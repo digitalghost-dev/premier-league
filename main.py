@@ -14,10 +14,10 @@ headers = {
  
 response = requests.request("GET", url, headers=headers, params=querystring)
  
-new = response.json()
+json_res = response.json()
  
-game_1 = json.dumps(new["response"][0], indent=4)
-game_2 = json.dumps(new["response"][1], indent=4)
-game_3 = json.dumps(new["response"][1], indent=4)
+game_1 = json.dumps(json_res["response"][0], indent=4)
+game_2 = json.dumps(json_res["response"][1], indent=4)
+game_3 = json.dumps(json_res["response"][1], indent=4)
  
 print(game_1, game_2, game_3)
