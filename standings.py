@@ -18,25 +18,28 @@ response = requests.request("GET", url, headers=headers, params=querystring)
 
 json_res = response.json()
 
-rank = int(json.dumps(json_res["response"][0]["league"]["standings"][0][0]["rank"], indent=4))
-team = str(json.dumps(json_res["response"][0]["league"]["standings"][0][0]["team"]["name"], indent=4))
-wins = int(json.dumps(json_res["response"][0]["league"]["standings"][0][0]["all"]["win"], indent=4))
-draws = int(json.dumps(json_res["response"][0]["league"]["standings"][0][0]["all"]["draw"], indent=4))
-loses = int(json.dumps(json_res["response"][0]["league"]["standings"][0][0]["all"]["lose"], indent=4))
-rank2 = int(json.dumps(json_res["response"][0]["league"]["standings"][0][1]["rank"], indent=4))
-team2 = str(json.dumps(json_res["response"][0]["league"]["standings"][0][1]["team"]["name"], indent=4))
-wins2 = int(json.dumps(json_res["response"][0]["league"]["standings"][0][1]["all"]["win"], indent=4))
-draws2 = int(json.dumps(json_res["response"][0]["league"]["standings"][0][1]["all"]["draw"], indent=4))
-loses2 = int(json.dumps(json_res["response"][0]["league"]["standings"][0][1]["all"]["lose"], indent=4))
+rank_list = []
+team_list = []
+wins_list = []
+draws_list = []
+loses_list = []
 
-table = {
-    'rank': [rank, rank2], 
-    'team': [team, team2], 
-    'wins': [wins, wins2], 
-    'draws': [draws, draws2], 
-    'loses': [loses, loses2]
-}
+count = 0
+while count < 20:
+    rank = int(json.dumps(json_res["response"][0]["league"]["standings"][0][count]["rank"]))
+    team = str(json.dumps(json_res["response"][0]["league"]["standings"][0][count]["team"]["name"]))
+    wins = int(json.dumps(json_res["response"][0]["league"]["standings"][0][count]["all"]["win"]))
+    draws = int(json.dumps(json_res["response"][0]["league"]["standings"][0][count]["all"]["draw"]))
+    loses = int(json.dumps(json_res["response"][0]["league"]["standings"][0][count]["all"]["lose"]))
+    rank_list.append(rank)
+    team_list.append(team)
+    wins_list.append(wins)
+    draws_list.append(draws)
+    loses_list.append(loses)
+    count += 1
 
-dataframe = pd.DataFrame(data = table)
+zipped = list(zip(rank_list, team_list, wins_list, draws_list, loses_list))
 
-print(dataframe)
+df = pd.DataFrame(zipped, columns=['Rank', 'Team', 'Wins', 'Draws', 'Loses'])
+
+print(df)
