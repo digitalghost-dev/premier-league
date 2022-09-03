@@ -5,8 +5,6 @@ import numpy as np
 import requests
 import json
 
-import requests
-
 url = "https://api-football-v1.p.rapidapi.com/v3/standings"
 
 querystring = {"season":"2022","league":"135"}
