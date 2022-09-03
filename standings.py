@@ -43,15 +43,21 @@ while count < 20:
     points_list.append(points)
     count += 1
 
-zipped = list(zip(rank_list, team_list, wins_list, draws_list, loses_list, points_list))
+class Standings:
 
-df = pd.DataFrame(zipped, columns=['Rank', 'Team', 'Wins', 'Draws', 'Loses', 'Points'])
+    def table(self):
+        zipped = list(zip(rank_list, team_list, wins_list, draws_list, loses_list, points_list))
 
-df_graph = pd.DataFrame({
-    'Points': points_list,
-    'Wins': wins_list,
-    'Draws': draws_list
-    }, index=team_list)
+        df = pd.DataFrame(zipped, columns=['Rank', 'Team', 'Wins', 'Draws', 'Loses', 'Points'])
+        print(df)
 
-ax = df_graph.plot.bar(rot=45)
-plt.show()
+    def graph(self):
+        df_graph = pd.DataFrame({
+            'Points': points_list,
+            'Wins': wins_list,
+            'Draws': draws_list
+        }, 
+            index=team_list)
+
+        ax = df_graph.plot.bar(rot=45)
+        plt.show()
