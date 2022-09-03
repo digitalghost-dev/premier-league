@@ -27,18 +27,12 @@ points_list = []
 
 count = 0
 while count < 20:
-    rank = int(json.dumps(json_res["response"][0]["league"]["standings"][0][count]["rank"]))
-    team = str(json.dumps(json_res["response"][0]["league"]["standings"][0][count]["team"]["name"]))
-    wins = int(json.dumps(json_res["response"][0]["league"]["standings"][0][count]["all"]["win"]))
-    draws = int(json.dumps(json_res["response"][0]["league"]["standings"][0][count]["all"]["draw"]))
-    loses = int(json.dumps(json_res["response"][0]["league"]["standings"][0][count]["all"]["lose"]))
-    points = int(json.dumps(json_res["response"][0]["league"]["standings"][0][count]["points"]))
-    rank_list.append(rank)
-    team_list.append(team)
-    wins_list.append(wins)
-    draws_list.append(draws)
-    loses_list.append(loses)
-    points_list.append(points)
+    rank_list.append(int(json.dumps(json_res["response"][0]["league"]["standings"][0][count]["rank"])))
+    team_list.append(str(json.dumps(json_res["response"][0]["league"]["standings"][0][count]["team"]["name"])))
+    wins_list.append(int(json.dumps(json_res["response"][0]["league"]["standings"][0][count]["all"]["win"])))
+    draws_list.append(int(json.dumps(json_res["response"][0]["league"]["standings"][0][count]["all"]["draw"])))
+    loses_list.append(int(json.dumps(json_res["response"][0]["league"]["standings"][0][count]["all"]["lose"])))
+    points_list.append(int(json.dumps(json_res["response"][0]["league"]["standings"][0][count]["points"])))
     count += 1
 
 class Standings:
