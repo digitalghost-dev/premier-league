@@ -1,5 +1,5 @@
 def stats():
-    from standings import Standings
+    from england_standings import Standings
     standings = Standings()
 
     return standings.table(), standings.graph()
