@@ -35,21 +35,12 @@ while count < 20:
     points_list.append(int(json.dumps(json_res["response"][0]["league"]["standings"][0][count]["points"])))
     count += 1
 
-class Standings:
+class engStandings:
 
     def table(self):
+        headers = ['Rank', 'Team', 'Wins', 'Draws', 'Loses', 'Points']
         zipped = list(zip(rank_list, team_list, wins_list, draws_list, loses_list, points_list))
 
-        df = pd.DataFrame(zipped, columns=['Rank', 'Team', 'Wins', 'Draws', 'Loses', 'Points'])
+        df = pd.DataFrame(zipped, columns=headers)
+
         print(df)
-
-    def graph(self):
-        df_graph = pd.DataFrame({
-            'Points': points_list,
-            'Wins': wins_list,
-            'Draws': draws_list
-        }, 
-            index=team_list)
-
-        ax = df_graph.plot.bar(rot=45)
-        plt.show()
