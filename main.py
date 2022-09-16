@@ -4,7 +4,7 @@ def stats():
     england = engStandings()
     spain = espStandings()
 
-    return england.table()
+    return england.drop(), england.table()
 
 if __name__ == "__main__":
     stats()
