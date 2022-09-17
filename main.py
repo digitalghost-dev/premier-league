@@ -1,8 +1,6 @@
 def stats():
-    from standings.england_standings import engStandings
-    from standings.spain_standings import espStandings
-    england = engStandings()
-    spain = espStandings()
+    from standings import Standings
+    england = Standings()
 
     return england.drop(), england.table()
 
