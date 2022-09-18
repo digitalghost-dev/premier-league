@@ -1,3 +1,4 @@
+# Importing needed modules
 from config import table_name, rapid_api, project_id
 from google.cloud import bigquery
 import pandas as pd
@@ -35,8 +36,15 @@ while count < 20:
     points_list.append(int(json.dumps(json_res["response"][0]["league"]["standings"][0][count]["points"])))
     count += 1
 
-class engStandings:
+# Removing the quotation marks from the team name.
+stripped_team = []
+for team in team_list:
+    team = team.strip('"')
+    stripped_team.append(team)
 
+class Standings:
+
+    # Dropping BigQuery table
     def drop(self):
         client = bigquery.Client()
         query = """
@@ -50,7 +58,7 @@ class engStandings:
 
     def table(self):
         headers = ['Rank', 'Team', 'Wins', 'Draws', 'Loses', 'Points']
-        zipped = list(zip(rank_list, team_list, wins_list, draws_list, loses_list, points_list))
+        zipped = list(zip(rank_list, stripped_team, wins_list, draws_list, loses_list, points_list))
 
         df = pd.DataFrame(zipped, columns=headers)
 
@@ -66,9 +74,7 @@ class engStandings:
 
         table = client.get_table(table_id)  # Make an API request.
         print(
-            "Loaded {} rows and {} columns to {}".format(
-                table.num_rows, len(table.schema), table_id
+            "Loaded {} rows and {} columns".format(
+                table.num_rows, len(table.schema)
             )
         )
-
-        print(df)
