@@ -1,4 +1,4 @@
-# Importing needed modules
+# Importing needed modules.
 from config import table_name, rapid_api, project_id
 from google.cloud import bigquery
 import pandas as pd
@@ -6,6 +6,7 @@ import numpy as np
 import requests
 import json
 
+# Standings endpoint from RapidAPI.
 url = "https://api-football-v1.p.rapidapi.com/v3/standings"
 
 querystring = {"season":"2022","league":"39"}
@@ -25,15 +26,110 @@ wins_list = []
 draws_list = []
 loses_list = []
 points_list = []
+goals_for = []
+goals_against = []
+goals_diff = []
 
 count = 0
 while count < 20:
-    rank_list.append(int(json.dumps(json_res["response"][0]["league"]["standings"][0][count]["rank"])))
-    team_list.append(str(json.dumps(json_res["response"][0]["league"]["standings"][0][count]["team"]["name"])))
-    wins_list.append(int(json.dumps(json_res["response"][0]["league"]["standings"][0][count]["all"]["win"])))
-    draws_list.append(int(json.dumps(json_res["response"][0]["league"]["standings"][0][count]["all"]["draw"])))
-    loses_list.append(int(json.dumps(json_res["response"][0]["league"]["standings"][0][count]["all"]["lose"])))
-    points_list.append(int(json.dumps(json_res["response"][0]["league"]["standings"][0][count]["points"])))
+    # Team postion data.
+    rank_list.append(int(json.dumps(json_res
+        ["response"]
+            [0]
+                ["league"]
+                    ["standings"]
+                        [0]
+                        [count]
+                            ["rank"]
+    )))
+    # Team names.
+    team_list.append(str(json.dumps(json_res
+        ["response"]
+            [0]
+                ["league"]
+                    ["standings"]
+                        [0]
+                            [count]
+                                ["team"]
+                                    ["name"]
+    )))
+    # Number of wins.
+    wins_list.append(int(json.dumps(json_res
+        ["response"]
+            [0]
+                ["league"]
+                    ["standings"]
+                        [0]
+                            [count]
+                                ["all"]
+                                    ["win"]
+    )))
+    # Number of draws.
+    draws_list.append(int(json.dumps(json_res
+        ["response"]
+            [0]
+                ["league"]
+                    ["standings"]
+                        [0]
+                            [count]
+                                ["all"]
+                                    ["draw"]
+    )))
+    # Number of loses.
+    loses_list.append(int(json.dumps(json_res
+        ["response"]
+            [0]
+                ["league"]
+                    ["standings"]
+                        [0]
+                            [count]
+                                ["all"]
+                                    ["lose"]
+    )))
+    # Number of points.
+    points_list.append(int(json.dumps(json_res
+        ["response"]
+            [0]
+                ["league"]
+                    ["standings"]
+                        [0]
+                            [count]
+                                ["points"]
+    )))
+    # Number of goals for.
+    goals_for.append(int(json.dumps(json_res
+        ["response"]
+            [0]
+                ["league"]
+                    ["standings"]   
+                        [0]
+                            [count]
+                                ["all"]
+                                    ["goals"]
+                                        ["for"]
+    )))
+    # Number of goals against.
+    goals_against.append(int(json.dumps(json_res
+        ["response"]
+            [0]
+                ["league"]
+                    ["standings"]
+                        [0]
+                            [count]
+                                ["all"]
+                                    ["goals"]
+                                        ["against"]
+    )))
+    # Number of goal differential.
+    goals_diff.append(int(json.dumps(json_res
+        ["response"]
+            [0]
+                ["league"]
+                    ["standings"]
+                        [0]
+                            [count]
+                                ["goalsDiff"]
+    )))
     count += 1
 
 # Removing the quotation marks from the team name.
@@ -44,7 +140,7 @@ for team in team_list:
 
 class Standings:
 
-    # Dropping BigQuery table
+    # Dropping BigQuery table.
     def drop(self):
         client = bigquery.Client()
         query = """
@@ -57,8 +153,9 @@ class Standings:
         print("Table dropped...")
 
     def table(self):
-        headers = ['Rank', 'Team', 'Wins', 'Draws', 'Loses', 'Points']
-        zipped = list(zip(rank_list, stripped_team, wins_list, draws_list, loses_list, points_list))
+        # Setting the headers then zipping the lists to create a dataframe.
+        headers = ['Rank', 'Team', 'Wins', 'Draws', 'Loses', 'Points', 'GF', 'GA', 'GD']
+        zipped = list(zip(rank_list, stripped_team, wins_list, draws_list, loses_list, points_list, goals_for, goals_against, goals_diff))
 
         df = pd.DataFrame(zipped, columns=headers)
 
