@@ -34,102 +34,39 @@ count = 0
 while count < 20:
     # Team postion data.
     rank_list.append(int(json.dumps(json_res
-        ["response"]
-            [0]
-                ["league"]
-                    ["standings"]
-                        [0]
-                        [count]
-                            ["rank"]
-    )))
+        ["response"][0]["league"]["standings"][0][count]["rank"])))
+
     # Team names.
     team_list.append(str(json.dumps(json_res
-        ["response"]
-            [0]
-                ["league"]
-                    ["standings"]
-                        [0]
-                            [count]
-                                ["team"]
-                                    ["name"]
-    )))
+        ["response"][0]["league"]["standings"][0][count]["team"]["name"])))
+
     # Number of wins.
     wins_list.append(int(json.dumps(json_res
-        ["response"]
-            [0]
-                ["league"]
-                    ["standings"]
-                        [0]
-                            [count]
-                                ["all"]
-                                    ["win"]
-    )))
+        ["response"][0]["league"]["standings"][0][count]["all"]["win"])))
+
     # Number of draws.
     draws_list.append(int(json.dumps(json_res
-        ["response"]
-            [0]
-                ["league"]
-                    ["standings"]
-                        [0]
-                            [count]
-                                ["all"]
-                                    ["draw"]
-    )))
+        ["response"][0]["league"]["standings"][0][count]["all"]["draw"])))
+
     # Number of loses.
     loses_list.append(int(json.dumps(json_res
-        ["response"]
-            [0]
-                ["league"]
-                    ["standings"]
-                        [0]
-                            [count]
-                                ["all"]
-                                    ["lose"]
-    )))
+        ["response"][0]["league"]["standings"][0][count]["all"]["lose"])))
+
     # Number of points.
     points_list.append(int(json.dumps(json_res
-        ["response"]
-            [0]
-                ["league"]
-                    ["standings"]
-                        [0]
-                            [count]
-                                ["points"]
-    )))
+        ["response"][0]["league"]["standings"][0][count]["points"])))
+
     # Number of goals for.
     goals_for.append(int(json.dumps(json_res
-        ["response"]
-            [0]
-                ["league"]
-                    ["standings"]   
-                        [0]
-                            [count]
-                                ["all"]
-                                    ["goals"]
-                                        ["for"]
-    )))
+        ["response"][0]["league"]["standings"][0][count]["all"]["goals"]["for"])))
+
     # Number of goals against.
     goals_against.append(int(json.dumps(json_res
-        ["response"]
-            [0]
-                ["league"]
-                    ["standings"]
-                        [0]
-                            [count]
-                                ["all"]
-                                    ["goals"]
-                                        ["against"]
-    )))
+        ["response"][0]["league"]["standings"][0][count]["all"]["goals"]["against"])))
+
     # Number of goal differential.
     goals_diff.append(int(json.dumps(json_res
-        ["response"]
-            [0]
-                ["league"]
-                    ["standings"]
-                        [0]
-                            [count]
-                                ["goalsDiff"]
-    )))
+        ["response"][0]["league"]["standings"][0][count]["goalsDiff"])))
     count += 1
 
 # Removing the quotation marks from the team name.
