@@ -82,7 +82,7 @@ class Standings:
         client = bigquery.Client()
         query = """
             DROP TABLE 
-            {}.european_football_leagues.england
+            {}.premier_league.standings
         """.format(project_id)
 
         query_job = client.query(query)
