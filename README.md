@@ -8,7 +8,7 @@
 
 ## Background
 
-> My second project, built to gain skills in Tableau, working with APIs, using Python, BigQuery and Google Sheets, and data pipelines.
+> My second project, built to gain skills in Tableau; working with APIs; using Python, BigQuery, and Google Sheets; and building data relationships.
 
 This project uses the [Football API](https://rapidapi.com/api-sports/api/api-football/) to retrieve data from England's Premier League, the top division for Men's soccer.
 
