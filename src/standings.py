@@ -20,6 +20,7 @@ response = requests.request("GET", url, headers=headers, params=querystring)
 
 json_res = response.json()
 
+id_list = []
 rank_list = []
 team_list = []
 wins_list = []
@@ -32,6 +33,10 @@ goals_diff = []
 
 count = 0
 while count < 20:
+    # Team ID.
+    id_list.append(str(json.dumps(json_res
+	["response"][0]["league"]["standings"][0][count]["team"]["id"])))
+
     # Team postion data.
     rank_list.append(int(json.dumps(json_res
         ["response"][0]["league"]["standings"][0][count]["rank"])))
@@ -75,6 +80,9 @@ for team in team_list:
     team = team.strip('"')
     stripped_team.append(team)
 
+# Turning each item in id_list into an integer.
+id_int = [eval(team_id) for team_id in id_list]
+
 class Standings:
 
     # Dropping BigQuery table.
@@ -91,8 +99,8 @@ class Standings:
 
     def table(self):
         # Setting the headers then zipping the lists to create a dataframe.
-        headers = ['Rank', 'Team', 'Wins', 'Draws', 'Loses', 'Points', 'GF', 'GA', 'GD']
-        zipped = list(zip(rank_list, stripped_team, wins_list, draws_list, loses_list, points_list, goals_for, goals_against, goals_diff))
+        headers = ['ID', 'Rank', 'Team', 'Wins', 'Draws', 'Loses', 'Points', 'GF', 'GA', 'GD']
+        zipped = list(zip(id_int, rank_list, stripped_team, wins_list, draws_list, loses_list, points_list, goals_for, goals_against, goals_diff))
 
         df = pd.DataFrame(zipped, columns=headers)
 
