@@ -4,42 +4,39 @@ import pandas as pd
 import requests
 import json
 
-# Standings endpoint from RapidAPI. Retrieving the ID for each team for the current season.
-url_standings = "https://api-football-v1.p.rapidapi.com/v3/standings"
-
-querystring_standings = {"season":"2022","league":"39"}
-
+# Headers used for RapidAPI.
 headers = {
 	"X-RapidAPI-Key": rapid_api,
 	"X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"
 }
 
-response_standings = requests.request("GET", url_standings, headers=headers, params=querystring_standings)
+# Creating URL variables.
+url= "https://api-football-v1.p.rapidapi.com/v3/"
+url_s = url + "standings"
+url_t = url + "teams"
 
-json_res_standings = response_standings.json()
-
+# Empty lists that will be filled and then used to create a dataframe.
 id_list = []
-
-count_standings = 0
-while count_standings < 20:
-	id_list.append(str(json.dumps(json_res_standings
-	["response"][0]["league"]["standings"][0][count_standings]["team"]["id"])))
-
-	count_standings += 1
-
-id_int = [eval(team_id) for team_id in id_list]
-
-# Team Information endpoint from RapidAPI.
 team_list = []
 city_list = []
 
+# Building query for id_list.
+querystring_s = {"season":"2022","league":"39"}
+response_s = requests.request("GET", url_s, headers=headers, params=querystring_s)
+json_res_s = response_s.json()
+
+# Filling in id_list.
+count = 0
+while count < 20:
+	id_list.append(str(json.dumps(json_res_s
+	["response"][0]["league"]["standings"][0][count]["team"]["id"])))
+
+	count += 1
+
+# Filling in team_list and city_list. 
 for id in id_list:
-	querystring = {"id":id}
-	
-	url = "https://api-football-v1.p.rapidapi.com/v3/teams"
-
-	response = requests.request("GET", url, headers=headers, params=querystring)
-
+	querystring_t = {"id":id}
+	response = requests.request("GET", url_t, headers=headers, params=querystring_t)
 	json_res = response.json()
 
 	team_list.append(str(json.dumps(json_res
@@ -48,11 +45,17 @@ for id in id_list:
 	city_list.append(str(json.dumps(json_res
 		["response"][0]["venue"]["city"])))
 
+# Turning each item in id_list into an integer.
+id_int = [eval(team_id) for team_id in id_list]
+
+# Removing quotation marks from each item in team_list.
 stripped_team = []
 for team in team_list:
     team = team.strip('"')
     stripped_team.append(team)
 
+# Removing quotation marks from each item and
+# all text from first comma in city_list.
 stripped_city = []
 for city in city_list:
     city = city.strip('"')
@@ -72,7 +75,7 @@ class Location:
 
 		print("Location table dropped...")
 
-	def table(self):
+	def load(self):
 		headers = ['ID', 'Team', 'City']
 		zipped = list(zip(id_int, stripped_team, stripped_city))
 
