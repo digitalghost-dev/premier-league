@@ -1,3 +1,4 @@
+# Importing needed libraries.
 from config import location_name, rapid_api, project_id
 from google.cloud import bigquery
 import pandas as pd
@@ -39,11 +40,8 @@ for id in id_list:
 	response = requests.request("GET", url_t, headers=headers, params=querystring_t)
 	json_res = response.json()
 
-	team_list.append(str(json.dumps(json_res
-		["response"][0]["team"]["name"])))
-
-	city_list.append(str(json.dumps(json_res
-		["response"][0]["venue"]["city"])))
+	team_list.append(str(json.dumps(json_res["response"][0]["team"]["name"])))
+	city_list.append(str(json.dumps(json_res["response"][0]["venue"]["city"])))
 
 # Turning each item in id_list into an integer.
 id_int = [eval(team_id) for team_id in id_list]
