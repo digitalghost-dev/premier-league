@@ -97,7 +97,7 @@ class Standings:
 
         print("Standings table dropped...")
 
-    def table(self):
+    def load(self):
         # Setting the headers then zipping the lists to create a dataframe.
         headers = ['ID', 'Rank', 'Team', 'Wins', 'Draws', 'Loses', 'Points', 'GF', 'GA', 'GD']
         zipped = list(zip(id_int, rank_list, stripped_team, wins_list, draws_list, loses_list, points_list, goals_for, goals_against, goals_diff))
