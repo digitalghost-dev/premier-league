@@ -9,14 +9,14 @@ import json
 # Standings endpoint from RapidAPI.
 url = "https://api-football-v1.p.rapidapi.com/v3/standings"
 
-querystring = {"season":"2022","league":"39"}
+query = {"season":"2022","league":"39"}
 
 headers = {
 	"X-RapidAPI-Key": rapid_api,
 	"X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"
 }
 
-response = requests.request("GET", url, headers=headers, params=querystring)
+response = requests.request("GET", url, headers=headers, params=query)
 
 json_res = response.json()
 
