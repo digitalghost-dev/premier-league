@@ -1,15 +1,15 @@
-from config import a, f
+from config import c, a
 import os
 
-os.environ[a]=f
+os.environ[c]=a
 
 def stats():
     from src.standings import Standings
-    from location import Location
-    england = Standings()
+    from src.location import Location
+    standings = Standings()
     location = Location()
 
-    return england.drop(), england.table()
+    return standings.drop(), standings.load()
 
 if __name__ == "__main__":
     stats()
