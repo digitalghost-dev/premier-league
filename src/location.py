@@ -74,6 +74,7 @@ class Location:
 		print("Location table dropped...")
 
 	def load(self):
+		# Setting the headers then zipping the lists to create a dataframe.
 		headers = ['ID', 'Team', 'City']
 		zipped = list(zip(id_int, stripped_team, stripped_city))
 
