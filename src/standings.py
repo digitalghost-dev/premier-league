@@ -6,20 +6,21 @@ import numpy as np
 import requests
 import json
 
-# Standings endpoint from RapidAPI.
-url = "https://api-football-v1.p.rapidapi.com/v3/standings"
-
-query = {"season":"2022","league":"39"}
-
+# Headers used for RapidAPI.
 headers = {
 	"X-RapidAPI-Key": rapid_api,
 	"X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"
 }
 
-response = requests.request("GET", url, headers=headers, params=query)
+# Standings endpoint from RapidAPI.
+url = "https://api-football-v1.p.rapidapi.com/v3/standings"
 
+# Building query to retrive data.
+query = {"season":"2022","league":"39"}
+response = requests.request("GET", url, headers=headers, params=query)
 json_res = response.json()
 
+# Empty lists that will be filled and then used to create a dataframe.
 rank_list = []
 team_list = []
 wins_list = []
@@ -30,6 +31,7 @@ goals_for = []
 goals_against = []
 goals_diff = []
 
+# Filling in empty lists.
 count = 0
 while count < 20:
     # Team postion data.
