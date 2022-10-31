@@ -43,9 +43,6 @@ for id in id_list:
 	team_list.append(str(json.dumps(json_res["response"][0]["team"]["name"])))
 	city_list.append(str(json.dumps(json_res["response"][0]["venue"]["city"])))
 
-# Turning each item in id_list into an integer.
-id_int = [eval(team_id) for team_id in id_list]
-
 # Removing quotation marks from each item in team_list.
 stripped_team = []
 for team in team_list:
@@ -75,8 +72,8 @@ class Location:
 
 	def load(self):
 		# Setting the headers then zipping the lists to create a dataframe.
-		headers = ['ID', 'Team', 'City']
-		zipped = list(zip(id_int, stripped_team, stripped_city))
+		headers = ['Team', 'City']
+		zipped = list(zip(stripped_team, stripped_city))
 
 		df = pd.DataFrame(zipped, columns=headers)
 		
