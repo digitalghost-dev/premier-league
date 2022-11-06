@@ -40,7 +40,7 @@ while count < 20:
 
     # Team names.
     team_list.append(str(json.dumps(json_res
-        ["response"][0]["league"]["standings"][0][count]["team"]["name"])))
+        ["response"][0]["league"]["standings"][0][count]["team"]["name"])).strip('"'))
 
     # Number of wins.
     wins_list.append(int(json.dumps(json_res
@@ -71,12 +71,6 @@ while count < 20:
         ["response"][0]["league"]["standings"][0][count]["goalsDiff"])))
     count += 1
 
-# Removing the quotation marks from the team name.
-stripped_team = []
-for team in team_list:
-    team = team.strip('"')
-    stripped_team.append(team)
-
 class Standings:
 
     # Dropping BigQuery table.
@@ -94,7 +88,7 @@ class Standings:
     def load(self):
         # Setting the headers then zipping the lists to create a dataframe.
         headers = ['Rank', 'Team', 'Wins', 'Draws', 'Loses', 'Points', 'GF', 'GA', 'GD']
-        zipped = list(zip(rank_list, stripped_team, wins_list, draws_list, loses_list, points_list, goals_for, goals_against, goals_diff))
+        zipped = list(zip(rank_list, team_list, wins_list, draws_list, loses_list, points_list, goals_for, goals_against, goals_diff))
 
         df = pd.DataFrame(zipped, columns=headers)
 
