@@ -40,22 +40,8 @@ for id in id_list:
 	response = requests.request("GET", url_t, headers=headers, params=querystring_t)
 	json_res = response.json()
 
-	team_list.append(str(json.dumps(json_res["response"][0]["team"]["name"])))
-	city_list.append(str(json.dumps(json_res["response"][0]["venue"]["city"])))
-
-# Removing quotation marks from each item in team_list.
-stripped_team = []
-for team in team_list:
-    team = team.strip('"')
-    stripped_team.append(team)
-
-# Removing quotation marks from each item and
-# all text from first comma in city_list.
-stripped_city = []
-for city in city_list:
-    city = city.strip('"')
-    city = city.split(',', 1)[0]
-    stripped_city.append(city)
+	team_list.append(str(json.dumps(json_res["response"][0]["team"]["name"])).strip('"'))
+	city_list.append(str(json.dumps(json_res["response"][0]["venue"]["city"])).strip('"'))
 
 class Location:
 
@@ -73,7 +59,7 @@ class Location:
 	def load(self):
 		# Setting the headers then zipping the lists to create a dataframe.
 		headers = ['Team', 'City']
-		zipped = list(zip(stripped_team, stripped_city))
+		zipped = list(zip(team_list, city_list))
 
 		df = pd.DataFrame(zipped, columns=headers)
 		
