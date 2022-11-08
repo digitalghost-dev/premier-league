@@ -4,12 +4,17 @@ import os
 os.environ[c]=a
 
 def stats():
-    from src.standings import Standings
+    # Importing classes from src files.
     from src.location import Location
-    standings = Standings()
-    location = Location()
+    from src.players import Players
+    from src.standings import Standings
 
-    return standings.drop(), standings.load()
+    location = Location()
+    players = Players()
+    standings = Standings()
+    
+    # Dropping and loading the standings and players dataframes.
+    return standings.drop(), standings.load(), players.drop(), players.load()
 
 if __name__ == "__main__":
     stats()
