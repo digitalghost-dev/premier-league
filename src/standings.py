@@ -15,7 +15,7 @@ headers = {
 # Standings endpoint from RapidAPI.
 url = "https://api-football-v1.p.rapidapi.com/v3/standings"
 
-# Building query to retrive data.
+# Building query to retrieve data.
 query = {"season":"2022","league":"39"}
 response = requests.request("GET", url, headers=headers, params=query)
 json_res = response.json()
