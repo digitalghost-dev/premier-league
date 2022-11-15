@@ -1,3 +1,6 @@
 *.json
 config.py
 __pycache__
+test.py
+test.py2
+src/__pycache__
