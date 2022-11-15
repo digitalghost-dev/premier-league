@@ -83,6 +83,7 @@ class Players:
 	def load(self):
 		df = dataframe() # Getting dataframe creating in dataframe() function.
 		
+		# Construct a BigQuery client object.
 		client = bigquery.Client(project=project_id)
 
 		table_id = players_name
