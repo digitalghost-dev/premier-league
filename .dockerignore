@@ -1,6 +1,6 @@
 *.json
 config.py
 __pycache__
-test.py
-test.py2
+test*
 src/__pycache__
+.streamlit/secrets.toml
