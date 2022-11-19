@@ -49,8 +49,8 @@ class Location:
 		client = bigquery.Client()
 		query = """
             DROP TABLE 
-            {}.premier_league.location
-        """.format(project_id)
+            {}
+        """.format(location_name)
 
 		query_job = client.query(query)
 
