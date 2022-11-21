@@ -1,5 +1,5 @@
 [theme]
-primaryColor = "#3D195B"
-textColor = "#3D195B"
+primaryColor = "indigo"
+textColor = "indigo"
 backgroundColor = "#EEE"
 secondaryBackgroundColor = "DDD"
