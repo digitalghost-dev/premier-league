@@ -1,7 +1,6 @@
 # Importing needed modules.
 from google.oauth2 import service_account
 from google.cloud import bigquery
-from config import standings_name
 import plotly.graph_objects as go
 import streamlit as st
 import pandas as pd
@@ -25,13 +24,14 @@ def background_processing():
         data = [dict(data) for data in raw_data]
         return data
 
+    db_name = st.secrets["football_database"]["name"]
 
     # Running SQL query to retrieve data.
     data = run_query("""
         SELECT * FROM
         {}
         ORDER BY Rank
-        """.format(standings_name)
+        """.format(db_name)
     )
 
     df = pd.DataFrame(data=data)
