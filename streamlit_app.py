@@ -24,7 +24,7 @@ def background_processing():
         data = [dict(data) for data in raw_data]
         return data
 
-    db_name = st.secrets["football_database"]["name"]
+    db_name = st.secrets["football_db"]["name"]
 
     # Running SQL query to retrieve data.
     data = run_query("""
@@ -43,16 +43,20 @@ def background_processing():
 def streamlit_app():
     df = background_processing()
 
-    st.title("Premier League Statistics for 2022/23 " + "⚽️")
+    logo = st.secrets["elements"]["logo_image"]
 
     # Setting page layout by columns.
-    col1, col2 = st.columns((3, 3))
+    col1, col2 = st.columns((3, 2))
 
     with col1:
+        st.title("Premier League Statistics for 2022/23 " + "⚽️")
+
         st.subheader("Current Standings:")
         st.table(df)
 
     with col2 :
+        st.image(logo)
+
         st.subheader("Points per Team:")
 
         # Creating the slider.
@@ -78,7 +82,9 @@ def streamlit_app():
         points_chart = go.Figure(data=[go.Bar(
             x = df_grouped['Team'],
             y = df_grouped['Points'],
-            marker_color = colors
+            marker_color = colors,
+            text = df_grouped['Points'],
+            textposition = 'auto'
         )])
 
         # Rotating x axis lables.
