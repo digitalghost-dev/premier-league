@@ -65,15 +65,7 @@ def streamlit_app():
         )
 
         # Picking colors to use for the bar chart.
-        colors = ['lightslategray',] * 20
-        colors[0] = 'darkgreen'
-        colors[1] = 'darkgreen'
-        colors[2] = 'darkgreen'
-        colors[3] = 'darkgreen'
-        colors[4] = 'lightgreen'
-        colors[-1] = 'crimson'
-        colors[-2] = 'crimson'
-        colors[-3] = 'crimson'
+        colors = ['indigo',] * 20
 
         # Making sure the bar chart changes with the slider.
         mask = df['Points'].between(*points_selection)
