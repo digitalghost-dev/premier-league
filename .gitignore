@@ -1,5 +1,6 @@
-__pycache__
-config.py
 *.json
-.DS_Store
+config.py
+__pycache__
+test*
+src/__pycache__
 .streamlit/secrets.toml
