@@ -24,44 +24,57 @@ def background_processing():
         data = [dict(data) for data in raw_data]
         return data
 
-    db_name = st.secrets["football_db"]["name"]
+    # Calling variables from toml file.
+    standings_table = st.secrets["football_db"]["standings"]
+    players_table = st.secrets["football_db"]["players"]
 
     # Running SQL query to retrieve data.
-    data = run_query("""
+    standings_data = run_query("""
         SELECT * FROM
         {}
         ORDER BY Rank
-        """.format(db_name)
+        """.format(standings_table)
     )
 
-    df = pd.DataFrame(data=data)
+    players_data = run_query("""
+        SELECT * FROM
+        {}
+        ORDER BY Goals DESC
+        """.format(players_table)
+    )
 
-    df_index = pd.DataFrame(data=data)
+    standings_df = pd.DataFrame(data = standings_data)
+    players_df = pd.DataFrame(data = players_data)
 
-    return df
+    return standings_df, players_df
 
 def streamlit_app():
-    df = background_processing()
+    standings_df, players_df = background_processing()
 
     logo = st.secrets["elements"]["logo_image"]
 
     # Setting page layout by columns.
     col1, col2 = st.columns((3, 2))
+    
+    col3, col4, col5, col6, col7 = st.columns((1, 1, 1, 1, 1))
 
-    with col1:
-        st.title("Premier League Statistics for 2022/23 " + "⚽️")
+    with st.container():
+        # Column one
+        col1.title("Premier League Statistics for 2022/23 " + "⚽️")
 
-        st.subheader("Current Standings:")
-        st.table(df)
+        col1.subheader("Current Standings:")
+        col1.table(standings_df)
 
-    with col2 :
-        st.image(logo)
+        col1.subheader("Top Scorers")
 
-        st.subheader("Points per Team:")
+        # Column two
+        col2.image(logo)
+
+        col2.subheader("Points per Team:")
 
         # Creating the slider.
-        points = df['Points'].tolist()
-        points_selection = st.slider(
+        points = standings_df['Points'].tolist()
+        points_selection = col2.slider(
             'Select a Range of Points:',
             min_value = min(points),
             max_value = max(points),
@@ -72,10 +85,10 @@ def streamlit_app():
         colors = ['indigo',] * 20
 
         # Making sure the bar chart changes with the slider.
-        mask = df['Points'].between(*points_selection)
-        results = df[mask].shape[0]
-        st.markdown(f'*Teams within range of selected points: {results}*')
-        df_grouped = df[mask]
+        mask = standings_df['Points'].between(*points_selection)
+        results = standings_df[mask].shape[0]
+        col2.markdown(f'*Teams within range of selected points: {results}*')
+        df_grouped = standings_df[mask]
         df_grouped = df_grouped.reset_index()
 
         # Creating the bar chart.
@@ -99,6 +112,42 @@ def streamlit_app():
             )
         )
 
-        st.plotly_chart(points_chart, use_container_width = True)
+        col2.plotly_chart(points_chart, use_container_width = True)
+
+    with st.container():
+        # First top scorer
+        col3.markdown("![Image]({})".format(players_df.iloc[0][4]))
+        col3.markdown("**{}**".format(players_df.iloc[0][0]))
+        col3.markdown("**Goals:** {}".format(players_df.iloc[0][1]))
+        col3.markdown("**Team:** {}".format(players_df.iloc[0][2]))
+        col3.markdown("**Nationality:** {}".format(players_df.iloc[0][3]))
+        
+        # Second top scorer
+        col4.markdown("![Image]({})".format(players_df.iloc[1][4]))
+        col4.markdown("**{}**".format(players_df.iloc[1][0]))
+        col4.markdown("**Goals:** {}".format(players_df.iloc[1][1]))
+        col4.markdown("**Team:** {}".format(players_df.iloc[1][2]))
+        col4.markdown("**Nationality:** {}".format(players_df.iloc[1][3]))
+
+        # Third top scorer
+        col5.markdown("![Image]({})".format(players_df.iloc[2][4]))
+        col5.markdown("**{}**".format(players_df.iloc[2][0]))
+        col5.markdown("**Goals:** {}".format(players_df.iloc[2][1]))
+        col5.markdown("**Team:** {}".format(players_df.iloc[2][2]))
+        col5.markdown("**Nationality:** {}".format(players_df.iloc[2][3]))
+
+        # Fourth top scorer
+        col6.markdown("![Image]({})".format(players_df.iloc[3][4]))
+        col6.markdown("**{}**".format(players_df.iloc[3][0]))
+        col6.markdown("**Goals:** {}".format(players_df.iloc[3][1]))
+        col6.markdown("**Team:** {}".format(players_df.iloc[3][2]))
+        col6.markdown("**Nationality:** {}".format(players_df.iloc[3][3]))
+
+        # Fifth top scorer
+        col7.markdown("![Image]({})".format(players_df.iloc[4][4]))
+        col7.markdown("**{}**".format(players_df.iloc[4][0]))
+        col7.markdown("**Goals:** {}".format(players_df.iloc[4][1]))
+        col7.markdown("**Team:** {}".format(players_df.iloc[4][2]))
+        col7.markdown("**Nationality:** {}".format(players_df.iloc[4][3]))
 
 streamlit_app()
