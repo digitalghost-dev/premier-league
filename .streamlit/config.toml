@@ -1,6 +1,5 @@
 [theme]
 primaryColor = "indigo"
 textColor = "black"
-backgroundColor = "#F5F5F5"
-secondaryBackgroundColor = "#F5F5F5"
-font = "serif"
+backgroundColor = "#FFF"
+secondaryBackgroundColor = "#FFF"
