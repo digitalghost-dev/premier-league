@@ -14,7 +14,7 @@ This project uses the [Football API](https://rapidapi.com/api-sports/api/api-foo
 
 Using Python, BigQuery, and Streamlit, this data pipeline turns raw JSON data into an interactive visualization on Tableau.
 
-View the [Streamlit](https://google.com).
+View the dashboard on [Streamlit](https://google.com).
 
 ## How the Pipeline Works
 
