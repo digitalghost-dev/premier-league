@@ -22,6 +22,7 @@ var locations = []location{
 	{Team: "Aston Villa", Stadium: "Villa Park", Latitude: 52.509090, Longitude: -1.885249},
 	{Team: "Bournemouth", Stadium: "Vitality Stadium", Latitude: 50.7348, Longitude: -1.8391},
 	{Team: "Brighton", Stadium: "Falmer Stadium", Latitude: 50.861782, Longitude: -0.084357},
+	{Team: "Brentford", Stadium: "Gtech Community Stadium", Latitude: 51.490715, Longitude: -0.289048},
 	{Team: "Chelsea", Stadium: "Stamford Bridge", Latitude: 51.481834, Longitude: -0.191390},
 	{Team: "Crystal Palace", Stadium: "Selhurst Park", Latitude: 51.398338, Longitude: -0.086084},
 	{Team: "Everton", Stadium: "Goodison Park", Latitude: 53.438751, Longitude: -2.966681},
