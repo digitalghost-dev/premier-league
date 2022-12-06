@@ -30,11 +30,12 @@ def players():
 	goals_list = []
 	team_list = []
 	nationality_list = []
+	photo_list = []
 
 	count = 0
 	while count < 5:
 
-		# Getting player's first and last name then combining for full name.
+		# Retrieving player's first and last name then combining for full name.
 		first_name = (str(json.dumps(json_res["response"][count]["player"]["firstname"], ensure_ascii=False))).strip('"')
 		last_name = (str(json.dumps(json_res["response"][count]["player"]["lastname"], ensure_ascii=False))).strip('"')
 
@@ -42,27 +43,30 @@ def players():
 		
 		full_name_list.append(full_name)
 
-		# Getting amount of goals per player.
+		# Retrieving amount of goals per player.
 		goals_list.append(int(json.dumps(json_res["response"][count]["statistics"][0]["goals"]["total"])))
 
-		# Getting player's team name
+		# Retrieving player's team name.
 		team_list.append(((str(json.dumps(json_res["response"][count]["statistics"][0]["team"]["name"])).strip('"'))))
 
-		# Getting player's nationality
+		# Retrieving player's nationality.
 		nationality_list.append((str(json.dumps(json_res["response"][count]["player"]["nationality"])).strip('"')))
+
+		# Retrieving player's photo link.
+		photo_list.append(str(json.dumps(json_res["response"][count]["player"]["photo"])).strip('"'))
 
 		count += 1
 	
-	return full_name_list, goals_list, team_list, nationality_list
+	return full_name_list, goals_list, team_list, nationality_list, photo_list
 
 def dataframe():
-	full_name_list, goals_list, team_list, nationality_list = players()
+	full_name_list, goals_list, team_list, nationality_list, photo_list = players()
 
 	# Setting the headers then zipping the lists to create a dataframe.
-	headers = ['Name', 'Goals', 'Team', 'Nationality']
-	zipped = list(zip(full_name_list, goals_list, team_list, nationality_list))
+	headers = ['Name', 'Goals', 'Team', 'Nationality', 'Photo']
+	zipped = list(zip(full_name_list, goals_list, team_list, nationality_list, photo_list))
 
-	df = pd.DataFrame(zipped, columns=headers)
+	df = pd.DataFrame(zipped, columns = headers)
 
 	return df
 
@@ -73,8 +77,8 @@ class Players:
 		client = bigquery.Client()
 		query = """
             DROP TABLE 
-            {}.premier_league.players
-        """.format(project_id)
+            {}
+        """.format(players_name)
 
 		query_job = client.query(query)
 
