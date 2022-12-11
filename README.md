@@ -10,13 +10,15 @@
 
 > My second project, built to gain skills in: Python, BigQuery, Streamlit, Docker, working with APIs, and Data Modeling.
 
-This project uses the [Football API](https://rapidapi.com/api-sports/api/api-football/) to retrieve data from England's Premier League, the top division for men's soccer.
+This project uses the [Football API](https://rapidapi.com/api-sports/api/api-football/) and a custom-built API (found in `/go-api`) to retrieve statistics from England's Premier League, the top division for men's soccer.
 
-Using Python, BigQuery, and Streamlit, this data pipeline turns raw JSON data into an interactive visualization on Tableau.
+Using Python, BigQuery, and Streamlit, this data pipeline turns raw JSON data into an interactive visualization on Streamlit.
 
 View the dashboard on [Streamlit](https://premierleague.streamlit.app/).
 
 ## How the Pipeline Works
+
+### Pipeline Flowchart
 
 ## Services Used
 * **Data Warehouse:** [Google Cloud BigQuery](https://cloud.google.com/bigquery)
