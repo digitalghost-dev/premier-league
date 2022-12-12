@@ -55,10 +55,10 @@ class Locations:
 
 	def drop(self):
 		client = bigquery.Client()
-		query = """
+		query = f"""
             DROP TABLE 
-            {}
-        """.format(locations_table)
+            {locations_table}
+        """
 
 		query_job = client.query(query)
 
@@ -77,8 +77,4 @@ class Locations:
 		job.result()  # Wait for the job to complete.
 
 		table = client.get_table(table_id)  # Make an API request.
-		print(
-            "Loaded {} rows and {} columns".format(
-                table.num_rows, len(table.schema)
-            )
-        )
+		print(f"Loaded {table.num_rows} rows and {len(table.schema)} columns")
