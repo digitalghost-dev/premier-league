@@ -1,5 +1,5 @@
 # Importing needed libraries.
-from config import players_name, rapid_api, project_id
+from config import players_table, rapid_api, project_id
 from google.cloud import bigquery
 import pandas as pd
 import requests
@@ -75,10 +75,10 @@ class Players:
 	# Dropping BigQuery table.
 	def drop(self):
 		client = bigquery.Client()
-		query = """
+		query = f"""
             DROP TABLE 
-            {}
-        """.format(players_name)
+            {players_table}
+        """
 
 		query_job = client.query(query)
 
@@ -90,7 +90,7 @@ class Players:
 		# Construct a BigQuery client object.
 		client = bigquery.Client(project=project_id)
 
-		table_id = players_name
+		table_id = players_table
 
 		job = client.load_table_from_dataframe(
             df, table_id
@@ -98,8 +98,5 @@ class Players:
 		job.result()  # Wait for the job to complete.
 
 		table = client.get_table(table_id)  # Make an API request.
-		print(
-            "Loaded {} rows and {} columns".format(
-                table.num_rows, len(table.schema)
-            )
-        )
+		
+		print(f"Loaded {table.num_rows} rows and {len(table.schema)} columns")
