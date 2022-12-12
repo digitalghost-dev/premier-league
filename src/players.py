@@ -63,7 +63,7 @@ def dataframe():
 	full_name_list, goals_list, team_list, nationality_list, photo_list = players()
 
 	# Setting the headers then zipping the lists to create a dataframe.
-	headers = ['Name', 'Goals', 'Team', 'Nationality', 'Photo']
+	headers = ['name', 'goals', 'team', 'nationality', 'photo']
 	zipped = list(zip(full_name_list, goals_list, team_list, nationality_list, photo_list))
 
 	df = pd.DataFrame(zipped, columns = headers)
@@ -98,5 +98,5 @@ class Players:
 		job.result()  # Wait for the job to complete.
 
 		table = client.get_table(table_id)  # Make an API request.
-		
+
 		print(f"Loaded {table.num_rows} rows and {len(table.schema)} columns")
