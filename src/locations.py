@@ -44,7 +44,7 @@ def dataframe():
 	team_list, stadium_list, lat_list, lon_list = locations()
 
 	# Setting the headers then zipping the lists to create a dataframe.
-	headers = ['Team', 'Stadium', 'Latitude', 'Longitude']
+	headers = ['team', 'stadium', 'latitude', 'longitude']
 	zipped = list(zip(team_list, stadium_list, lat_list, lon_list))
 
 	df = pd.DataFrame(zipped, columns = headers)
@@ -77,4 +77,5 @@ class Locations:
 		job.result()  # Wait for the job to complete.
 
 		table = client.get_table(table_id)  # Make an API request.
+		
 		print(f"Loaded {table.num_rows} rows and {len(table.schema)} columns")
