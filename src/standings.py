@@ -2,10 +2,10 @@
 from config import standings_table, rapid_api, project_id
 from google.cloud import bigquery
 import pandas as pd
-import numpy as np
 import requests
 import json
 
+# Function to call the Football API.
 def call_api():
     # Headers used for RapidAPI.
     headers = {
@@ -27,6 +27,7 @@ def standings():
     json_res = call_api()
 
     # Empty lists that will be filled and then used to create a dataframe.
+    id_list = []
     rank_list = []
     team_list = []
     wins_list = []
@@ -40,7 +41,11 @@ def standings():
     # Filling in empty lists.
     count = 0
     while count < 20:
-        # Team postion data.
+        # Team ID.
+        id_list.append(int(json.dumps(json_res
+            ["response"][0]["league"]["standings"][0][count]["team"]["id"])))
+
+        # Team rank.
         rank_list.append(int(json.dumps(json_res
             ["response"][0]["league"]["standings"][0][count]["rank"])))
 
@@ -75,16 +80,18 @@ def standings():
         # Number of goal differential.
         goals_diff.append(int(json.dumps(json_res
             ["response"][0]["league"]["standings"][0][count]["goalsDiff"])))
+            
         count += 1
 
-    return rank_list, team_list, wins_list, draws_list, loses_list, points_list, goals_for, goals_against, goals_diff
+    return id_list, rank_list, team_list, wins_list, draws_list, loses_list, points_list, goals_for, goals_against, goals_diff
 
+# Function to build the dataframe from the lists in the previous function.
 def dataframe():
-	rank_list, team_list, wins_list, draws_list, loses_list, points_list, goals_for, goals_against, goals_diff = standings()
+	id_list, rank_list, team_list, wins_list, draws_list, loses_list, points_list, goals_for, goals_against, goals_diff = standings()
 
 	# Setting the headers then zipping the lists to create a dataframe.
-	headers = ['Rank', 'Team', 'Wins', 'Draws', 'Loses', 'Points', 'GF', 'GA', 'GD']
-	zipped = list(zip(rank_list, team_list, wins_list, draws_list, loses_list, points_list, goals_for, goals_against, goals_diff))
+	headers = ['ID', 'Rank', 'Team', 'Wins', 'Draws', 'Loses', 'Points', 'GF', 'GA', 'GD']
+	zipped = list(zip(id_list, rank_list, team_list, wins_list, draws_list, loses_list, points_list, goals_for, goals_against, goals_diff))
 
 	df = pd.DataFrame(zipped, columns=headers)
 
