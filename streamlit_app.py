@@ -7,6 +7,10 @@ import pandas as pd
 
 st.set_page_config(layout="wide")
 
+def local_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
 def background_processing():
     # Create API client.
     credentials = service_account.Credentials.from_service_account_info(
@@ -25,129 +29,223 @@ def background_processing():
         return data
 
     # Calling variables from toml file.
-    standings_table = st.secrets["football_db"]["standings"]
+    locations_table = st.secrets["football_db"]["locations"]
     players_table = st.secrets["football_db"]["players"]
+    standings_table = st.secrets["football_db"]["standings"]
+    teams_table = st.secrets["football_db"]["teams"]
 
-    # Running SQL query to retrieve data.
-    standings_data = run_query("""
-        SELECT * FROM
-        {}
-        ORDER BY Rank
-        """.format(standings_table)
+    # Running SQL query to retrieve data from the following tables:
+
+    # Locations table.
+    locations_data = run_query(f"""
+        SELECT latitude, longitude
+        FROM {locations_table}
+        """
     )
 
-    players_data = run_query("""
-        SELECT * FROM
-        {}
+    # Players table.
+    players_data = run_query(f"""
+        SELECT *
+        FROM {players_table}
         ORDER BY Goals DESC
-        """.format(players_table)
+        """
     )
 
-    standings_df = pd.DataFrame(data = standings_data)
-    players_df = pd.DataFrame(data = players_data)
+    # Standings table.
+    standings_data = run_query(f"""
+        SELECT Rank, Team, Wins, Draws, Loses, Points, GF, GA, GD
+        FROM {standings_table}
+        ORDER BY Rank
+        """
+    )
 
-    return standings_df, players_df
+    # Teams table.
+    teams_data = run_query(f"""
+        SELECT *
+        FROM {teams_table}
+        """
+    )
+
+    # Creating dataframes from BigQuery tables.
+    locations_df = pd.DataFrame(data = locations_data)
+    players_df = pd.DataFrame(data = players_data)
+    standings_df = pd.DataFrame(data = standings_data)
+    teams_df = pd.DataFrame(data = teams_data)
+
+    return locations_df, players_df, standings_df, teams_df
 
 def streamlit_app():
-    standings_df, players_df = background_processing()
+    locations_df, players_df, standings_df, teams_df = background_processing()
 
     logo = st.secrets["elements"]["logo_image"]
 
-    # Setting page layout by columns.
-    col1, col2 = st.columns((3, 2))
-    
-    col3, col4, col5, col6, col7 = st.columns((1, 1, 1, 1, 1))
-
+    # Premier League logo.
+    col1, col = st.columns((2, 4))
     with st.container():
-        # Column one
-        col1.title("Premier League Statistics for 2022/23 " + "⚽️")
+        col1.image(logo)
 
-        col1.subheader("Current Standings:")
-        col1.table(standings_df)
+    # Title.
+    col1, col = st.columns((9, 1))
+    with st.container():
+        col1.title("Premier League Statistics / '22-'23")
 
-        col1.subheader("Top Scorers")
+    # Tab menu.
+    tab1, tab2, tab3 = st.tabs(["📄 Overview", "⚽️ Top Teams", "🏃🏻‍♂️ Top Players"])
 
-        # Column two
-        col2.image(logo)
+    # Tab 1, overview
+    with tab1:
 
-        col2.subheader("Points per Team:")
+        col1, col2 = st.columns(2)
 
-        # Creating the slider.
-        points = standings_df['Points'].tolist()
-        points_selection = col2.slider(
-            'Select a Range of Points:',
-            min_value = min(points),
-            max_value = max(points),
-            value = (min(points), max(points))
-        )
+        # Standings table.
+        with col1:
+            st.subheader("Standings")
 
-        # Picking colors to use for the bar chart.
-        colors = ['indigo',] * 20
+            st.table(standings_df)
 
-        # Making sure the bar chart changes with the slider.
-        mask = standings_df['Points'].between(*points_selection)
-        results = standings_df[mask].shape[0]
-        col2.markdown(f'*Teams within range of selected points: {results}*')
-        df_grouped = standings_df[mask]
-        df_grouped = df_grouped.reset_index()
+        # Slider and bar graph.
+        with col2:
+            st.subheader("Points per Team:")
 
-        # Creating the bar chart.
-        points_chart = go.Figure(data=[go.Bar(
-            x = df_grouped['Team'],
-            y = df_grouped['Points'],
-            marker_color = colors,
-            text = df_grouped['Points'],
-            textposition = 'auto'
-        )])
-
-        # Rotating x axis lables.
-        points_chart.update_layout(
-            xaxis_tickangle = -35,
-            autosize = False,
-            margin = dict (
-                l = 0,
-                r = 0,
-                b = 0,
-                t = 0
+            # Creating the slider.
+            points = standings_df['Points'].tolist()
+            points_selection = st.slider(
+                'Select a Range of Points:',
+                min_value = min(points),
+                max_value = max(points),
+                value = (min(points), max(points))
             )
-        )
 
-        col2.plotly_chart(points_chart, use_container_width = True)
+            # Picking colors to use for the bar chart.
+            colors = ['indigo',] * 20
 
-    with st.container():
-        # First top scorer
-        col3.markdown("![Image]({})".format(players_df.iloc[0][4]))
-        col3.markdown("**{}**".format(players_df.iloc[0][0]))
-        col3.markdown("**Goals:** {}".format(players_df.iloc[0][1]))
-        col3.markdown("**Team:** {}".format(players_df.iloc[0][2]))
-        col3.markdown("**Nationality:** {}".format(players_df.iloc[0][3]))
+            # Making sure the bar chart changes with the slider.
+            mask = standings_df['Points'].between(*points_selection)
+            results = standings_df[mask].shape[0]
+            st.markdown(f'*Teams within range of selected points: {results}*')
+            df_grouped = standings_df[mask]
+            df_grouped = df_grouped.reset_index()
+
+            # Creating the bar chart.
+            points_chart = go.Figure(data=[go.Bar(
+                x = df_grouped['Team'],
+                y = df_grouped['Points'],
+                marker_color = colors,
+                text = df_grouped['Points'],
+                textposition = 'auto'
+            )])
+
+            # Rotating x axis lables.
+            points_chart.update_layout(
+                xaxis_tickangle = -35,
+                autosize = False,
+                margin = dict (
+                    l = 0,
+                    r = 0,
+                    b = 0,
+                    t = 0
+                )
+            )
+
+            st.plotly_chart(points_chart, use_container_width = True)
+
+        # Map of stadiums.
+        st.subheader("Location of Stadiums")
+        st.map(locations_df, use_container_width=True)
+
+    # Tab 2, top teams
+    with tab2:
         
-        # Second top scorer
-        col4.markdown("![Image]({})".format(players_df.iloc[1][4]))
-        col4.markdown("**{}**".format(players_df.iloc[1][0]))
-        col4.markdown("**Goals:** {}".format(players_df.iloc[1][1]))
-        col4.markdown("**Team:** {}".format(players_df.iloc[1][2]))
-        col4.markdown("**Nationality:** {}".format(players_df.iloc[1][3]))
+        st.subheader("Top 5 Teams")
 
-        # Third top scorer
-        col5.markdown("![Image]({})".format(players_df.iloc[2][4]))
-        col5.markdown("**{}**".format(players_df.iloc[2][0]))
-        col5.markdown("**Goals:** {}".format(players_df.iloc[2][1]))
-        col5.markdown("**Team:** {}".format(players_df.iloc[2][2]))
-        col5.markdown("**Nationality:** {}".format(players_df.iloc[2][3]))
+        col1, col2, col3, col4, col5 = st.columns(5)
 
-        # Fourth top scorer
-        col6.markdown("![Image]({})".format(players_df.iloc[3][4]))
-        col6.markdown("**{}**".format(players_df.iloc[3][0]))
-        col6.markdown("**Goals:** {}".format(players_df.iloc[3][1]))
-        col6.markdown("**Team:** {}".format(players_df.iloc[3][2]))
-        col6.markdown("**Nationality:** {}".format(players_df.iloc[3][3]))
+        with col1:
+            # First top team.
+            st.markdown(f"![Image]({(teams_df.iloc[0][0])})")
+            st.markdown(f"**Form:** {(teams_df.iloc[0][1])}")
+            st.markdown(f"**Clean Sheets:** {(teams_df.iloc[0][2])}")
+            st.markdown(f"**Penalties Scored:** {(teams_df.iloc[0][3])}")
+            st.markdown(f"**Penalties Missed:** {(teams_df.iloc[0][4])}")
 
-        # Fifth top scorer
-        col7.markdown("![Image]({})".format(players_df.iloc[4][4]))
-        col7.markdown("**{}**".format(players_df.iloc[4][0]))
-        col7.markdown("**Goals:** {}".format(players_df.iloc[4][1]))
-        col7.markdown("**Team:** {}".format(players_df.iloc[4][2]))
-        col7.markdown("**Nationality:** {}".format(players_df.iloc[4][3]))
+        with col2:
+            # Second top team.
+            st.markdown(f"![Image]({(teams_df.iloc[1][0])})")
+            st.markdown(f"**Form:** {(teams_df.iloc[1][1])}")
+            st.markdown(f"**Clean Sheets:** {(teams_df.iloc[1][2])}")
+            st.markdown(f"**Penalties Scored:** {(teams_df.iloc[1][3])}")
+            st.markdown(f"**Penalties Missed:** {(teams_df.iloc[1][4])}")
 
+        with col3:
+            # Third top team.
+            st.markdown(f"![Image]({(teams_df.iloc[2][0])})")
+            st.markdown(f"**Form:** {(teams_df.iloc[2][1])}")
+            st.markdown(f"**Clean Sheets:** {(teams_df.iloc[2][2])}")
+            st.markdown(f"**Penalties Scored:** {(teams_df.iloc[2][3])}")
+            st.markdown(f"**Penalties Missed:** {(teams_df.iloc[2][4])}")
+
+        with col4:
+            # Fourth top team.
+            st.markdown(f"![Image]({(teams_df.iloc[3][0])})")
+            st.markdown(f"**Form:** {(teams_df.iloc[3][1])}")
+            st.markdown(f"**Clean Sheets:** {(teams_df.iloc[3][2])}")
+            st.markdown(f"**Penalties Scored:** {(teams_df.iloc[3][3])}")
+            st.markdown(f"**Penalties Missed:** {(teams_df.iloc[3][4])}")
+
+        with col5:
+            # Fifth top team.
+            st.markdown(f"![Image]({(teams_df.iloc[4][0])})")
+            st.markdown(f"**Form:** {(teams_df.iloc[4][1])}")
+            st.markdown(f"**Clean Sheets:** {(teams_df.iloc[4][2])}")
+            st.markdown(f"**Penalties Scored:** {(teams_df.iloc[4][3])}")
+            st.markdown(f"**Penalties Missed:** {(teams_df.iloc[4][4])}")
+
+    # Tab 3, top players
+    with tab3:
+
+        st.subheader("Top 5 Scorers")
+        
+        col1, col2, col3, col4, col5 = st.columns(5)
+
+        with col1:
+            # First top scorer.
+            st.markdown(f"![Image]({(players_df.iloc[0][4])})")
+            st.markdown(f"**{(players_df.iloc[0][0])}**")
+            st.markdown(f"**Goals:** {(players_df.iloc[0][1])}")
+            st.markdown(f"**Team:** {(players_df.iloc[0][2])}")
+            st.markdown(f"**Nationality:** {(players_df.iloc[0][3])}")
+        
+        with col2:
+            # Second top scorer.
+            st.markdown(f"![Image]({(players_df.iloc[1][4])})")
+            st.markdown(f"**{(players_df.iloc[1][0])}**")
+            st.markdown(f"**Goals:** {(players_df.iloc[1][1])}")
+            st.markdown(f"**Team:** {(players_df.iloc[1][2])}")
+            st.markdown(f"**Nationality:** {(players_df.iloc[1][3])}")
+
+        with col3:
+            # Third top scorer.
+            st.markdown(f"![Image]({(players_df.iloc[2][4])})")
+            st.markdown(f"**{(players_df.iloc[2][0])}**")
+            st.markdown(f"**Goals:** {(players_df.iloc[2][1])}")
+            st.markdown(f"**Team:** {(players_df.iloc[2][2])}")
+            st.markdown(f"**Nationality:** {(players_df.iloc[2][3])}")
+
+        with col4:
+            # Fourth top scorer.
+            st.markdown(f"![Image]({(players_df.iloc[3][4])})")
+            st.markdown(f"**{(players_df.iloc[3][0])}**")
+            st.markdown(f"**Goals:** {(players_df.iloc[3][1])}")
+            st.markdown(f"**Team:** {(players_df.iloc[3][2])}")
+            st.markdown(f"**Nationality:** {(players_df.iloc[3][3])}")
+            
+        with col5:
+            # Fifth top scorer.
+            col5.markdown(f"![Image]({(players_df.iloc[4][4])})")
+            col5.markdown(f"**{(players_df.iloc[4][0])}**")
+            col5.markdown(f"**Goals:** {(players_df.iloc[4][1])}")
+            col5.markdown(f"**Team:** {(players_df.iloc[4][2])}")
+            col5.markdown(f"**Nationality:** {(players_df.iloc[4][3])}")
+
+local_css("style.css")
 streamlit_app()
