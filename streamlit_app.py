@@ -2,6 +2,7 @@
 from google.oauth2 import service_account
 from google.cloud import bigquery
 import plotly.graph_objects as go
+import plotly.express as px
 import streamlit as st
 import pandas as pd
 
@@ -61,8 +62,12 @@ def background_processing():
 
     # Teams table.
     teams_data = run_query(f"""
-        SELECT *
-        FROM {teams_table}
+        SELECT logo, form, clean_sheets, penalties_scored, penalties_missed
+        FROM {teams_table} AS t
+        LEFT JOIN {standings_table} AS s
+        ON t.team = s.Team
+        ORDER BY s.Rank
+        LIMIT 5
         """
     )
 
@@ -163,7 +168,7 @@ def streamlit_app():
         with col1:
             # First top team.
             st.markdown(f"![Image]({(teams_df.iloc[0][0])})")
-            st.markdown(f"**Form:** {(teams_df.iloc[0][1])}")
+            st.markdown(f"**Form (Last 5):** {((teams_df.iloc[0][1])[-5:])}")
             st.markdown(f"**Clean Sheets:** {(teams_df.iloc[0][2])}")
             st.markdown(f"**Penalties Scored:** {(teams_df.iloc[0][3])}")
             st.markdown(f"**Penalties Missed:** {(teams_df.iloc[0][4])}")
@@ -171,7 +176,7 @@ def streamlit_app():
         with col2:
             # Second top team.
             st.markdown(f"![Image]({(teams_df.iloc[1][0])})")
-            st.markdown(f"**Form:** {(teams_df.iloc[1][1])}")
+            st.markdown(f"**Form (Last 5):** {((teams_df.iloc[1][1])[-5:])}")
             st.markdown(f"**Clean Sheets:** {(teams_df.iloc[1][2])}")
             st.markdown(f"**Penalties Scored:** {(teams_df.iloc[1][3])}")
             st.markdown(f"**Penalties Missed:** {(teams_df.iloc[1][4])}")
@@ -179,7 +184,7 @@ def streamlit_app():
         with col3:
             # Third top team.
             st.markdown(f"![Image]({(teams_df.iloc[2][0])})")
-            st.markdown(f"**Form:** {(teams_df.iloc[2][1])}")
+            st.markdown(f"**Form (Last 5):** {((teams_df.iloc[2][1])[-5:])}")
             st.markdown(f"**Clean Sheets:** {(teams_df.iloc[2][2])}")
             st.markdown(f"**Penalties Scored:** {(teams_df.iloc[2][3])}")
             st.markdown(f"**Penalties Missed:** {(teams_df.iloc[2][4])}")
@@ -187,7 +192,7 @@ def streamlit_app():
         with col4:
             # Fourth top team.
             st.markdown(f"![Image]({(teams_df.iloc[3][0])})")
-            st.markdown(f"**Form:** {(teams_df.iloc[3][1])}")
+            st.markdown(f"**Form (Last 5):** {((teams_df.iloc[3][1])[-5:])}")
             st.markdown(f"**Clean Sheets:** {(teams_df.iloc[3][2])}")
             st.markdown(f"**Penalties Scored:** {(teams_df.iloc[3][3])}")
             st.markdown(f"**Penalties Missed:** {(teams_df.iloc[3][4])}")
@@ -195,10 +200,56 @@ def streamlit_app():
         with col5:
             # Fifth top team.
             st.markdown(f"![Image]({(teams_df.iloc[4][0])})")
-            st.markdown(f"**Form:** {(teams_df.iloc[4][1])}")
+            st.markdown(f"**Form (Last 5):** {((teams_df.iloc[4][1])[-5:])}")
             st.markdown(f"**Clean Sheets:** {(teams_df.iloc[4][2])}")
             st.markdown(f"**Penalties Scored:** {(teams_df.iloc[4][3])}")
             st.markdown(f"**Penalties Missed:** {(teams_df.iloc[4][4])}")
+
+        team_forms = [[], [], [], [], []]
+
+        forms = [teams_df.iloc[0][1], teams_df.iloc[1][1], teams_df.iloc[2][1], teams_df.iloc[3][1], teams_df.iloc[4][1]]
+
+        count = 0
+        while count < 5:
+            points = 0
+            for char in forms[count]:
+                if char == "W":
+                    points += 3
+                elif char == "D":
+                    points += 1
+                else:
+                    points += 0
+
+                team_forms[count].append(points)
+
+            count += 1
+
+        games = [num for num in range(1, 39)]
+
+        headers = [
+            str(standings_df.iloc[0][1]),
+            str(standings_df.iloc[1][1]),
+            str(standings_df.iloc[2][1]),
+            str(standings_df.iloc[3][1]),
+            str(standings_df.iloc[4][1]),
+            "matchday"
+        ]
+        zipped = list(zip(team_forms[0], team_forms[1], team_forms[2], team_forms[3], team_forms[4], games))
+
+        df = pd.DataFrame(zipped, columns=headers)
+
+        fig = px.line(
+            df, 
+            x='matchday', 
+            y=df.columns[0:5], 
+            markers=True, title="Top Five Teams / Matchday: " + str(len(df.index)), 
+            labels={
+                "matchday": "Matchday",
+                "value": "Points",
+                "variable": "Team"
+            }
+        )
+        st.plotly_chart(fig)
 
     # Tab 3, top players
     with tab3:
