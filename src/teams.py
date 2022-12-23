@@ -50,6 +50,7 @@ def call_api():
     url = "https://api-football-v1.p.rapidapi.com/v3/teams/statistics"
 
     # Empty lists that will be filled and then used to create a dataframe.
+    team_list = []
     logo_list = []
     form_list = []
     clean_sheets_list = []
@@ -62,6 +63,9 @@ def call_api():
         query = {"league": "39", "season": "2022", "team": id_list[count]}
         response = requests.request("GET", url, headers=headers, params=query)
         json_res = response.json()
+
+        # Team's name.
+        team_list.append(str(json_res["response"]["team"]["name"]))
 
         # Team's logo.
         logo_list.append(str(json_res["response"]["team"]["logo"]))
@@ -80,15 +84,15 @@ def call_api():
 
         count += 1
 
-    return logo_list, form_list, clean_sheets_list, penalty_scored_list, penalty_missed_list
+    return team_list, logo_list, form_list, clean_sheets_list, penalty_scored_list, penalty_missed_list
 
 # Function to build the dataframe from the lists in the previous function.
 def dataframe():
-    logo_list, form_list, clean_sheets_list, penalty_scored_list, penalty_missed_list = call_api()
+    team_list, logo_list, form_list, clean_sheets_list, penalty_scored_list, penalty_missed_list = call_api()
 
     # Setting the headers then zipping the lists to create a dataframe.
-    headers = ['logo', 'form', 'clean_sheets', 'penalties_scored', 'penalties_missed']
-    zipped = list(zip(logo_list, form_list, clean_sheets_list, penalty_scored_list, penalty_missed_list))
+    headers = ['team', 'logo', 'form', 'clean_sheets', 'penalties_scored', 'penalties_missed']
+    zipped = list(zip(team_list, logo_list, form_list, clean_sheets_list, penalty_scored_list, penalty_missed_list))
 
     df = pd.DataFrame(zipped, columns=headers)
 
