@@ -16,6 +16,6 @@ jobs:
     - uses: actions/checkout@v3
     - name: Build the Docker image
       run: |
-        echo "${{ secrets.DOCKERPW }}" | docker login -u "${{ DOCKER_USER }}" --password-stdin
-        docker image build -t ${{ DOCKER_USER }}/premier_league:1.0 .
-        docker push ${{ DOCKER_USER }}/premier_league:1.0 
+        echo "${{ secrets.DOCKERPW }}" | docker login -u "${{ secrets.DOCKER_USER }}" --password-stdin
+        docker image build -t ${{ secrets.DOCKER_USER  }}/premier_league:1.0 .
+        docker push ${{ secrets.DOCKER_USER }}/premier_league:1.0 
