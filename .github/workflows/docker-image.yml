@@ -1,0 +1,21 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: |
+        echo "${{ secrets.DOCKERPW }}" | docker login -u "${{ DOCKER_USER }}" --password-stdin
+        docker image build -t ${{ DOCKER_USER }}/premier_league:1.0 .
+        docker push ${{ DOCKER_USER }}/premier_league:1.0 
