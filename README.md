@@ -3,10 +3,6 @@
 <div>
     <img alt="Version" src="https://img.shields.io/badge/Current Version-1.0-blue.svg?cacheSeconds=2592000" />
     <img alt="Version" src="https://img.shields.io/badge/Project Number-2-orange.svg?cacheSeconds=2592000" />
-    <style type="text/css">
-        ol { list-style-type: upper-roman; }
-        ol ol { list-style-type: lower-roman; }
-    </style>
 </div>
 
 ## Description
