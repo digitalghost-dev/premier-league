@@ -12,6 +12,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - uses: docker/setup-qemu-action@v2 
+      with:
+          platforms: arm64
     - name: Build the Docker image
       run: |
         echo "${{ secrets.DOCKER_PWD }}" | docker login -u "${{ secrets.DOCKER_USER }}" --password-stdin
