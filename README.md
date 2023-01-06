@@ -30,7 +30,7 @@ View the dashboard on [Streamlit](https://premierleague.streamlit.app/).
     1. The CI/CD pipeline builds and pushes a new Docker image/tag to my private DockerHub repository.
 
 ### Pipeline Flowchart
-![football-data-flowchart](https://storage.googleapis.com/personal-website-nv-bucket/football-data-pipeline-chart.png)
+![football-data-flowchart](https://storage.googleapis.com/personal-website-nv-bucket/flowcharts/football-data-pipeline-flowchart.png)
 
 ## Services Used
 * **Scheduler:** [cron](https://en.wikipedia.org/wiki/Cron)
