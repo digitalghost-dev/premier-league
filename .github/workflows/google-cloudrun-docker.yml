@@ -1,0 +1,69 @@
+# Overview:
+#
+# 1. Authenticate to Google Cloud
+# 2. Authenticate Docker to Artifact Registry
+# 3. Build a docker container
+# 4. Publish it to Google Artifact Registry
+# 5. Deploy it to Cloud Run
+#
+# 3. Ensure the required IAM permissions are granted
+#
+#    Cloud Run
+#      roles/run.admin
+#      roles/iam.serviceAccountUser     (to act as the Cloud Run runtime service account)
+#
+#    Artifact Registry
+#      roles/artifactregistry.admin     (project or repository level)
+#
+#    NOTE: You should always follow the principle of least privilege when assigning IAM roles
+#
+#
+# 5. Change the values for the GAR_LOCATION, SERVICE and REGION environment variables (below).
+#
+# For more support on how to run this workflow, please visit https://github.com/marketplace/actions/deploy-to-cloud-run
+#
+name: Build and Deploy to Cloud Run as Job
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+
+env:
+  PROJECT_ID: ${{ secrets.PROJECT_ID }}
+  GAR_LOCATION: us-central1
+  SERVICE: ${{ secrets.SERVICE_NAME }}
+  JOB: ${{ secrets.SERVICE_NAME }}
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        
+      - name: Google Auth
+        id: auth
+        uses: 'google-github-actions/auth@v0'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}''
+
+      - name: Build and Push Container
+        run: |-
+          docker build -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}" ./
+          docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}"
+
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: 'spencercorwin/deploy-cloudrun@enable-jobs'
+        with:
+          job: ${{ env.JOB }}
+          gcloud_component: beta
+          region: ${{ env.REGION }}
+          # NOTE: If using a pre-built image, update the image name here
+          image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/${{ env.SERVICE }}:${{ github.sha }}
+
+      # If required, use the Cloud Run url output in later steps
+      - name: Show Output
+        run: echo ${{ steps.deploy.outputs.url }}
