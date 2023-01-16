@@ -42,8 +42,8 @@ on:
 env:
   PROJECT_ID: ${{ secrets.PROJECT_ID }}
   GAR_LOCATION: us-central1
-  SERVICE: ${{ secrets.SERVICE_NAME }}
   JOB: ${{ secrets.SERVICE_NAME }}
+  REGISTRY_REPO: ${{ secrets.REIGSTRY_REPO }}
 
 jobs:
   deploy:
@@ -61,8 +61,8 @@ jobs:
 
       - name: Build and Push Container
         run: |-
-          docker build -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}" ./
-          docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}"
+          docker build -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}:${{ github.sha }}" ./
+          docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}:${{ github.sha }}"
 
       - name: Deploy to Cloud Run
         id: deploy
