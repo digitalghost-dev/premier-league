@@ -25,7 +25,7 @@
 name: Build and Deploy to Cloud Run as Job
 
 on:
-  workflow_dispatch:
+workflow_dispatch:
   push:
     branches: [ "main" ]
 
@@ -47,7 +47,7 @@ jobs:
         id: auth
         uses: 'google-github-actions/auth@v0'
         with:
-          credentials_json: '${{ secrets.GCP_CREDENTIALS }}''
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
       - name: Build and Push Container
         run: |-
