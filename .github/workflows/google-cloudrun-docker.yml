@@ -57,7 +57,10 @@ jobs:
         id: auth
         uses: 'google-github-actions/auth@v0'
         with:
-          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+          token_format: 'access_token'
+          workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
+          service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}'
+
           
       - name: Docker Auth
         id: docker-auth
