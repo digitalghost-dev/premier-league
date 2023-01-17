@@ -63,7 +63,6 @@ jobs:
           token_format: 'access_token'
           workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
           service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}'
-
           
       - name: Docker Auth
         id: docker-auth
@@ -84,9 +83,9 @@ jobs:
         with:
           job: ${{ env.JOB }}
           gcloud_component: beta
-          region: ${{ env.REGION }}
+          region: ${{ env.GAR_LOCATION }}
           # NOTE: If using a pre-built image, update the image name here
-          image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/${{ env.SERVICE }}:${{ github.sha }}
+          image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/premier_league:${{ github.sha }}
 
       # If required, use the Cloud Run url output in later steps
       - name: Show Output
