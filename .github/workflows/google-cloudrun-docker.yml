@@ -43,7 +43,7 @@ env:
   PROJECT_ID: ${{ secrets.PROJECT_ID }}
   GAR_LOCATION: us-central1
   JOB: ${{ secrets.SERVICE_NAME }}
-  REGISTRY_REPO: ${{ secrets.REIGSTRY_REPO }}
+  REGISTRY_REPO: ${{ secrets.REGISTRY_REPO }}
 
 jobs:
   deploy:
