@@ -1,8 +1,8 @@
 *.json
-test*
+testing/
+.DS_store
 config.py
 __pycache__
 src/__pycache__
-go-api/__pycache__
+football-data-api/__pycache__
 .streamlit/secrets.toml
-.DS_store

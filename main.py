@@ -1,9 +1,4 @@
-from config import c, a
-import os
-
-os.environ[c]=a
-
-print("Process starting...")
+print("------Process starting------")
 
 def stats():
     # Importing classes from src files.
