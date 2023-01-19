@@ -1,13 +1,31 @@
 # Importing needed libraries.
-from config import locations_table, locations_api, project_id
 from google.cloud import bigquery
 import pandas as pd
 import requests
 import json
 
+locations_table = "cloud-data-infrastructure.football_data_dataset.locations"
+
+def gcp_secret():
+    # Import the Secret Manager client library.
+    from google.cloud import secretmanager
+
+    # Create the Secret Manager client.
+    client = secretmanager.SecretManagerServiceClient()
+
+    # Build the resource name of the secret version.
+    name = "projects/463690670206/secrets/locations_api/versions/1"
+
+    # Access the secret version.
+    response = client.access_secret_version(request={"name": name})
+
+    payload = response.payload.data.decode("UTF-8")
+    return payload
+
 def call_api():
+	payload = gcp_secret()
 	# Building query to retrieve data.
-	response = requests.request("GET", locations_api)
+	response = requests.request("GET", payload)
 	json_res = response.json()
 
 	return json_res
@@ -67,7 +85,7 @@ class Locations:
 	def load(self):
 		df = dataframe() # Getting dataframe creating in dataframe() function.
 		
-		client = bigquery.Client(project=project_id)
+		client = bigquery.Client(project="cloud-data-infrastructure")
 
 		table_id = locations_table
 

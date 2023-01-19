@@ -13,7 +13,7 @@ def stats():
     teams = Teams()
     
     # Dropping and loading the standings and players dataframes.
-    return players.drop(), players.load(), standings.drop(), standings.load(), teams.drop(), teams.load()
+    return locations.drop(), locations.load(), players.drop(), players.load(), standings.drop(), standings.load(), teams.drop(), teams.load()
 
 if __name__ == "__main__":
     stats()

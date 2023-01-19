@@ -1,15 +1,33 @@
 # Importing needed modules.
-from config import standings_table, rapid_api, project_id
 from google.cloud import bigquery
 import pandas as pd
 import requests
 import json
 
+standings_table = "cloud-data-infrastructure.football_data_dataset.standings"
+
+def gcp_secret():
+    # Import the Secret Manager client library.
+    from google.cloud import secretmanager
+
+    # Create the Secret Manager client.
+    client = secretmanager.SecretManagerServiceClient()
+
+    # Build the resource name of the secret version.
+    name = "projects/463690670206/secrets/rapid-api/versions/1"
+
+    # Access the secret version.
+    response = client.access_secret_version(request={"name": name})
+
+    payload = response.payload.data.decode("UTF-8")
+    return payload
+
 # Function to call the Football API.
 def call_api():
+    payload = gcp_secret()
     # Headers used for RapidAPI.
     headers = {
-        "X-RapidAPI-Key": rapid_api,
+        "X-RapidAPI-Key": payload,
         "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"
     }
 
@@ -115,7 +133,7 @@ class Standings:
         df = dataframe() # Getting dataframe creating in dataframe() function.
 
         # Construct a BigQuery client object.
-        client = bigquery.Client(project=project_id)
+        client = bigquery.Client(project="cloud-data-infrastructure")
 
         table_id = standings_table
 
