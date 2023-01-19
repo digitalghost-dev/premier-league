@@ -1,0 +1,18 @@
+name: Secret Printer
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  print_secret:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: python print secret
+      env:
+        MY_VAL: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+      run: |
+        import os
+        for q in (os.getenv("MY_VAL")):
+          print(q)
+      shell: python
