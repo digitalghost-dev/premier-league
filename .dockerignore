@@ -6,4 +6,4 @@ __pycache__
 .streamlit/
 src/__pycache__
 streamlit_app.py
-football-data-api/
+locations-api/
