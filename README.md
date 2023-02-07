@@ -6,13 +6,20 @@
 
 ## Description
 
-> My second project, built to gain skills in: Python, BigQuery, Streamlit, Docker, GitHub Actions (CI/CD), plus working with and creating APIs.
+This pipeline provides statistics and data from the current [Premier League](https://en.wikipedia.org/wiki/Premier_League) season. The metrics shown are:
 
-This project uses the [Football API](https://rapidapi.com/api-sports/api/api-football/) and a self-built API (found in `locations-api/`) to retrieve statistics for the current season of England's Premier League, the top division for men's soccer.
-
-Using Python, some SQL, and BigQuery, this data pipeline turns raw JSON data into an interactive visualization on Streamlit.
-
-Docker, GitHub Actions, and Cloud Scheduler is also used to automate processes.
+* League Standings
+* Map with points of stadium locations
+* Statistics for Top 5 Teams
+    * Form (last 5 games)
+    * Clean Sheets
+    * Penalties Scored
+    * Penalties Missed
+* Statistics for Top 5 Players
+    * Name
+    * Goals
+    * Team
+    * Nationality
 
 View the dashboard on [Streamlit](https://premierleague.streamlit.app/).
 
