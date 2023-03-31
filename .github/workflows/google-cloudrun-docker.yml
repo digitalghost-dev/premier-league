@@ -13,6 +13,10 @@ on:
         - warning
         - debug
   push:
+    paths-ignore:
+      - '.github/**'
+      - 'README.md'
+      - '.gitignore'
     branches: [ "main" ]
 
 env:
