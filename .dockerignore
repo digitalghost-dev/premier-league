@@ -3,7 +3,5 @@ testing/
 .DS_store
 .github/
 __pycache__
-.streamlit/
 src/__pycache__
-streamlit_app.py
 locations-api/
