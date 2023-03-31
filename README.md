@@ -1,8 +1,5 @@
 # Premier League Data Visualization with Streamlit
-
-<div>
-    <img alt="Version" src="https://img.shields.io/badge/Project Number-2-orange.svg?cacheSeconds=2592000" />
-</div>
+<sup>*Backend infrastructure source code for https://premierleague.streamlit.app*</sup>
 
 ## Overview
 * Extracts Premier League data with a self written API in Go and a Football API using Python.
