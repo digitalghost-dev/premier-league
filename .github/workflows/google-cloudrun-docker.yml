@@ -17,7 +17,9 @@ on:
       - '.github/**'
       - 'README.md'
       - '.gitignore'
-    branches: [ "main" ]
+    branches:
+      - "main"
+      - "containerization"
 
 env:
   PROJECT_ID: ${{ secrets.PROJECT_ID }}
