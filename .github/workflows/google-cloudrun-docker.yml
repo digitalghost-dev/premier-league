@@ -62,7 +62,7 @@ jobs:
         id: deploy
         uses: 'spencercorwin/deploy-cloudrun@enable-jobs'
         with:
-          job: pl_teams
+          job: pl-teams
           gcloud_component: beta
           region: ${{ env.GAR_LOCATION }}
           # NOTE: If using a pre-built image, update the image name here
