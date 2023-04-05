@@ -1,5 +1,4 @@
 # Premier League Data Visualization with Streamlit
-<sup>*Backend infrastructure source code for https://premierleague.streamlit.app*</sup>
 
 ## Overview
 * Extracts Premier League data with a self written API in Go and a Football API using Python.
