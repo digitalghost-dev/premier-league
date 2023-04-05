@@ -3,28 +3,24 @@ from google.cloud import bigquery
 import pandas as pd
 import requests
 import json
+import os
+
+os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
 
 standings_table = "cloud-data-infrastructure.football_data_dataset.standings"
 teams_table = "cloud-data-infrastructure.football_data_dataset.teams"
 
 def gcp_secret():
-    # Import the Secret Manager client library.
     from google.cloud import secretmanager
-
-    # Create the Secret Manager client.
     client = secretmanager.SecretManagerServiceClient()
-
-    # Build the resource name of the secret version.
     name = "projects/463690670206/secrets/rapid-api/versions/1"
-
-    # Access the secret version.
     response = client.access_secret_version(request={"name": name})
-
     payload = response.payload.data.decode("UTF-8")
+    
     return payload
 
 # Function to call the Teams table in BigQuery.
-def call_bigquery():
+def bigquery_call():
 
     bqclient = bigquery.Client()
 
@@ -33,7 +29,6 @@ def call_bigquery():
     SELECT *
     FROM {standings_table}
     ORDER BY Rank
-    LIMIT 5
     """
 
     pd.dataframe = (
@@ -49,15 +44,12 @@ def call_bigquery():
     return bigquery_dataframe
 
 # Function to call the Football API.
-def call_api():
+def api_call():
     payload = gcp_secret()
-    bigquery_dataframe = call_bigquery()
+    bigquery_dataframe = bigquery_call()
 
-    id_list = [bigquery_dataframe.iloc[0][0], 
-                bigquery_dataframe.iloc[1][0], 
-                bigquery_dataframe.iloc[2][0],
-                bigquery_dataframe.iloc[3][0],
-                bigquery_dataframe.iloc[4][0]]
+    # Iterate through bigquery_dataframe to get the team's id and create a list using list comprehension.
+    id_list = [bigquery_dataframe.iloc[i][0] for i in range(20)]
 
     # Headers used for RapidAPI.
     headers = {
@@ -106,8 +98,8 @@ def call_api():
     return team_list, logo_list, form_list, clean_sheets_list, penalty_scored_list, penalty_missed_list
 
 # Function to build the dataframe from the lists in the previous function.
-def dataframe():
-    team_list, logo_list, form_list, clean_sheets_list, penalty_scored_list, penalty_missed_list = call_api()
+def create_dataframe():
+    team_list, logo_list, form_list, clean_sheets_list, penalty_scored_list, penalty_missed_list = api_call()
 
     # Setting the headers then zipping the lists to create a dataframe.
     headers = ['team', 'logo', 'form', 'clean_sheets', 'penalties_scored', 'penalties_missed']
@@ -132,7 +124,7 @@ class Teams:
         print("Teams table dropped...")
 
     def load(self):
-        df = dataframe() # Getting dataframe creating in dataframe() function.
+        df = create_dataframe() # Getting dataframe creating in dataframe() function.
 
         # Construct a BigQuery client object.
         client = bigquery.Client(project="cloud-data-infrastructure")
@@ -147,3 +139,10 @@ class Teams:
         table = client.get_table(table_id)  # Make an API request.
         
         print(f"Loaded {table.num_rows} rows and {len(table.schema)} columns")
+
+# Creating an instance of the class.
+teams = Teams()
+
+# Calling the functions.
+teams.drop()
+teams.load()

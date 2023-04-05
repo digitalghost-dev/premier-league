@@ -1,0 +1,12 @@
+# Directories
+.github/
+locations-api/
+
+# Files
+keys.json
+.DS_store
+README.md
+
+# Cache
+__pycache__
+src/__pycache__
