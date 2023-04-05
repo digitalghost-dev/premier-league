@@ -22,7 +22,6 @@ on:
 env:
   PROJECT_ID: ${{ secrets.PROJECT_ID }}
   GAR_LOCATION: us-central1
-  JOB: ${{ secrets.JOB }}
   REGISTRY_REPO: ${{ secrets.REGISTRY_REPO }}
 
 jobs:
@@ -61,11 +60,11 @@ jobs:
         id: deploy
         uses: 'spencercorwin/deploy-cloudrun@enable-jobs'
         with:
-          job: ${{ env.JOB }}
+          job: pl_teams
           gcloud_component: beta
           region: ${{ env.GAR_LOCATION }}
           # NOTE: If using a pre-built image, update the image name here
-          image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/premier_league:3.1
+          image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/pl_teams:1.1
 
       # If required, use the Cloud Run url output in later steps
       - name: Show Output
