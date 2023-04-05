@@ -27,6 +27,8 @@ env:
   REGISTRY_REPO: ${{ secrets.REGISTRY_REPO }}
 
 jobs:
+
+  # Build and Deploy to Cloud Run for pl-teams.
   deploy:
     permissions:
       contents: 'read'
@@ -55,8 +57,8 @@ jobs:
 
       - name: Build and Push Container
         run: |-
-          docker build --file ./data/teams/Dockerfile --tag "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/pl_teams:1.1" ./
-          docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/pl_teams:1.1"
+          docker build --file ./data/teams/Dockerfile --tag "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/pl_teams:1.0" ./
+          docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/pl_teams:1.0"
 
       - name: Deploy to Cloud Run
         id: deploy
