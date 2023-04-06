@@ -1,0 +1,18 @@
+# Directories
+.github/
+.streamlit/
+locations-api/
+
+# Files
+./keys.json
+./.DS_store
+./CHANGELOG.md
+./README.md
+./streamlit_app.py
+./style.css
+./Dockerfile
+
+# Cache
+./__pycache__
+data/__pycache__
+data/teams/__pycache__
