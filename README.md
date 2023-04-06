@@ -2,7 +2,7 @@
 
 ## Overview
 * Extracts Premier League data with a self written API in Go and a Football API using Python.
-* Data is transformed and processed, loaded into BigQuery then sent to a Streamlit dashboard.
+* Data is transformed and processed, loaded into BigQuery, then sent to a Streamlit dashboard.
 * Project is containerized with Docker and uses GitHub Actions for CI/CD.
 
 ### Important Links
@@ -11,17 +11,18 @@
 * [Documentation](https://github.com/digitalghost-dev/football-data-pipeline/wiki/Football-Data-Pipeline-Documentation)
 
 ## How the Pipeline Works
-### Main Data Pipeline
-1. Cloud Scheduler triggers a Cloud Run Job execution everyday at 9am PST.
-2. Cloud Run Job runs a Docker container that is stored in Artifact Registry.
-3. The Docker container consists of four Python files under `src/` which are separated by the specific API endpoint they call and `main.py` which acts as the primary driver of those four files by calling their classes and functions.
-4. The following files: `src/teams.py`, `src/standings.py`, and `src/players` call the Football API which is hosted on [RapidAPI](https://rapidapi.com/search/marketplace). While `src/locations.py` calls the self-built API written in Go which is hosted on Cloud Run as a Service. All files extract, tranform, and load (ETL) the data. File names are based on the endpoints they reach.
-5. Data processed from APIs are sent to BigQuery.
+### Data Pipeline
+1. Cloud Scheduler triggers Cloud Run Job executions twice a day at 12AM and 12PM PST.
+2. Docker containers that are stored in Artifact Registry are ran as Jobs.
+3. Each Docker container holds a Python script that is responsible for calling its respective API endpoint and extracting the data. The following files: `teams.py`, `standings.py`, and `players` call the Football API which is hosted on [RapidAPI](https://rapidapi.com/search/marketplace). While `locations.py` calls the self-built API written in Go which is hosted on Cloud Run as a Service.
+4. The data is then transformed and dataframes are created.
+5. Dataframes are sent to BigQuery.
 6. When the Streamlit app loads, the BigQuery tables are queried to return the data.
 
-### CI/CD
-1. When a push is made to the GitHub Repository on the `main` branch, a workflow with GitHub Actions starts which begins by building a new Docker image.
+### CI/CD Pipeline
+1. When a push is made to the GitHub Repository on `main` branch, a workflow with GitHub Actions starts which begins by building a new Docker image.
 2. The Docker image is then pushed to Artifact Registry.
+3. The new image is then deployed to Cloud Run as a Job.
 
 ### Pipeline Flowchart
 ![football-data-flowchart](https://storage.googleapis.com/pipeline-flowcharts/football-data-pipeline-flowchart.png)

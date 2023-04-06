@@ -20,6 +20,7 @@ on:
       - '.github/**'
       - '.streamlit/**'
       - 'README.md'
+      - 'CHANGELOG.md'
       - '.gitignore'
       - 'streamlit_app.py'
       - 'style.css'
