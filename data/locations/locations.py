@@ -3,23 +3,21 @@ from google.cloud import bigquery
 import pandas as pd
 import requests
 import json
+import os
+
+os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
 
 locations_table = "cloud-data-infrastructure.football_data_dataset.locations"
 
 def gcp_secret():
     # Import the Secret Manager client library.
     from google.cloud import secretmanager
-
-    # Create the Secret Manager client.
+	
     client = secretmanager.SecretManagerServiceClient()
-
-    # Build the resource name of the secret version.
     name = "projects/463690670206/secrets/locations_api/versions/1"
-
-    # Access the secret version.
     response = client.access_secret_version(request={"name": name})
-
     payload = response.payload.data.decode("UTF-8")
+
     return payload
 
 def call_api():
@@ -27,11 +25,6 @@ def call_api():
 	# Building query to retrieve data.
 	response = requests.request("GET", payload)
 	json_res = response.json()
-
-	return json_res
-
-def locations():
-	json_res = call_api()	
 
 	# Empty lists that will be filled and then used to create a dataframe.
 	team_list = []
@@ -59,7 +52,7 @@ def locations():
 	return team_list, stadium_list, lat_list, lon_list
 
 def dataframe():
-	team_list, stadium_list, lat_list, lon_list = locations()
+	team_list, stadium_list, lat_list, lon_list = call_api()
 
 	# Setting the headers then zipping the lists to create a dataframe.
 	headers = ['team', 'stadium', 'latitude', 'longitude']
@@ -97,3 +90,10 @@ class Locations:
 		table = client.get_table(table_id)  # Make an API request.
 		
 		print(f"Loaded {table.num_rows} rows and {len(table.schema)} columns")
+
+# Creating an instance of the class.
+locations = Locations()
+
+# Calling the functions.
+locations.drop()
+locations.load()
