@@ -155,7 +155,7 @@ jobs:
 
       - name: Build and Push Container
         run: |-
-          docker build --file ./data/teams/Dockerfile --tag "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/pl_standings:1.0" ./
+          docker build --file ./data/standings/Dockerfile --tag "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/pl_standings:1.0" ./
           docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/pl_standings:1.0"
 
       - name: Deploy to Cloud Run
