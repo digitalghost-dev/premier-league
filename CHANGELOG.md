@@ -5,7 +5,7 @@ View the Streamlit dasboard: https://premierleague.streamlit.app
 
 ## [1.0.0] - 2023-03-05
 
-**Added**
+### **Added**
 
 Overview Tab
 * View the current standings for the league for the current season.
