@@ -11,7 +11,9 @@ standings_table = "cloud-data-infrastructure.football_data_dataset.standings"
 teams_table = "cloud-data-infrastructure.football_data_dataset.teams"
 
 def gcp_secret():
+    # Import the Secret Manager client library.
     from google.cloud import secretmanager
+    
     client = secretmanager.SecretManagerServiceClient()
     name = "projects/463690670206/secrets/rapid-api/versions/1"
     response = client.access_secret_version(request={"name": name})
@@ -44,7 +46,7 @@ def bigquery_call():
     return bigquery_dataframe
 
 # Function to call the Football API.
-def api_call():
+def call_api():
     payload = gcp_secret()
     bigquery_dataframe = bigquery_call()
 
@@ -99,7 +101,7 @@ def api_call():
 
 # Function to build the dataframe from the lists in the previous function.
 def create_dataframe():
-    team_list, logo_list, form_list, clean_sheets_list, penalty_scored_list, penalty_missed_list = api_call()
+    team_list, logo_list, form_list, clean_sheets_list, penalty_scored_list, penalty_missed_list = call_api()
 
     # Setting the headers then zipping the lists to create a dataframe.
     headers = ['team', 'logo', 'form', 'clean_sheets', 'penalties_scored', 'penalties_missed']

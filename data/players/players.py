@@ -3,6 +3,9 @@ from google.cloud import bigquery
 import pandas as pd
 import requests
 import json
+import os
+
+os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
 
 players_table = "cloud-data-infrastructure.football_data_dataset.players"
 
@@ -10,16 +13,11 @@ def gcp_secret():
     # Import the Secret Manager client library.
     from google.cloud import secretmanager
 
-    # Create the Secret Manager client.
     client = secretmanager.SecretManagerServiceClient()
-
-    # Build the resource name of the secret version.
     name = "projects/463690670206/secrets/rapid-api/versions/1"
-
-    # Access the secret version.
     response = client.access_secret_version(request={"name": name})
-
     payload = response.payload.data.decode("UTF-8")
+	
     return payload
 
 def call_api():
@@ -37,11 +35,6 @@ def call_api():
 	query = {"league":"39","season":"2022"}
 	response = requests.request("GET", url, headers=headers, params=query)
 	json_res = response.json()
-
-	return json_res
-
-def players():
-	json_res = call_api()
 
 	# Empty lists that will be filled and then used to create a dataframe.
 	full_name_list = []
@@ -78,7 +71,7 @@ def players():
 	return full_name_list, goals_list, team_list, nationality_list, photo_list
 
 def dataframe():
-	full_name_list, goals_list, team_list, nationality_list, photo_list = players()
+	full_name_list, goals_list, team_list, nationality_list, photo_list = call_api()
 
 	# Setting the headers then zipping the lists to create a dataframe.
 	headers = ['name', 'goals', 'team', 'nationality', 'photo']
@@ -118,3 +111,10 @@ class Players:
 		table = client.get_table(table_id)  # Make an API request.
 
 		print(f"Loaded {table.num_rows} rows and {len(table.schema)} columns")
+
+# Creating an instance of the class.
+players = Players()
+
+# Calling the functions.
+players.drop()
+players.load()
