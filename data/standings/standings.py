@@ -3,6 +3,9 @@ from google.cloud import bigquery
 import pandas as pd
 import requests
 import json
+import os
+
+os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
 
 standings_table = "cloud-data-infrastructure.football_data_dataset.standings"
 
@@ -10,16 +13,11 @@ def gcp_secret():
     # Import the Secret Manager client library.
     from google.cloud import secretmanager
 
-    # Create the Secret Manager client.
     client = secretmanager.SecretManagerServiceClient()
-
-    # Build the resource name of the secret version.
     name = "projects/463690670206/secrets/rapid-api/versions/1"
-
-    # Access the secret version.
     response = client.access_secret_version(request={"name": name})
-
     payload = response.payload.data.decode("UTF-8")
+
     return payload
 
 # Function to call the Football API.
@@ -38,11 +36,6 @@ def call_api():
     query = {"season":"2022","league":"39"}
     response = requests.request("GET", url, headers=headers, params=query)
     json_res = response.json()
-
-    return json_res
-
-def standings():
-    json_res = call_api()
 
     # Empty lists that will be filled and then used to create a dataframe.
     id_list = []
@@ -105,7 +98,7 @@ def standings():
 
 # Function to build the dataframe from the lists in the previous function.
 def dataframe():
-	id_list, rank_list, team_list, wins_list, draws_list, loses_list, points_list, goals_for, goals_against, goals_diff = standings()
+	id_list, rank_list, team_list, wins_list, draws_list, loses_list, points_list, goals_for, goals_against, goals_diff = call_api()
 
 	# Setting the headers then zipping the lists to create a dataframe.
 	headers = ['ID', 'Rank', 'Team', 'Wins', 'Draws', 'Loses', 'Points', 'GF', 'GA', 'GD']
@@ -145,3 +138,10 @@ class Standings:
         table = client.get_table(table_id)  # Make an API request.
         
         print(f"Loaded {table.num_rows} rows and {len(table.schema)} columns")
+
+# Creating an instance of the class.
+standings = Standings()
+
+# Calling the functions.
+standings.drop()
+standings.load()
