@@ -35,7 +35,7 @@ env:
 jobs:
 
   # --------- Build and Deploy to Cloud Run for pl-locations --------- #
-  deploy:
+  build-deploy-locations:
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -81,7 +81,7 @@ jobs:
         run: echo ${{ steps.deploy.outputs.url }}
 
   # --------- Build and Deploy to Cloud Run for pl-players --------- #
-  deploy:
+  build-deploy-players:
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -127,7 +127,7 @@ jobs:
         run: echo ${{ steps.deploy.outputs.url }}
 
   # --------- Build and Deploy to Cloud Run for pl-standingss --------- #
-  deploy:
+  build-deploy-standings:
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -173,7 +173,7 @@ jobs:
         run: echo ${{ steps.deploy.outputs.url }}
 
   # --------- Build and Deploy to Cloud Run for pl-teams --------- #
-  deploy:
+  build-deploy-teams:
     permissions:
       contents: 'read'
       id-token: 'write'
