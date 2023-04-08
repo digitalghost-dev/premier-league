@@ -3,7 +3,27 @@ This change log provides version history for the Streamlit app itself, not for a
 
 View the Streamlit dasboard: https://premierleague.streamlit.app
 
-## [1.0.0] - 2023-03-05
+## [1.1.0] - 2023-04-07
+
+### **Added**
+
+Top Teams Tab
+* Added `logo` and `form` for the rest of the league.
+
+### **Changed**
+
+Top Teams Tab
+* Center aligning `logo`, `form (last 5)`, `clean sheets`, `penalties scored`, and `penalties missed` in their containers.
+* Setting `logo` width for top 5 teams to `150px`.
+
+Top Players Tab
+* Center aligning `photo`, `name`, `goals`, `team`, and `nationality` in their containers.
+* Setting `photo` width for top 5 players to `150px`.
+
+### **Removed**
+* Removing `LIMIT 5` from SQL query to pull all teams.
+
+## [1.0.0] - 2023-04-05
 
 ### **Added**
 
