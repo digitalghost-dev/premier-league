@@ -71,7 +71,7 @@ def call_api():
     penalty_missed_list = []
 
     count = 0
-    while count < 5:
+    while count < 20:
         # Building query to retrieve data.
         query = {"league": "39", "season": "2022", "team": id_list[count]}
         response = requests.request("GET", url, headers=headers, params=query)
