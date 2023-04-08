@@ -1,7 +1,7 @@
 # Premier League Data Visualization with Streamlit
 
 ![builds](https://img.shields.io/github/actions/workflow/status/digitalghost-dev/premier-league/cloudrun-build-and-deploy.yml?style=flat-square)
-![version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
+![version](https://img.shields.io/badge/streamlit_app_version-1.1.0-blue?style=flat-square)
 ![size](https://img.shields.io/github/repo-size/digitalghost-dev/premier-league?style=flat-square)
 
 ## Overview
