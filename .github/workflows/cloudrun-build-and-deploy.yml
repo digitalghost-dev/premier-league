@@ -32,11 +32,40 @@ env:
   PROJECT_ID: ${{ secrets.PROJECT_ID }}
   GAR_LOCATION: us-central1
   REGISTRY_REPO: ${{ secrets.REGISTRY_REPO }}
+  NAME: ${{ secrets.NAME }}
+  EMAIL: ${{ secrets.EMAIL }}
 
 jobs:
 
+  black-formatting:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10'
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install black
+        
+    - name: Run Black
+      run: |
+        black data/
+
+    - name: Commit Changes
+      run: |
+        git config --local user.email "${{ env.EMAIL }}}}"
+        git config --local user.name "${{ env.NAME }}}}"
+        git add data/
+        git commit -m "Apply Black Formatting" --allow-empty
+        git push
+
   # --------- Build and Deploy to Cloud Run for pl-locations --------- #
   build-deploy-locations:
+    needs: black-formatting
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -83,6 +112,7 @@ jobs:
 
   # --------- Build and Deploy to Cloud Run for pl-players --------- #
   build-deploy-players:
+    needs: black-formatting
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -129,6 +159,7 @@ jobs:
 
   # --------- Build and Deploy to Cloud Run for pl-standingss --------- #
   build-deploy-standings:
+    needs: black-formatting
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -175,6 +206,7 @@ jobs:
 
   # --------- Build and Deploy to Cloud Run for pl-teams --------- #
   build-deploy-teams:
+    needs: black-formatting
     permissions:
       contents: 'read'
       id-token: 'write'
