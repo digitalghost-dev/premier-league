@@ -10,20 +10,21 @@ os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
 standings_table = "cloud-data-infrastructure.football_data_dataset.standings"
 teams_table = "cloud-data-infrastructure.football_data_dataset.teams"
 
+
 def gcp_secret():
     # Import the Secret Manager client library.
     from google.cloud import secretmanager
-    
+
     client = secretmanager.SecretManagerServiceClient()
     name = "projects/463690670206/secrets/rapid-api/versions/1"
     response = client.access_secret_version(request={"name": name})
     payload = response.payload.data.decode("UTF-8")
-    
+
     return payload
+
 
 # Function to call the Teams table in BigQuery.
 def bigquery_call():
-
     bqclient = bigquery.Client()
 
     # SQL query
@@ -45,6 +46,7 @@ def bigquery_call():
 
     return bigquery_dataframe
 
+
 # Function to call the Football API.
 def call_api():
     payload = gcp_secret()
@@ -56,7 +58,7 @@ def call_api():
     # Headers used for RapidAPI.
     headers = {
         "X-RapidAPI-Key": payload,
-        "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"
+        "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com",
     }
 
     # Standings endpoint from RapidAPI.
@@ -90,29 +92,64 @@ def call_api():
         clean_sheets_list.append(int(json_res["response"]["clean_sheet"]["total"]))
 
         # Team's total penalties scored.
-        penalty_scored_list.append(int(json_res["response"]["penalty"]["scored"]["total"]))
+        penalty_scored_list.append(
+            int(json_res["response"]["penalty"]["scored"]["total"])
+        )
 
         # Team's total penalties missed.
-        penalty_missed_list.append(int(json_res["response"]["penalty"]["missed"]["total"]))
+        penalty_missed_list.append(
+            int(json_res["response"]["penalty"]["missed"]["total"])
+        )
 
         count += 1
 
-    return team_list, logo_list, form_list, clean_sheets_list, penalty_scored_list, penalty_missed_list
+    return (
+        team_list,
+        logo_list,
+        form_list,
+        clean_sheets_list,
+        penalty_scored_list,
+        penalty_missed_list,
+    )
+
 
 # Function to build the dataframe from the lists in the previous function.
 def create_dataframe():
-    team_list, logo_list, form_list, clean_sheets_list, penalty_scored_list, penalty_missed_list = call_api()
+    (
+        team_list,
+        logo_list,
+        form_list,
+        clean_sheets_list,
+        penalty_scored_list,
+        penalty_missed_list,
+    ) = call_api()
 
     # Setting the headers then zipping the lists to create a dataframe.
-    headers = ['team', 'logo', 'form', 'clean_sheets', 'penalties_scored', 'penalties_missed']
-    zipped = list(zip(team_list, logo_list, form_list, clean_sheets_list, penalty_scored_list, penalty_missed_list))
+    headers = [
+        "team",
+        "logo",
+        "form",
+        "clean_sheets",
+        "penalties_scored",
+        "penalties_missed",
+    ]
+    zipped = list(
+        zip(
+            team_list,
+            logo_list,
+            form_list,
+            clean_sheets_list,
+            penalty_scored_list,
+            penalty_missed_list,
+        )
+    )
 
     df = pd.DataFrame(zipped, columns=headers)
 
     return df
 
-class Teams:
 
+class Teams:
     # Dropping BigQuery table.
     def drop(self):
         client = bigquery.Client()
@@ -126,21 +163,20 @@ class Teams:
         print("Teams table dropped...")
 
     def load(self):
-        df = create_dataframe() # Getting dataframe creating in dataframe() function.
+        df = create_dataframe()  # Getting dataframe creating in dataframe() function.
 
         # Construct a BigQuery client object.
         client = bigquery.Client(project="cloud-data-infrastructure")
 
         table_id = teams_table
 
-        job = client.load_table_from_dataframe(
-            df, table_id
-        )  # Make an API request.
+        job = client.load_table_from_dataframe(df, table_id)  # Make an API request.
         job.result()  # Wait for the job to complete.
 
         table = client.get_table(table_id)  # Make an API request.
-        
+
         print(f"Loaded {table.num_rows} rows and {len(table.schema)} columns")
+
 
 # Creating an instance of the class.
 teams = Teams()
