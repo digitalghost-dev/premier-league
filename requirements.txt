@@ -4,7 +4,7 @@ plotly==5.11.0
 requests==2.27.1
 streamlit==1.15.0
 google-cloud-core==2.3.1
-google-cloud-bigquery==3.2.0
+google-cloud-bigquery==3.9.0
 google-cloud-secret-manager==2.14.0
 google-cloud-bigquery[pandas]==3.2.0
 google-cloud-bigquery-storage==2.19.1
