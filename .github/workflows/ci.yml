@@ -177,7 +177,7 @@ jobs:
           
       - name: Build and Push Container
         run: |-
-          docker tag locations:test "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/locations:test" ./
+          docker tag locations:test "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/locations:test"
           docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/locations:test"
           
       - name: Deploy to Cloud Run
