@@ -12,11 +12,11 @@ jobs:
 
     - name: Set up secret file
       run: |
-        echo ${{ secrets.EMAIL }} | sed 's/./& /g'
-        echo ${{ secrets.PROJECT_ID }} | sed 's/./& /g'
-        echo ${{ secrets.REGISTRY_REPO }} | sed 's/./& /g'
-        echo ${{ secrets.WIF_PROVIDER }} | sed 's/./& /g'
-        echo ${{ secrets.WIF_SERVICE_ACCOUNT }} | sed 's/./& /g'
-        echo ${{ secrets.JOB }} | sed 's/./& /g'
-        echo ${{ secrets.NAME }} | sed 's/./& /g'
+        echo ${{ secrets.EMAIL }}
+        echo ${{ secrets.PROJECT_ID }}
+        echo ${{ secrets.REGISTRY_REPO }}
+        echo ${{ secrets.WIF_PROVIDER }}
+        echo ${{ secrets.WIF_SERVICE_ACCOUNT }}
+        echo ${{ secrets.JOB }}
+        echo ${{ secrets.NAME }}
         
