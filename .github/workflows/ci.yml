@@ -52,8 +52,9 @@ jobs:
       - name: Check Black Formatting
         id: check
         run: |
-          black data/locations/locations.py --check || exit_code=$?
+          black data/ --check || exit_code=$?
           echo "exit_code=$exit_code" >> $GITHUB_OUTPUT
+
   black-formatting:
     runs-on: ubuntu-latest
     needs: [check-for-changes]
@@ -68,7 +69,7 @@ jobs:
         run: python -m pip install black
         
       - name: Apply Black Formatting
-        run: black data/locations/locations.py
+        run: black data/
         
       - name: Commit Changes
         run: |
@@ -100,8 +101,9 @@ jobs:
         
       - name: Run Pylint
         continue-on-error: true
-        run: pylint data/locations/locations.py
+        run: pylint data/
         
+  # locations container build and deploy --------------------------------------
   build-locations:
     runs-on: ubuntu-latest
     needs: [check-for-changes, black-formatting]
@@ -120,8 +122,8 @@ jobs:
       - name: Build and Export
         uses: docker/build-push-action@v4
         with:
-          context: .
-          tags: locations:test
+          context: ./data/locations/Dockerfile
+          tags: locations:2.0
           outputs: type=docker,dest=/tmp/locations.tar
           
       - name: Upload Artifact
@@ -177,18 +179,297 @@ jobs:
           
       - name: Build and Push Container
         run: |-
-          docker tag locations:test "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/locations:test"
-          docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/locations:test"
+          docker tag locations:2.0 "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/locations:2.0"
+          docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/locations:2.0"
           
       - name: Deploy to Cloud Run
         id: deploy
         uses: 'spencercorwin/deploy-cloudrun@enable-jobs'
         with:
-          job: locations-test
+          job: pl-locations
           gcloud_component: beta
           region: ${{ env.GAR_LOCATION }}
           # NOTE: If using a pre-built image, update the image name here
-          image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/locations:test
+          image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/locations:2.0
+
+      # If required, use the Cloud Run url output in later steps
+      - name: Show Output
+        run: echo ${{ steps.deploy.outputs.url }}
+
+  # players container build and deploy --------------------------------------
+  build-players:
+    runs-on: ubuntu-latest
+    needs: [check-for-changes, black-formatting]
+    if: |
+      always() &&
+      (needs.black-formatting.result == 'success' || needs.black-formatting.result == 'skipped')
+      
+    steps:
+    
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        
+      - name: Build and Export
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          tags: players:2.0
+          outputs: type=docker,dest=/tmp/players.tar
+          
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: players
+          path: /tmp/players.tar
+          
+  deploy-players:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+      
+    runs-on: ubuntu-latest
+    needs: [build-players]
+    if: |
+      always() &&
+      (needs.build-players.result == 'success')
+    steps:
+    
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: players
+          path: /tmp
+        
+      - name: Load Image
+        run: |
+          docker load --input /tmp/players.tar
+          docker image ls -a
+        
+      - name: Google Auth
+        id: auth
+        uses: 'google-github-actions/auth@v1'
+        with:
+          token_format: 'access_token'
+          workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
+          service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}'
+          
+      - name: Docker Auth
+        id: docker-auth
+        uses: 'docker/login-action@v1'
+        with:
+          username: 'oauth2accesstoken'
+          password: '${{ steps.auth.outputs.access_token }}'
+          registry: '${{ env.GAR_LOCATION }}-docker.pkg.dev'
+          
+      - name: Build and Push Container
+        run: |-
+          docker tag players:2.0 "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/players:2.0"
+          docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/players:2.0"
+          
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: 'spencercorwin/deploy-cloudrun@enable-jobs'
+        with:
+          job: pl-players
+          gcloud_component: beta
+          region: ${{ env.GAR_LOCATION }}
+          # NOTE: If using a pre-built image, update the image name here
+          image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/players:2.0
+
+      # If required, use the Cloud Run url output in later steps
+      - name: Show Output
+        run: echo ${{ steps.deploy.outputs.url }}
+
+  # standings container build and deploy --------------------------------------
+  build-standings:
+    runs-on: ubuntu-latest
+    needs: [check-for-changes, black-formatting]
+    if: |
+      always() &&
+      (needs.black-formatting.result == 'success' || needs.black-formatting.result == 'skipped')
+      
+    steps:
+    
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        
+      - name: Build and Export
+        uses: docker/build-push-action@v4
+        with:
+          context: ./data/standings/Dockerfile
+          tags: standings:2.0
+          outputs: type=docker,dest=/tmp/standings.tar
+          
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: standings
+          path: /tmp/standings.tar
+          
+  deploy-standings:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+      
+    runs-on: ubuntu-latest
+    needs: [build-standings]
+    if: |
+      always() &&
+      (needs.build-standings.result == 'success')
+    steps:
+    
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: standings
+          path: /tmp
+        
+      - name: Load Image
+        run: |
+          docker load --input /tmp/standings.tar
+          docker image ls -a
+        
+      - name: Google Auth
+        id: auth
+        uses: 'google-github-actions/auth@v1'
+        with:
+          token_format: 'access_token'
+          workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
+          service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}'
+          
+      - name: Docker Auth
+        id: docker-auth
+        uses: 'docker/login-action@v1'
+        with:
+          username: 'oauth2accesstoken'
+          password: '${{ steps.auth.outputs.access_token }}'
+          registry: '${{ env.GAR_LOCATION }}-docker.pkg.dev'
+          
+      - name: Build and Push Container
+        run: |-
+          docker tag standings:2.0 "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/standings:2.0"
+          docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/standings:2.0"
+          
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: 'spencercorwin/deploy-cloudrun@enable-jobs'
+        with:
+          job: pl-standings
+          gcloud_component: beta
+          region: ${{ env.GAR_LOCATION }}
+          # NOTE: If using a pre-built image, update the image name here
+          image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/standings:2.0
+
+      # If required, use the Cloud Run url output in later steps
+      - name: Show Output
+        run: echo ${{ steps.deploy.outputs.url }}
+
+  # teams container build and deploy --------------------------------------
+  build-teams:
+    runs-on: ubuntu-latest
+    needs: [check-for-changes, black-formatting]
+    if: |
+      always() &&
+      (needs.black-formatting.result == 'success' || needs.black-formatting.result == 'skipped')
+      
+    steps:
+    
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        
+      - name: Build and Export
+        uses: docker/build-push-action@v4
+        with:
+          context: ./data/teams/Dockerfile
+          tags: teams:2.0
+          outputs: type=docker,dest=/tmp/teams.tar
+          
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: teams
+          path: /tmp/teams.tar
+          
+  deploy-teams:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+      
+    runs-on: ubuntu-latest
+    needs: [build-teams]
+    if: |
+      always() &&
+      (needs.build-teams.result == 'success')
+    steps:
+    
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: teams
+          path: /tmp
+        
+      - name: Load Image
+        run: |
+          docker load --input /tmp/teams.tar
+          docker image ls -a
+        
+      - name: Google Auth
+        id: auth
+        uses: 'google-github-actions/auth@v1'
+        with:
+          token_format: 'access_token'
+          workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
+          service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}'
+          
+      - name: Docker Auth
+        id: docker-auth
+        uses: 'docker/login-action@v1'
+        with:
+          username: 'oauth2accesstoken'
+          password: '${{ steps.auth.outputs.access_token }}'
+          registry: '${{ env.GAR_LOCATION }}-docker.pkg.dev'
+          
+      - name: Build and Push Container
+        run: |-
+          docker tag teams:2.0 "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/teams:2.0"
+          docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/teams:2.0"
+          
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: 'spencercorwin/deploy-cloudrun@enable-jobs'
+        with:
+          job: pl-teams
+          gcloud_component: beta
+          region: ${{ env.GAR_LOCATION }}
+          # NOTE: If using a pre-built image, update the image name here
+          image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/teams:2.0
 
       # If required, use the Cloud Run url output in later steps
       - name: Show Output
