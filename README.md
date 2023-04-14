@@ -1,9 +1,10 @@
 # Premier League Data Visualization with Streamlit
 
-![builds](https://img.shields.io/github/actions/workflow/status/digitalghost-dev/premier-league/cloudrun-build-and-deploy.yml?style=flat-square)
+![builds](https://img.shields.io/github/actions/workflow/status/digitalghost-dev/premier-league/ci.yml?style=flat-square)
 ![version](https://img.shields.io/badge/streamlit_app_version-1.1.0-blue?style=flat-square)
 ![size](https://img.shields.io/github/repo-size/digitalghost-dev/premier-league?style=flat-square)
 ![black](https://img.shields.io/badge/code%20style-black-black?style=flat-square)
+![pyling](https://img.shields.io/badge/linter-pylint-pink?style=flat-square)
 
 ## Overview
 * Extracts Premier League data with a self written API in Go and a Football API using Python.
