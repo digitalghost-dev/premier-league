@@ -122,7 +122,7 @@ jobs:
       - name: Build and Export
         uses: docker/build-push-action@v4
         with:
-          context: ./data/locations/Dockerfile
+          context: ./data/locations/
           tags: locations:2.0
           outputs: type=docker,dest=/tmp/locations.tar
           
@@ -215,7 +215,7 @@ jobs:
       - name: Build and Export
         uses: docker/build-push-action@v4
         with:
-          context: .
+          context: ./data/players/
           tags: players:2.0
           outputs: type=docker,dest=/tmp/players.tar
           
@@ -308,7 +308,7 @@ jobs:
       - name: Build and Export
         uses: docker/build-push-action@v4
         with:
-          context: ./data/standings/Dockerfile
+          context: ./data/standings/
           tags: standings:2.0
           outputs: type=docker,dest=/tmp/standings.tar
           
@@ -401,7 +401,7 @@ jobs:
       - name: Build and Export
         uses: docker/build-push-action@v4
         with:
-          context: ./data/teams/Dockerfile
+          context: ./data/teams/
           tags: teams:2.0
           outputs: type=docker,dest=/tmp/teams.tar
           
