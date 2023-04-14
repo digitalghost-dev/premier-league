@@ -9,6 +9,6 @@ RUN mkdir /home/nonroot/app
 COPY ./requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-COPY ./data/teams .
+COPY . .
 
 CMD ["python3", "teams.py"]
