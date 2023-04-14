@@ -119,10 +119,18 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
         
+      - name: Prepare Docker Build Context
+        run: |
+          mkdir docker-context
+          cp ./requirements.txt docker-context
+          cp ./data/locations/locations.py docker-context
+          cp ./data/locations/Dockerfile docker-context
+          cp ./data/locations/.dockerignore docker-context
+        
       - name: Build and Export
         uses: docker/build-push-action@v4
         with:
-          context: ./data/locations/
+          context: ./docker-context
           tags: locations:2.0
           outputs: type=docker,dest=/tmp/locations.tar
           
@@ -212,10 +220,18 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
         
+      - name: Prepare Docker Build Context
+        run: |
+          mkdir docker-context
+          cp ./requirements.txt docker-context
+          cp ./data/players/players.py docker-context
+          cp ./data/players/Dockerfile docker-context
+          cp ./data/players/.dockerignore docker-context
+        
       - name: Build and Export
         uses: docker/build-push-action@v4
         with:
-          context: ./data/players/
+          context: ./docker-context
           tags: players:2.0
           outputs: type=docker,dest=/tmp/players.tar
           
@@ -305,10 +321,18 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
         
+      - name: Prepare Docker Build Context
+        run: |
+          mkdir docker-context
+          cp ./requirements.txt docker-context
+          cp ./data/standings/standings.py docker-context
+          cp ./data/standings/Dockerfile docker-context
+          cp ./data/standings/.dockerignore docker-context
+        
       - name: Build and Export
         uses: docker/build-push-action@v4
         with:
-          context: ./data/standings/
+          context: ./docker-context
           tags: standings:2.0
           outputs: type=docker,dest=/tmp/standings.tar
           
@@ -398,10 +422,18 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
         
+      - name: Prepare Docker Build Context
+        run: |
+          mkdir docker-context
+          cp ./requirements.txt docker-context
+          cp ./data/teams/teams.py docker-context
+          cp ./data/teams/Dockerfile docker-context
+          cp ./data/teams/.dockerignore docker-context
+        
       - name: Build and Export
         uses: docker/build-push-action@v4
         with:
-          context: ./data/teams/
+          context: ./docker-context
           tags: teams:2.0
           outputs: type=docker,dest=/tmp/teams.tar
           
