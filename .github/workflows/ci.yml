@@ -31,8 +31,10 @@ env:
   PROJECT_ID: ${{ secrets.PROJECT_ID }}
   GAR_LOCATION: us-central1
   REGISTRY_REPO: ${{ secrets.REGISTRY_REPO }}
-  USERNAME: ${{ secrets.USERNAME }}
+  NAME: ${{ secrets.NAME }}
   EMAIL: ${{ secrets.EMAIL }}
+  WIF_PROVIDER: ${{ secrets.WIF_PROVIDER }}
+  WIF_SERVICE_ACCOUNT: ${{ secrets.WIF_SERVICE_ACCOUNT }}
 
 jobs:
     
@@ -74,7 +76,7 @@ jobs:
       - name: Commit Changes
         run: |
           git config --local user.email "${{ env.EMAIL }}"
-          git config --local user.name "${{ env.USERNAME }}"
+          git config --local user.name "${{ env.NAME }}"
           git add .
           git commit -m "Apply Black Formatting" --allow-empty
           git push
