@@ -1,18 +1,22 @@
+"""
+This file pulls data from an API and loads it into a BigQuery table.
+"""
+
 # Importing needed libraries.
+import os
+
+from google.cloud import secretmanager
 from google.cloud import bigquery
 import pandas as pd
 import requests
-import json
-import os
 
 os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
 
-locations_table = "cloud-data-infrastructure.football_data_dataset.locations"
+LOCATIONS_TABLE = "cloud-data-infrastructure.football_data_dataset.locations"
 
 
 def gcp_secret():
-    # Import the Secret Manager client library.
-    from google.cloud import secretmanager
+    """Retrieves the API URL from GCP Secret Manager."""""
 
     client = secretmanager.SecretManagerServiceClient()
     name = "projects/463690670206/secrets/locations_api/versions/1"
@@ -23,9 +27,10 @@ def gcp_secret():
 
 
 def call_api():
+    """Calls the API and returns the data in lists."""
     payload = gcp_secret()
     # Building query to retrieve data.
-    response = requests.request("GET", payload)
+    response = requests.request("GET", payload, timeout=20)
     json_res = response.json()
 
     # Empty lists that will be filled and then used to create a dataframe.
@@ -54,37 +59,42 @@ def call_api():
 
 
 def dataframe():
+    """Creates a dataframe from the lists returned from the call_api() function."""
     team_list, stadium_list, lat_list, lon_list = call_api()
 
     # Setting the headers then zipping the lists to create a dataframe.
     headers = ["team", "stadium", "latitude", "longitude"]
     zipped = list(zip(team_list, stadium_list, lat_list, lon_list))
 
-    df = pd.DataFrame(zipped, columns=headers)
+    locations_df = pd.DataFrame(zipped, columns=headers)
 
-    return df
+    return locations_df
 
 
 class Locations:
+    """Functions to drop and load the locations table."""
+
     def drop(self):
+        """Drops the table if it exists."""
         client = bigquery.Client()
         query = f"""
             DROP TABLE 
-            {locations_table}
+            {LOCATIONS_TABLE}
         """
 
-        query_job = client.query(query)
+        client.query(query)
 
         print("Location table dropped...")
 
     def load(self):
-        df = dataframe()  # Getting dataframe creating in dataframe() function.
+        """Loads the table with data from the dataframe."""
+        locations_df = dataframe()  # Getting dataframe creating in dataframe() function.
 
         client = bigquery.Client(project="cloud-data-infrastructure")
 
-        table_id = locations_table
+        table_id = LOCATIONS_TABLE
 
-        job = client.load_table_from_dataframe(df, table_id)  # Make an API request.
+        job = client.load_table_from_dataframe(locations_df, table_id)  # Make an API request.
         job.result()  # Wait for the job to complete.
 
         table = client.get_table(table_id)  # Make an API request.
