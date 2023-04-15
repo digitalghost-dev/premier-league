@@ -1,3 +1,7 @@
+"""
+This file pulls data from an API and loads it into a BigQuery table.
+"""
+
 # Importing needed libraries.
 from google.cloud import bigquery
 import pandas as pd
