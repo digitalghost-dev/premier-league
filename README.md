@@ -4,7 +4,7 @@
 ![version](https://img.shields.io/badge/streamlit_app_version-1.1.0-blue?style=flat-square)
 ![size](https://img.shields.io/github/repo-size/digitalghost-dev/premier-league?style=flat-square)
 ![black](https://img.shields.io/badge/code%20style-black-black?style=flat-square)
-![pyling](https://img.shields.io/badge/linter-pylint-pink?style=flat-square)
+![pyling](https://img.shields.io/badge/linting-pylint-yellowgreen?style=flat-square)
 
 ## Overview
 * Extracts Premier League data with a self written API in Go and a Football API using Python.
@@ -14,7 +14,7 @@
 ### Important Links
 
 * [Visualization](https://premierleague.streamlit.app/)
-* [Documentation](https://github.com/digitalghost-dev/football-data-pipeline/wiki/Football-Data-Pipeline-Documentation)
+* [Documentation](https://digitalghost-dev.notion.site/12d644bff83f46359c3de9036d84f0b0?v=4c615e0378304f499d6fdfeaf223fa77)
 
 ## How the Pipeline Works
 ### Data Pipeline
@@ -26,9 +26,11 @@
 6. When the Streamlit app loads, the BigQuery tables are queried to return the data.
 
 ### CI/CD Pipeline
-1. When a push is made to the GitHub Repository on `main` branch, a workflow with GitHub Actions starts which begins by building a new Docker image.
-2. The Docker image is then pushed to Artifact Registry.
-3. The new image is then deployed to Cloud Run as a Job.
+1. The endpoint Python files will be checked with the [Black](https://github.com/psf/black) code formatter. 
+2. If Black finds changes to make, they will be made then committed to the repository.
+    * If there are no changes to be made, this step will be skipped.
+3. Four jobs take place simultaneously which build each Docker image related to the endpoint. [Pylint](https://github.com/pylint-dev/pylint) is also used to lint the same Python files as Black in job 1.
+4. The Docker images are then pushed to Artifact Registry and deployed as new Cloud Run Jobs.
 
 ### Pipeline Flowchart
 ![football-data-flowchart](https://storage.googleapis.com/pipeline-flowcharts/football-data-pipeline-flowchart.png)
