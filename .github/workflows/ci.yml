@@ -75,7 +75,7 @@ jobs:
         run: |
           git config --local user.email "${{ env.EMAIL }}"
           git config --local user.name "${{ env.USERNAME }}"
-          git add black_test.py
+          git add .
           git commit -m "Apply Black Formatting" --allow-empty
           git push
           
