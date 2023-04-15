@@ -16,7 +16,7 @@ LOCATIONS_TABLE = "cloud-data-infrastructure.football_data_dataset.locations"
 
 
 def gcp_secret():
-    """Retrieves the API URL from GCP Secret Manager."""""
+    """Retrieves the API URL from GCP Secret Manager.""" ""
 
     client = secretmanager.SecretManagerServiceClient()
     name = "projects/463690670206/secrets/locations_api/versions/1"
@@ -88,13 +88,17 @@ class Locations:
 
     def load(self):
         """Loads the table with data from the dataframe."""
-        locations_df = dataframe()  # Getting dataframe creating in dataframe() function.
+        locations_df = (
+            dataframe()
+        )  # Getting dataframe creating in dataframe() function.
 
         client = bigquery.Client(project="cloud-data-infrastructure")
 
         table_id = LOCATIONS_TABLE
 
-        job = client.load_table_from_dataframe(locations_df, table_id)  # Make an API request.
+        job = client.load_table_from_dataframe(
+            locations_df, table_id
+        )  # Make an API request.
         job.result()  # Wait for the job to complete.
 
         table = client.get_table(table_id)  # Make an API request.
