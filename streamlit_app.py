@@ -6,7 +6,7 @@ import plotly.express as px
 import streamlit as st
 import pandas as pd
 
-st.set_page_config(layout="wide")
+st.set_page_config(page_title="Overview", layout="wide")
 
 def local_css(file_name):
     with open(file_name) as f:
@@ -94,7 +94,7 @@ def streamlit_app():
         col1.title("Premier League Statistics / '22-'23")
 
     # Tab menu.
-    tab1, tab2 = st.tabs(["📄 Overview", "⚽️ Top Teams & 🏃🏻‍♂️ Top Scorers"])
+    tab1, tab2 = st.tabs(["Overview", "Top Teams & Top Scorers"])
 
     # Tab 1, overview
     with tab1:
@@ -288,59 +288,59 @@ def streamlit_app():
 
         with st.container():
             st.subheader("")
-            st.subheader("Forms for the rest of the league:")
+            st.subheader("Forms for the Rest of the League")
 
             col1, col2, col3, col4, col5 = st.columns(5)
 
             with col1:
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[5][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>{((teams_df.iloc[5][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>6. {((teams_df.iloc[5][1])[-5:])}</p>", unsafe_allow_html=True)
 
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[10][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>{((teams_df.iloc[10][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>11. {((teams_df.iloc[10][1])[-5:])}</p>", unsafe_allow_html=True)
 
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[15][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>{((teams_df.iloc[15][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>16. {((teams_df.iloc[15][1])[-5:])}</p>", unsafe_allow_html=True)
 
             with col2:
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[6][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>{((teams_df.iloc[6][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>7. {((teams_df.iloc[6][1])[-5:])}</p>", unsafe_allow_html=True)
 
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[11][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>{((teams_df.iloc[11][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>12. {((teams_df.iloc[11][1])[-5:])}</p>", unsafe_allow_html=True)
 
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[16][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>{((teams_df.iloc[16][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>17. {((teams_df.iloc[16][1])[-5:])}</p>", unsafe_allow_html=True)
 
             with col3:
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[7][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>{((teams_df.iloc[7][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>8. {((teams_df.iloc[7][1])[-5:])}</p>", unsafe_allow_html=True)
 
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[12][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>{((teams_df.iloc[12][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>13. {((teams_df.iloc[12][1])[-5:])}</p>", unsafe_allow_html=True)
 
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[17][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>{((teams_df.iloc[17][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>18. {((teams_df.iloc[17][1])[-5:])}</p>", unsafe_allow_html=True)
 
             with col4:
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[8][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>{((teams_df.iloc[8][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>9. {((teams_df.iloc[8][1])[-5:])}</p>", unsafe_allow_html=True)
 
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[13][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>{((teams_df.iloc[13][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>14. {((teams_df.iloc[13][1])[-5:])}</p>", unsafe_allow_html=True)
 
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[18][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>{((teams_df.iloc[18][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>19. {((teams_df.iloc[18][1])[-5:])}</p>", unsafe_allow_html=True)
 
             with col5:
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[9][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>{((teams_df.iloc[9][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>10. {((teams_df.iloc[9][1])[-5:])}</p>", unsafe_allow_html=True)
 
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[14][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>{((teams_df.iloc[14][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>15. {((teams_df.iloc[14][1])[-5:])}</p>", unsafe_allow_html=True)
 
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[19][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>{((teams_df.iloc[19][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>20. {((teams_df.iloc[19][1])[-5:])}</p>", unsafe_allow_html=True)
 
 local_css("style.css")
 streamlit_app()

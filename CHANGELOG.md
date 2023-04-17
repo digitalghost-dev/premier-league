@@ -3,7 +3,22 @@ This change log provides version history for the Streamlit app itself, not for a
 
 View the Streamlit dasboard: https://premierleague.streamlit.app
 
-## [1.2.0] - 2023-04-16
+## [1.3.0] - 2023-04-17
+
+### **Added**
+
+* Added page title.
+* Added position number to teams in `Forms for the Rest of the League` section.
+
+### **Fixed**
+
+* Fixing capitalization for `Forms for the Rest of the League` subheader.
+
+### **Removed**
+
+* Removed Emojis from tab titles.
+
+## [1.2.0][1.2.0] - 2023-04-16
 
 ### **Changed**
 
@@ -17,7 +32,7 @@ Top Teams Tab
 Top Players Tab
 * Removed this tab, combined with top teams tab.
 
-## [1.1.0] - 2023-04-07
+## [1.1.0][1.1.0] - 2023-04-07
 
 ### **Added**
 
@@ -35,9 +50,9 @@ Top Players Tab
 * Setting `photo` width for top 5 players to `150px`.
 
 ### **Removed**
-* Removing `LIMIT 5` from SQL query to pull all teams.
+* Removed `LIMIT 5` from SQL query to pull all teams.
 
-## [1.0.0] - 2023-04-05
+## [1.0.0][1.0.0] - 2023-04-05
 
 ### **Added**
 
@@ -53,3 +68,9 @@ Top Teams Tab
 
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
+
+[1.2.0]: https://github.com/digitalghost-dev/premier-league/commit/8d5fbb7cdf91263eb55f2bc7ecd09236d975a704#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
+
+[1.1.0]: https://github.com/digitalghost-dev/premier-league/commit/e99f1f4a6eab3ef967c30b6c21b4fffa109de8e9#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
+
+[1.0.0]: https://github.com/digitalghost-dev/premier-league/commit/429a6f3ca12bcdbb5bee4505d390838b25edb8bb#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
