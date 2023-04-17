@@ -3,6 +3,20 @@ This change log provides version history for the Streamlit app itself, not for a
 
 View the Streamlit dasboard: https://premierleague.streamlit.app
 
+## [1.2.0] - 2023-04-16
+
+### **Changed**
+
+Top Teams Tab
+* Renamed tab to: "⚽️ Top Teams & 🏃🏻‍♂️ Top Scorers".
+* Changed `st.plotly_chart` to `st.line_chart`.
+* Moved top scorers to this tab.
+
+### **Removed**
+
+Top Players Tab
+* Removed this tab, combined with top teams tab.
+
 ## [1.1.0] - 2023-04-07
 
 ### **Added**
