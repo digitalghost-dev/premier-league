@@ -110,6 +110,7 @@ def dataframe():
 
     return df
 
+
 class Players:
     """Functions to drop and load the locations table."""
 

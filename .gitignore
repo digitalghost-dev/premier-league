@@ -3,6 +3,12 @@
 .DS_store
 .streamlit/secrets.toml
 
+# Testing files and directories
+test/
+tests/
+testing/
+test*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 data/__pycache__
