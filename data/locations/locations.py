@@ -16,8 +16,6 @@ LOCATIONS_TABLE = "cloud-data-infrastructure.football_data_dataset.locations"
 
 
 def gcp_secret():
-    """Retrieves the API URL from GCP Secret Manager.""" ""
-
     client = secretmanager.SecretManagerServiceClient()
     name = "projects/463690670206/secrets/locations_api/versions/1"
     response = client.access_secret_version(request={"name": name})
@@ -27,7 +25,6 @@ def gcp_secret():
 
 
 def call_api():
-    """Calls the API and returns the data in lists."""
     payload = gcp_secret()
     # Building query to retrieve data.
     response = requests.request("GET", payload, timeout=20)
@@ -42,16 +39,16 @@ def call_api():
     count = 0
     while count < 20:
         # Retrieving team name.
-        team_list.append(json_res[count]["team"])
+        team_list.append(str(json_res[count]["team"]))
 
         # Retrieving stadium name.
-        stadium_list.append(json_res[count]["stadium"])
+        stadium_list.append(str(json_res[count]["stadium"]))
 
         # Retrieving stadium's latitude.
-        lat_list.append(json_res[count]["latitude"])
+        lat_list.append(float(json_res[count]["latitude"]))
 
         # Retrieving stadium's longitude.
-        lon_list.append(json_res[count]["longitude"])
+        lon_list.append(float(json_res[count]["longitude"]))
 
         count += 1
 
@@ -59,7 +56,6 @@ def call_api():
 
 
 def dataframe():
-    """Creates a dataframe from the lists returned from the call_api() function."""
     team_list, stadium_list, lat_list, lon_list = call_api()
 
     # Setting the headers then zipping the lists to create a dataframe.
@@ -75,7 +71,6 @@ class Locations:
     """Functions to drop and load the locations table."""
 
     def drop(self):
-        """Drops the table if it exists."""
         client = bigquery.Client()
         query = f"""
             DROP TABLE 
@@ -87,7 +82,6 @@ class Locations:
         print("Location table dropped...")
 
     def load(self):
-        """Loads the table with data from the dataframe."""
         locations_df = (
             dataframe()
         )  # Getting dataframe creating in dataframe() function.

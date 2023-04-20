@@ -2,22 +2,21 @@
 This file pulls data from an API and loads it into a BigQuery table.
 """
 
+import os
+import json
+
 # Importing needed libraries.
+from google.cloud import secretmanager
 from google.cloud import bigquery
 import pandas as pd
 import requests
-import json
-import os
 
 os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
 
-players_table = "cloud-data-infrastructure.football_data_dataset.players"
+PLAYERS_TABLE = "cloud-data-infrastructure.football_data_dataset.players"
 
 
 def gcp_secret():
-    # Import the Secret Manager client library.
-    from google.cloud import secretmanager
-
     client = secretmanager.SecretManagerServiceClient()
     name = "projects/463690670206/secrets/rapid-api/versions/1"
     response = client.access_secret_version(request={"name": name})
@@ -39,7 +38,7 @@ def call_api():
 
     # Building query to retrieve data.
     query = {"league": "39", "season": "2022"}
-    response = requests.request("GET", url, headers=headers, params=query)
+    response = requests.request("GET", url, headers=headers, params=query, timeout=20)
     json_res = response.json()
 
     # Empty lists that will be filled and then used to create a dataframe.
@@ -75,38 +74,22 @@ def call_api():
 
         # Retrieving amount of goals per player.
         goals_list.append(
-            int(
-                json.dumps(
-                    json_res["response"][count]["statistics"][0]["goals"]["total"]
-                )
-            )
+            int(json_res["response"][count]["statistics"][0]["goals"]["total"])
         )
 
         # Retrieving player's team name.
         team_list.append(
-            (
-                (
-                    str(
-                        json.dumps(
-                            json_res["response"][count]["statistics"][0]["team"]["name"]
-                        )
-                    ).strip('"')
-                )
-            )
+            str(json_res["response"][count]["statistics"][0]["team"]["name"]).strip('"')
         )
 
         # Retrieving player's nationality.
         nationality_list.append(
-            (
-                str(
-                    json.dumps(json_res["response"][count]["player"]["nationality"])
-                ).strip('"')
-            )
+            str(json_res["response"][count]["player"]["nationality"]).strip('"')
         )
 
         # Retrieving player's photo link.
         photo_list.append(
-            str(json.dumps(json_res["response"][count]["player"]["photo"])).strip('"')
+            str(json_res["response"][count]["player"]["photo"]).strip('"')
         )
 
         count += 1
@@ -127,17 +110,18 @@ def dataframe():
 
     return df
 
-
 class Players:
+    """Functions to drop and load the locations table."""
+
     # Dropping BigQuery table.
     def drop(self):
         client = bigquery.Client()
         query = f"""
-            DROP TABLE 
-            {players_table}
+            DROP TABLE
+            {PLAYERS_TABLE}
         """
 
-        query_job = client.query(query)
+        client.query(query)
 
         print("Players table dropped...")
 
@@ -147,7 +131,7 @@ class Players:
         # Construct a BigQuery client object.
         client = bigquery.Client(project="cloud-data-infrastructure")
 
-        table_id = players_table
+        table_id = PLAYERS_TABLE
 
         job = client.load_table_from_dataframe(df, table_id)  # Make an API request.
         job.result()  # Wait for the job to complete.
