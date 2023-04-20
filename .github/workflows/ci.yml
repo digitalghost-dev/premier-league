@@ -195,7 +195,7 @@ jobs:
           
       - name: Deploy to Cloud Run
         id: deploy
-        uses: 'spencercorwin/deploy-cloudrun@enable-jobs'
+        uses: 'digitalghost-dev/deploy-cloudrun@enable-jobs'
         with:
           job: pl-locations
           gcloud_component: beta
@@ -292,7 +292,7 @@ jobs:
           
       - name: Deploy to Cloud Run
         id: deploy
-        uses: 'spencercorwin/deploy-cloudrun@enable-jobs'
+        uses: 'digitalghost-dev/deploy-cloudrun@enable-jobs'
         with:
           job: pl-players
           gcloud_component: beta
@@ -389,7 +389,7 @@ jobs:
           
       - name: Deploy to Cloud Run
         id: deploy
-        uses: 'spencercorwin/deploy-cloudrun@enable-jobs'
+        uses: 'digitalghost-dev/deploy-cloudrun@enable-jobs'
         with:
           job: pl-standings
           gcloud_component: beta
@@ -486,7 +486,7 @@ jobs:
           
       - name: Deploy to Cloud Run
         id: deploy
-        uses: 'spencercorwin/deploy-cloudrun@enable-jobs'
+        uses: 'digitalghost-dev/deploy-cloudrun@enable-jobs'
         with:
           job: pl-teams
           gcloud_component: beta
