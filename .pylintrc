@@ -1,0 +1,7 @@
+[MESSAGES CONTROL]
+
+disable=C0103, C0116, E0401
+
+# C0103: Argument name "x" doesn't conform to snake_case naming style (invalid-name)
+# C0116: Missing function or method docstring (missing-function-docstring)
+# E0401: Unable to import 'numpy' (import-error)
