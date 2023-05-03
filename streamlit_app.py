@@ -1,10 +1,21 @@
-# Importing needed modules.
-from google.oauth2 import service_account
-from google.cloud import bigquery
-import plotly.graph_objects as go
-import plotly.express as px
-import streamlit as st
+# System libraries
+import os
+from datetime import datetime
+
+# Data libraries
 import pandas as pd
+import psycopg2
+
+# Visualization Libraries
+import streamlit as st
+import plotly.express as px
+import plotly.graph_objects as go
+
+# Google Cloud Libraries
+import firebase_admin
+from google.cloud import bigquery
+from firebase_admin import firestore
+from google.oauth2 import service_account
 
 st.set_page_config(page_title="Overview", layout="wide")
 
@@ -17,17 +28,51 @@ def background_processing():
     credentials = service_account.Credentials.from_service_account_info(
         st.secrets["gcp_service_account"]
     )
-    client = bigquery.Client(credentials=credentials)
 
+    # Authenticating with Google Cloud.
+    client = bigquery.Client(credentials=credentials)
+    db = firestore.Client(credentials=credentials)
+
+    # Check to see if firebase app has been initialized.
+    if not firebase_admin._apps:
+        firebase_admin.initialize_app()
+
+    # ----- BigQuery Connection ----- #
     # Perform query.
-    # Uses st.experimental_memo to only rerun when the query changes or after 10 min.
-    @st.experimental_memo(ttl=600)
+    # Uses st.cache_data to only rerun when the query changes or after 10 min.
+    @st.cache_data(ttl=600)
     def run_query(query):
         query_job = client.query(query)
         raw_data = query_job.result()
         # Convert to list of dicts. Required for st.experimental_memo to hash the return value.
         data = [dict(data) for data in raw_data]
         return data
+
+    # ----- PostgreSQL Connection ----- #
+    # Initialize connection.
+    # Uses st.cache_resource to only run once.
+    @st.cache_resource
+    def init_connection():
+        return psycopg2.connect(**st.secrets["postgres"])
+
+    conn = init_connection()
+
+    # Perform query.
+    # Uses st.cache_data to only rerun when the query changes or after 10 min.
+    @st.cache_data(ttl=600)
+    def run_postgres_query(postgres_query):
+        with conn.cursor() as cur:
+            cur.execute(postgres_query)
+            return cur.fetchall()
+
+    min_round_row = run_postgres_query("SELECT MIN(round) FROM rounds;")
+    max_round_row = run_postgres_query("SELECT MAX(round) FROM rounds;")
+
+    # Saving the MINIMUM round to a variable.
+    min_round_postgres = min_round_row[0]
+
+    # Saving the MAXIMUM round to a variable.
+    max_round_postgres = max_round_row[0]
 
     # Calling variables from toml file.
     locations_table = st.secrets["football_db"]["locations"]
@@ -76,10 +121,10 @@ def background_processing():
     standings_df = pd.DataFrame(data = standings_data)
     teams_df = pd.DataFrame(data = teams_data)
 
-    return locations_df, players_df, standings_df, teams_df
+    return locations_df, players_df, standings_df, teams_df, db, min_round_postgres, max_round_postgres
 
 def streamlit_app():
-    locations_df, players_df, standings_df, teams_df = background_processing()
+    locations_df, players_df, standings_df, teams_df, db, min_round_postgres, max_round_postgres = background_processing()
 
     logo = st.secrets["elements"]["logo_image"]
 
@@ -94,7 +139,7 @@ def streamlit_app():
         col1.title("Premier League Statistics / '22-'23")
 
     # Tab menu.
-    tab1, tab2 = st.tabs(["Overview", "Top Teams & Top Scorers"])
+    tab1, tab2, tab3 = st.tabs(["Overview", "Top Teams & Top Scorers", "Fixtures"])
 
     # Tab 1, overview
     with tab1:
@@ -144,10 +189,10 @@ def streamlit_app():
                 xaxis_tickangle = -35,
                 autosize = False,
                 margin = dict (
-                    l = 0,
-                    r = 0,
-                    b = 0,
-                    t = 0
+                    l = 0, # left
+                    r = 0, # right
+                    b = 0, # bottom
+                    t = 0  # top
                 )
             )
 
@@ -157,7 +202,7 @@ def streamlit_app():
         st.subheader("Location of Stadiums")
         st.map(locations_df, use_container_width=True)
 
-    # Tab 2, top teams & top players.
+    # Tab 2, top teams, top players, and rest of league forms.
     with tab2:
         
         st.subheader("Top 5 Teams")
@@ -341,6 +386,93 @@ def streamlit_app():
 
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[19][0])}'/>", unsafe_allow_html=True)
                 st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>20. {((teams_df.iloc[19][1])[-5:])}</p>", unsafe_allow_html=True)
+
+    with tab3:
+
+        st.subheader("Fixtures per Round")
+
+        # Looping through each collection to get each round.
+        current_round_count = int(min_round_postgres[0])
+        while current_round_count < int(max_round_postgres[0]):
+
+            # Function to pull collection and documents.
+            def firestore_pull():
+
+                collection_ref = db.collection(f'Regular Season - {current_round_count}')
+                docs = collection_ref.get()
+
+                documents = []
+
+                for doc in docs:
+                    document_dict = {
+                        "id": doc.id,
+                        "data": doc.to_dict()
+                    }
+                    documents.append(document_dict)
+
+                # Retrieving match date.
+                match_date = [datetime.strptime(documents[count]['data']['date'], 
+                    '%Y-%m-%dT%H:%M:%S+00:00').strftime('%B, %d{}, %Y - %H:%M').format("th" if 4<=int(datetime.strptime(documents[count]['data']['date'], 
+                    '%Y-%m-%dT%H:%M:%S+00:00').strftime("%d"))<=20 else {1:"st", 2:"nd", 3:"rd"}.get(int(datetime.strptime(documents[count]['data']['date'], 
+                    '%Y-%m-%dT%H:%M:%S+00:00').strftime("%d"))%10, "th")) for count in range(10)]
+
+                # Retrieving away and home goals for each match.
+                away_goals = [documents[count]['data']['goals']['away'] for count in range(10)]
+                home_goals = [documents[count]['data']['goals']['home'] for count in range(10)]
+
+                # Retrieving away and home team for each match.
+                away_team = [documents[count]['data']['teams']['away']['name'] for count in range(10)]
+                home_team = [documents[count]['data']['teams']['home']['name'] for count in range(10)]
+
+                # Retrieving away and home logo for each team.
+                away_logo = [documents[count]['data']['teams']['away']['logo'] for count in range(10)]
+                home_logo = [documents[count]['data']['teams']['home']['logo'] for count in range(10)]
+
+                return match_date, away_goals, home_goals, away_team, home_team, away_logo, home_logo
+
+            # Placing data in an expander.
+            with st.expander(f"Round {current_round_count}"):
+                match_date, away_goals, home_goals, away_team, home_team, away_logo, home_logo = firestore_pull()
+
+                count = 0
+                while count < 10:
+
+                    # Creating a container for each match.
+                    with st.container():
+                        col1, col2, col3, col4, col5 = st.columns(5)
+
+                        with col1:
+                            st.write("")
+
+                        # Home teams
+                        with col2:
+                            st.markdown(f"<h3 style='text-align: center;'>{home_goals[count]}</h3>", unsafe_allow_html=True)
+                            st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{home_logo[count]}'/>", unsafe_allow_html=True)  
+                            st.write("")
+                            st.write("")
+
+                        # Match date
+                        with col3:
+                            st.write("")
+                            st.markdown("<p style='text-align: center;'><b>Match Date & Time</b></p>", unsafe_allow_html=True)
+                            st.markdown(f"<p style='text-align: center;'>{match_date[count]}</p>", unsafe_allow_html=True)
+                            st.markdown(f"<p style='text-align: center;'>{home_team[count]} vs. {away_team[count]}</p>", unsafe_allow_html=True)
+                    
+                        # Away teams
+                        with col4:
+                            st.markdown(f"<h3 style='text-align: center;'>{away_goals[count]}</h3>", unsafe_allow_html=True)
+                            st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{away_logo[count]}'/>", unsafe_allow_html=True)
+                            st.write("")
+                            st.write("")
+
+                        with col5:
+                            st.write("")
+
+                    count += 1
+
+                    st.divider()
+
+            current_round_count += 1
 
 local_css("style.css")
 streamlit_app()
