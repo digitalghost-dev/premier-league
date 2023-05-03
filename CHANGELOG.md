@@ -1,9 +1,22 @@
 # Change Log
-This change log provides version history for the Streamlit app itself, not for any backend/infrastructure changes.
+This change log provides version history for the Streamlit Dashboard.
 
 View the Streamlit dasboard: https://premierleague.streamlit.app
 
-## [1.3.0] - 2023-04-17
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+* **MAJOR:** Any changes to the backend infrastructure that requires new methods of moving data.
+* **MINOR:** Any changes to the Streamlit dashboard that adds a new interaction/feature or removal of one.
+* **PATCH:** Any changes that fix bugs.
+
+## [2.0.0] - 2023-05-02
+Now using [Firestore](https://firebase.google.com/docs/firestore/) to store fixture data in a document format.
+
+### **Added**
+* Added `Fixtures` tab for all rounds in the current season. Updates 3 times a day and will add new rounds as they start.
+
+## [1.3.0][1.3.0] - 2023-04-17
 
 ### **Added**
 
@@ -68,6 +81,8 @@ Top Teams Tab
 
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
+
+[1.3.0]: https://github.com/digitalghost-dev/premier-league/commit/4b2063a3663f48e166f7b13cbe06e51b24fd2056#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
 [1.2.0]: https://github.com/digitalghost-dev/premier-league/commit/8d5fbb7cdf91263eb55f2bc7ecd09236d975a704#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
