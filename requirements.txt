@@ -10,5 +10,5 @@ google-cloud-core==2.3.1
 google-cloud-bigquery==3.10.0
 google-cloud-firestore==2.11.0
 google-cloud-secret-manager==2.14.0
-google-cloud-bigquery[pandas]==3.2.0
+google-cloud-bigquery[pandas]==3.10.0
 google-cloud-bigquery-storage==2.19.1
