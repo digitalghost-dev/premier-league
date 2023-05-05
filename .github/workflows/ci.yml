@@ -107,7 +107,7 @@ jobs:
       - name: Run Pylint
         continue-on-error: true
         run: pylint data/ > pylint_output.txt
-        	
+
       - name: Upload Artifact	
         uses: actions/upload-artifact@v3	
         with:	
