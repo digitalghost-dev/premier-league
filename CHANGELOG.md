@@ -10,7 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * **MINOR:** Any changes to the Streamlit dashboard that adds a new interaction/feature or removal of one.
 * **PATCH:** Any changes that fix bugs.
 
-## [2.0.0] - 2023-05-02
+## [2.0.1] - 2023-05-05
+
+### **Fixed**
+* Adding '<=' to while loop to get the current round. Previously, the Streamlit app would only select rounds that were less than the `MAX` round which would omit the final round.
+
+## [2.0.0][2.0.0] - 2023-05-02
 Now using [Firestore](https://firebase.google.com/docs/firestore/) to store fixture data in a document format.
 
 ### **Added**
@@ -81,6 +86,8 @@ Top Teams Tab
 
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
+
+[2.0.0]: https://github.com/digitalghost-dev/premier-league/commit/a8b11f02c8b517453c1d7d2e34b0986ea73588ba#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
 [1.3.0]: https://github.com/digitalghost-dev/premier-league/commit/4b2063a3663f48e166f7b13cbe06e51b24fd2056#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 

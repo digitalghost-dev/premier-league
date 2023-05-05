@@ -392,13 +392,13 @@ def streamlit_app():
         st.subheader("Fixtures per Round")
 
         # Looping through each collection to get each round.
-        current_round_count = int(min_round_postgres[0])
-        while current_round_count < int(max_round_postgres[0]):
+        round_count = int(min_round_postgres[0])
+        while round_count <= int(max_round_postgres[0]):
 
             # Function to pull collection and documents.
             def firestore_pull():
 
-                collection_ref = db.collection(f'Regular Season - {current_round_count}')
+                collection_ref = db.collection(f'Regular Season - {round_count}')
                 docs = collection_ref.get()
 
                 documents = []
@@ -431,7 +431,7 @@ def streamlit_app():
                 return match_date, away_goals, home_goals, away_team, home_team, away_logo, home_logo
 
             # Placing data in an expander.
-            with st.expander(f"Round {current_round_count}"):
+            with st.expander(f"Round {round_count}"):
                 match_date, away_goals, home_goals, away_team, home_team, away_logo, home_logo = firestore_pull()
 
                 count = 0
@@ -472,7 +472,7 @@ def streamlit_app():
 
                     st.divider()
 
-            current_round_count += 1
+            round_count += 1
 
 local_css("style.css")
 streamlit_app()
