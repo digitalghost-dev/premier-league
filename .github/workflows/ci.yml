@@ -84,7 +84,7 @@ jobs:
           git commit -m "Apply Black Formatting" --allow-empty
           git push
           
-  lint:
+  pylint-check:
     runs-on: ubuntu-latest
     needs: [check-for-changes, black-formatting]
     if: |
@@ -116,7 +116,11 @@ jobs:
 
   google-cloud-upload:
     runs-on: ubuntu-latest
-    needs: [lint]
+    needs: [pylint-check]
+    if: |
+      always() &&
+      (needs.pylint-check.result == 'success')
+
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -191,6 +195,7 @@ jobs:
     if: |
       always() &&
       (needs.build-locations.result == 'success')
+
     steps:
     
       - name: Checkout
@@ -288,6 +293,7 @@ jobs:
     if: |
       always() &&
       (needs.build-players.result == 'success')
+
     steps:
     
       - name: Checkout
@@ -385,6 +391,7 @@ jobs:
     if: |
       always() &&
       (needs.build-standings.result == 'success')
+
     steps:
     
       - name: Checkout
@@ -482,6 +489,7 @@ jobs:
     if: |
       always() &&
       (needs.build-teams.result == 'success')
+      
     steps:
     
       - name: Checkout
