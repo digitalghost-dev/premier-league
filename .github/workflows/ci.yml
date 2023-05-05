@@ -35,7 +35,9 @@ env:
   NAME: ${{ secrets.NAME }}
   EMAIL: ${{ secrets.EMAIL }}
   WIF_PROVIDER: ${{ secrets.WIF_PROVIDER }}
-  WIF_SERVICE_ACCOUNT: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+  WIF_SERVICE_ACCOUNT_ARTIFACT_REGISTRY: ${{ secrets.WIF_SERVICE_ACCOUNT_ARTIFACT_REGISTRY }}
+  WIF_SERVICE_ACCOUNT_CLOUD_STORAGE: ${{ secrets.WIF_SERVICE_ACCOUNT_CLOUD_STORAGE }}
+  CLOUD_BUCKET: ${{ secrets.CLOUD_BUCKET }}
 
 jobs:
     
@@ -104,7 +106,43 @@ jobs:
         
       - name: Run Pylint
         continue-on-error: true
-        run: pylint data/
+        run: pylint data/ > pylint_output.txt
+        	
+      - name: Upload Artifact	
+        uses: actions/upload-artifact@v3	
+        with:	
+          name: pylint_output
+          path: ./pylint_output.txt
+
+  google-cloud-upload:
+    runs-on: ubuntu-latest
+    needs: [lint]
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: pylint_output
+          path: .
+
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          workload_identity_provider: '${{ env.WIF_PROVIDER }}'
+          service_account: ${{ env.WIF_SERVICE_ACCOUNT_CLOUD_STORAGE }}
+
+      - id: 'upload-file'
+        uses: 'google-github-actions/upload-cloud-storage@v1'
+        with:
+          path: 'pylint_output.txt'
+          destination: '${{ env.CLOUD_BUCKET }}'
         
   # locations container build and deploy --------------------------------------
   build-locations:
@@ -178,7 +216,7 @@ jobs:
         with:
           token_format: 'access_token'
           workload_identity_provider: '${{ env.WIF_PROVIDER }}'
-          service_account: '${{ env.WIF_SERVICE_ACCOUNT }}'
+          service_account: '${{ env.WIF_SERVICE_ACCOUNT_ARTIFACT_REGISTRY }}'
           
       - name: Docker Auth
         id: docker-auth
@@ -275,7 +313,7 @@ jobs:
         with:
           token_format: 'access_token'
           workload_identity_provider: '${{ env.WIF_PROVIDER }}'
-          service_account: '${{ env.WIF_SERVICE_ACCOUNT }}'
+          service_account: '${{ env.WIF_SERVICE_ACCOUNT_ARTIFACT_REGISTRY }}'
           
       - name: Docker Auth
         id: docker-auth
@@ -372,7 +410,7 @@ jobs:
         with:
           token_format: 'access_token'
           workload_identity_provider: '${{ env.WIF_PROVIDER }}'
-          service_account: '${{ env.WIF_SERVICE_ACCOUNT }}'
+          service_account: '${{ env.WIF_SERVICE_ACCOUNT_ARTIFACT_REGISTRY }}'
           
       - name: Docker Auth
         id: docker-auth
@@ -469,7 +507,7 @@ jobs:
         with:
           token_format: 'access_token'
           workload_identity_provider: '${{ env.WIF_PROVIDER }}'
-          service_account: '${{ env.WIF_SERVICE_ACCOUNT }}'
+          service_account: '${{ env.WIF_SERVICE_ACCOUNT_ARTIFACT_REGISTRY }}'
           
       - name: Docker Auth
         id: docker-auth
@@ -566,7 +604,7 @@ jobs:
         with:
           token_format: 'access_token'
           workload_identity_provider: '${{ env.WIF_PROVIDER }}'
-          service_account: '${{ env.WIF_SERVICE_ACCOUNT }}'
+          service_account: '${{ env.WIF_SERVICE_ACCOUNT_ARTIFACT_REGISTRY }}'
           
       - name: Docker Auth
         id: docker-auth
