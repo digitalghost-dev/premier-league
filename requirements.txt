@@ -1,7 +1,7 @@
 numpy==1.24.3
 pandas==1.4.2
 plotly==5.14.1
-requests==2.29.0
+requests==2.30.0
 streamlit==1.22.0
 SQLAlchemy==2.0.11
 firebase-admin==6.1.0
