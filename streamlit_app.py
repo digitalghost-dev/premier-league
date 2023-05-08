@@ -392,8 +392,8 @@ def streamlit_app():
         st.subheader("Fixtures per Round")
 
         # Looping through each collection to get each round.
-        round_count = int(min_round_postgres[0])
-        while round_count <= int(max_round_postgres[0]):
+        round_count = int(max_round_postgres[0])
+        while round_count >= int(min_round_postgres[0]):
 
             # Function to pull collection and documents.
             def firestore_pull():
@@ -472,7 +472,7 @@ def streamlit_app():
 
                     st.divider()
 
-            round_count += 1
+            round_count -= 1
 
 local_css("style.css")
 streamlit_app()
