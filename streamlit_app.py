@@ -84,7 +84,7 @@ def background_processing():
 
     # Locations table.
     locations_data = run_query(f"""
-        SELECT latitude, longitude
+        SELECT latitude, longitude, stadium, team
         FROM {locations_table}
         """
     )
@@ -136,7 +136,7 @@ def streamlit_app():
     # Title.
     col1, col = st.columns((9, 1))
     with st.container():
-        col1.title("Premier League Statistics / '22-'23")
+        col1.title("Premier League Statistics / 2022-23")
 
     # Tab menu.
     tab1, tab2, tab3 = st.tabs(["Overview", "Top Teams & Top Scorers", "Fixtures"])
@@ -200,7 +200,23 @@ def streamlit_app():
 
         # Map of stadiums.
         st.subheader("Location of Stadiums")
-        st.map(locations_df, use_container_width=True)
+
+        mapbox_access_token = st.secrets["mapbox"]["mapbox_key"]
+
+        px.set_mapbox_access_token(mapbox_access_token)
+
+        stadium_map = px.scatter_mapbox(locations_df, lat="latitude", lon="longitude", hover_name="stadium", hover_data="team")
+
+        stadium_map.update_layout(
+            mapbox_style="light", 
+            margin={"r":0,"t":0,"l":0,"b":0}, 
+            mapbox_bounds={"west": -17, "east": 17, "south": 45, "north": 60})
+
+        stadium_map.update_traces(marker=dict(size=8)) 
+
+        stadium_map.update_mapboxes(zoom=4)
+
+        st.plotly_chart(stadium_map, height=1000, use_container_width=True)
 
     # Tab 2, top teams, top players, and rest of league forms.
     with tab2:
