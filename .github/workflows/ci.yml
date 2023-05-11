@@ -19,10 +19,12 @@ on:
     paths-ignore:
       - '.github/**'
       - '.streamlit/**'
-      - 'README.md'
       - 'CHANGELOG.md'
+      - 'Dockerfile'
+      - '.dockerignore'
       - '.gitignore'
       - '.pylintrc'
+      - 'README.md'
       - 'streamlit_app.py'
       - 'style.css'
     branches:
