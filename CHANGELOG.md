@@ -10,12 +10,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * **MINOR:** Any changes to the Streamlit dashboard that adds a new interaction/feature or removal of one.
 * **PATCH:** Any changes that fix bugs.
 
-## [2.1.0] - 2023-05-10
+## [2.2.0] - 2023-05-17
+
+### **Changed**
+* Changed the hex colors used for promtion/demotion status.
+* Changed the color of `locations` map markers to `indigo` to match the rest of the theme.
+
+### **Added**
+* Added an extra color to denote `europa conference league qualification` promotion.
+* Added solid border element to `standings` table to better denote promotion/demotion status.
+* Added text under table to explain which color denotes which promotion/demotion status.
+
+---
+
+## [2.1.0][2.1.0] - 2023-05-10
 
 ### **Changed**
 * Changed stadium `locations` map to use [plotly express](https://plotly.com/python/mapbox-layers/) `scatter_mapbox` instead of Streamlit's built in `st.map()` function.
     * This allows the stadium points to be hoverable which enables a tooltip that provides more information about the venue.
-* Changed title to display, ***Premier League Statistics / 2022-23*** instead of ***Premier League Statistics / '22-'23***.
+* Changed title to display ***Premier League Statistics / 2022-23*** instead of ***Premier League Statistics / '22-'23***.
 
 ---
 
@@ -112,6 +125,8 @@ Top Teams Tab
 
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
+
+[2.1.0]: https://github.com/digitalghost-dev/premier-league/commit/f4e580d998e8e1042b9b824aa846bf3e738b3fd4#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
 [2.0.2]: https://github.com/digitalghost-dev/premier-league/commit/72337e2ac3ee365612a6a02eda25f390ab2690b9#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 

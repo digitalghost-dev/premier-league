@@ -1,32 +1,44 @@
 /* Styling Streamlit app */
 table tr:nth-child(1) {
-    color: green;
+    color: #55A630;
 }
 
 table tr:nth-child(2) {
-    color: green;
+    color: #55A630;
 }
 
 table tr:nth-child(3) {
-    color: green;
+    color: #55A630;
 }
 
 table tr:nth-child(4) {
-    color: green;
+    color: #55A630;
+    border-bottom: solid 2px;
 }
 
 table tr:nth-child(5) {
-    color: blue;
+    color: #0077B6;
+}
+
+table tr:nth-child(6) {
+    color: #0077B6;
+    border-bottom: solid 2px;
+}
+
+table tr:nth-child(7) {
+    color: #48CAE4;
+    border-bottom: solid 2px;
 }
 
 table tr:nth-child(18) {
-    color: red;
+    color: #D00000;
+    border-top: solid 2px;
 }
 
 table tr:nth-child(19) {
-    color: red;
+    color: #D00000;
 }
 
 table tr:nth-child(20) {
-    color: red;
+    color: #D00000;
 }
