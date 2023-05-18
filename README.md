@@ -1,7 +1,7 @@
 # Premier League Data Visualization with Streamlit
 
 ![builds](https://img.shields.io/github/actions/workflow/status/digitalghost-dev/premier-league/ci.yml?style=flat-square)
-![version](https://img.shields.io/badge/streamlit_app_version-2.1.0-blue?style=flat-square)
+![version](https://img.shields.io/badge/streamlit_app_version-2.2.0-blue?style=flat-square)
 ![size](https://img.shields.io/github/repo-size/digitalghost-dev/premier-league?style=flat-square)
 ![black](https://img.shields.io/badge/code%20style-black-black?style=flat-square)
 ![pyling](https://img.shields.io/badge/linting-pylint-yellowgreen?style=flat-square)
@@ -29,8 +29,8 @@
 | API Source | Football API  | Cloud Run      | Football API | Football API   | Football API |
 | Storage    | Firestore     | BigQuery       |  BigQuery    | BigQuery       |  BigQuery    |
 
-4. The data is then transformed and dataframes are created.
-5. Dataframes are sent to BigQuery and Firestore.
+4. The data is transformed, dataframes and dictionaries are created.
+5. Dataframes are sent to BigQuery and dictionaries are sent to Firestore.
 6. When the Streamlit app loads, the BigQuery tables and Firestore documents are queried to return and load the data.
 
 ### CI/CD Pipeline

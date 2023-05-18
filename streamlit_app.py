@@ -123,6 +123,7 @@ def background_processing():
 
     return locations_df, players_df, standings_df, teams_df, db, min_round_postgres, max_round_postgres
 
+# Function that holds all elements of display for the dashboard.
 def streamlit_app():
     locations_df, players_df, standings_df, teams_df, db, min_round_postgres, max_round_postgres = background_processing()
 
@@ -150,7 +151,25 @@ def streamlit_app():
         with col1:
             st.subheader("Standings")
 
+            # Standings table.
             st.table(standings_df)
+
+            # List of promotions/demotions for the league.
+            st.markdown(
+                # '&nbsp' adds a non-breaking space.
+                """
+                <div style='display: flex; flex-direction:row;'>
+                    <p style='color:#55A630'>Champions League</p>
+                    <p>&nbsp;&nbsp;-&nbsp;&nbsp</p>
+                    <p style='color:#0077B6'>Europa League</p>
+                    <p>&nbsp;&nbsp-&nbsp;&nbsp</p>
+                    <p style='color:#48cae4'>Europa Conference League Qualification</p>
+                    <p>&nbsp;&nbsp-&nbsp;&nbsp</p>
+                    <p style='color:#d00000'>Relegation</p>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
 
         # Slider and bar graph.
         with col2:
@@ -212,7 +231,7 @@ def streamlit_app():
             margin={"r":0,"t":0,"l":0,"b":0}, 
             mapbox_bounds={"west": -17, "east": 17, "south": 45, "north": 60})
 
-        stadium_map.update_traces(marker=dict(size=8)) 
+        stadium_map.update_traces(marker=dict(size=8), marker_color="indigo") 
 
         stadium_map.update_mapboxes(zoom=4)
 
