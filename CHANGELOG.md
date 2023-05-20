@@ -10,7 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * **MINOR:** Any changes to the Streamlit dashboard that adds a new interaction/feature or removal of one.
 * **PATCH:** Any changes that fix bugs.
 
-## [2.2.0] - 2023-05-17
+## [2.2.1] - 2023-05-19
+
+### Fixed
+* Fixed promotion/demotion legend by displaying items as a column instead of in a row.
+
+---
+
+## [2.2.0][2.2.0] - 2023-05-17
 
 ### **Changed**
 * Changed the hex colors used for promtion/demotion status.
@@ -125,6 +132,8 @@ Top Teams Tab
 
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
+
+[2.2.0]: https://github.com/digitalghost-dev/premier-league/commit/11606ed57e6a4460d5059fc0141fbeccd268b716#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
 [2.1.0]: https://github.com/digitalghost-dev/premier-league/commit/f4e580d998e8e1042b9b824aa846bf3e738b3fd4#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
