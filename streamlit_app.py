@@ -158,15 +158,10 @@ def streamlit_app():
             st.markdown(
                 # '&nbsp' adds a non-breaking space.
                 """
-                <div style='display: flex; flex-direction:row;'>
-                    <p style='color:#55A630'>Champions League</p>
-                    <p>&nbsp;&nbsp;-&nbsp;&nbsp</p>
-                    <p style='color:#0077B6'>Europa League</p>
-                    <p>&nbsp;&nbsp-&nbsp;&nbsp</p>
-                    <p style='color:#48cae4'>Europa Conference League Qualification</p>
-                    <p>&nbsp;&nbsp-&nbsp;&nbsp</p>
-                    <p style='color:#d00000'>Relegation</p>
-                </div>
+                    <p style='color:#55A630'>- Champions League</p>
+                    <p style='color:#0077B6'>- Europa League</p>
+                    <p style='color:#48cae4'>- Europa Conference League Qualification</p>
+                    <p style='color:#d00000'>- Relegation</p>
                 """,
                 unsafe_allow_html=True
             )
