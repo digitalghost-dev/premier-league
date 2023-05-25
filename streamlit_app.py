@@ -240,7 +240,7 @@ def streamlit_app():
         components.html(
         """
         <script src="https://kit.fontawesome.com/84587c6ecd.js" crossorigin="anonymous"></script>
-        <div style="display: flex; flex-direction: row;"
+        <div style="display: flex; flex-direction: row;">
             <a href="https://github.com/digitalghost-dev/premier-league"><i class='fa-brands fa-github fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
             <a href="https://www.linkedin.com/in/christian-sanchez-nv/"><i class='fa-brands fa-linkedin fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
             <a href="https://medium.com/@digitialghost-dev"><i class='fa-brands fa-medium fa-2x fa-fade' style='color: #000000;'></i></a>
@@ -438,7 +438,7 @@ def streamlit_app():
         components.html(
         """
         <script src="https://kit.fontawesome.com/84587c6ecd.js" crossorigin="anonymous"></script>
-        <div style="display: flex; flex-direction: row;"
+        <div style="display: flex; flex-direction: row;">
             <a href="https://github.com/digitalghost-dev/premier-league"><i class='fa-brands fa-github fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
             <a href="https://www.linkedin.com/in/christian-sanchez-nv/"><i class='fa-brands fa-linkedin fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
             <a href="https://medium.com/@digitialghost-dev"><i class='fa-brands fa-medium fa-2x fa-fade' style='color: #000000;'></i></a>
@@ -538,7 +538,7 @@ def streamlit_app():
         components.html(
         """
         <script src="https://kit.fontawesome.com/84587c6ecd.js" crossorigin="anonymous"></script>
-        <div style="display: flex; flex-direction: row;"
+        <div style="display: flex; flex-direction: row;">
             <a href="https://github.com/digitalghost-dev/premier-league"><i class='fa-brands fa-github fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
             <a href="https://www.linkedin.com/in/christian-sanchez-nv/"><i class='fa-brands fa-linkedin fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
             <a href="https://medium.com/@digitialghost-dev"><i class='fa-brands fa-medium fa-2x fa-fade' style='color: #000000;'></i></a>
