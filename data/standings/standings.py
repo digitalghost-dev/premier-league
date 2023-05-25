@@ -1,19 +1,25 @@
-# Importing needed modules.
+"""
+This file pulls data from an API relating to the English Premier League standings data and loads it into BigQuery.
+"""
+
+# System libraries
+import os
+
+# Importing needed libraries.
+from google.cloud import secretmanager
 from google.cloud import bigquery
 import pandas as pd
 import requests
 import json
-import os
 
+# Settings the project environment.
 os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
 
-standings_table = "cloud-data-infrastructure.football_data_dataset.standings"
+# Setting table names.
+STANDINGS_TABLE = "cloud-data-infrastructure.football_data_dataset.standings"
 
 
 def gcp_secret():
-    # Import the Secret Manager client library.
-    from google.cloud import secretmanager
-
     client = secretmanager.SecretManagerServiceClient()
     name = "projects/463690670206/secrets/rapid-api/versions/1"
     response = client.access_secret_version(request={"name": name})
@@ -225,12 +231,17 @@ def dataframe():
 
 
 class Standings:
+    """Functions to drop and load the standings table."""
+    
     # Dropping BigQuery table.
     def drop(self):
+        
+        # Construct a BigQuery client object.
         client = bigquery.Client()
+        
         query = f"""
             DROP TABLE 
-            {standings_table}
+            {STANDINGS_TABLE}
         """
 
         query_job = client.query(query)
@@ -241,14 +252,12 @@ class Standings:
         df = dataframe()  # Getting dataframe creating in dataframe() function.
 
         # Construct a BigQuery client object.
-        client = bigquery.Client(project="cloud-data-infrastructure")
+        client = bigquery.Client()
 
-        table_id = standings_table
-
-        job = client.load_table_from_dataframe(df, table_id)  # Make an API request.
+        job = client.load_table_from_dataframe(df, STANDINGS_TABLE)  # Make an API request.
         job.result()  # Wait for the job to complete.
 
-        table = client.get_table(table_id)  # Make an API request.
+        table = client.get_table(STANDINGS_TABLE)  # Make an API request.
 
         print(f"Loaded {table.num_rows} rows and {len(table.schema)} columns")
 

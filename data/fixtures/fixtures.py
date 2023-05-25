@@ -3,14 +3,16 @@ This file calls the Football API to extract match fixture data
 and load the collection and documents into Firestore.
 """
 
+# System libraries
 import os
-import requests
 
 # Google Cloud library imports.
-import firebase_admin
-from firebase_admin import firestore
 from google.cloud import secretmanager
+from firebase_admin import firestore
+import firebase_admin
+import requests
 
+# Settings the project environment.
 os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
 
 

@@ -1,17 +1,20 @@
 """
-This file pulls data from an API and loads it into a BigQuery table.
+This file pulls data from an API relating to the English Premier League stadium location data and loads it into BigQuery.
 """
 
-# Importing needed libraries.
+# System libraries
 import os
 
+# Importing needed libraries.
 from google.cloud import secretmanager
 from google.cloud import bigquery
 import pandas as pd
 import requests
 
+# Settings the project environment.
 os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
 
+# Settings the project environment.
 LOCATIONS_TABLE = "cloud-data-infrastructure.football_data_dataset.locations"
 
 
@@ -86,16 +89,14 @@ class Locations:
             dataframe()
         )  # Getting dataframe creating in dataframe() function.
 
-        client = bigquery.Client(project="cloud-data-infrastructure")
-
-        table_id = LOCATIONS_TABLE
+        client = bigquery.Client()
 
         job = client.load_table_from_dataframe(
-            locations_df, table_id
+            locations_df, LOCATIONS_TABLE
         )  # Make an API request.
         job.result()  # Wait for the job to complete.
 
-        table = client.get_table(table_id)  # Make an API request.
+        table = client.get_table(LOCATIONS_TABLE)  # Make an API request.
 
         print(f"Loaded {table.num_rows} rows and {len(table.schema)} columns")
 

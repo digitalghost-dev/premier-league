@@ -1,18 +1,21 @@
 """
-This file pulls data from an API and loads it into a BigQuery table.
+This file pulls data from an API relating to the English Premier League players data and loads it into BigQuery.
 """
 
+# System libraries
 import os
-import json
 
 # Importing needed libraries.
 from google.cloud import secretmanager
 from google.cloud import bigquery
 import pandas as pd
 import requests
+import json
 
+# Settings the project environment.
 os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
 
+# Settings the project environment.
 PLAYERS_TABLE = "cloud-data-infrastructure.football_data_dataset.players"
 
 
@@ -112,7 +115,7 @@ def dataframe():
 
 
 class Players:
-    """Functions to drop and load the locations table."""
+    """Functions to drop and load the players table."""
 
     # Dropping BigQuery table.
     def drop(self):
@@ -130,7 +133,7 @@ class Players:
         df = dataframe()  # Getting dataframe creating in dataframe() function.
 
         # Construct a BigQuery client object.
-        client = bigquery.Client(project="cloud-data-infrastructure")
+        client = bigquery.Client()
 
         table_id = PLAYERS_TABLE
 
