@@ -10,6 +10,7 @@ import psycopg2
 import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
+import streamlit.components.v1 as components
 
 # Google Cloud Libraries
 import firebase_admin
@@ -140,7 +141,7 @@ def streamlit_app():
         col1.title("Premier League Statistics / 2022-23")
 
     # Tab menu.
-    tab1, tab2, tab3 = st.tabs(["Overview", "Top Teams & Top Scorers", "Fixtures"])
+    tab1, tab2, tab3 = st.tabs(["Overview", "Statistics", "Fixtures"])
 
     # Tab 1, overview
     with tab1:
@@ -212,6 +213,8 @@ def streamlit_app():
 
             st.plotly_chart(points_chart, use_container_width = True)
 
+            st.subheader("Season ends May 28th, 2023")
+
         # Map of stadiums.
         st.subheader("Location of Stadiums")
 
@@ -231,6 +234,19 @@ def streamlit_app():
         stadium_map.update_mapboxes(zoom=4)
 
         st.plotly_chart(stadium_map, height=1000, use_container_width=True)
+
+        st.divider()
+        st.subheader("Social")
+        components.html(
+        """
+        <script src="https://kit.fontawesome.com/84587c6ecd.js" crossorigin="anonymous"></script>
+        <div style="display: flex; flex-direction: row;"
+            <a href="https://github.com/digitalghost-dev/premier-league"><i class='fa-brands fa-github fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
+            <a href="https://www.linkedin.com/in/christian-sanchez-nv/"><i class='fa-brands fa-linkedin fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
+            <a href="https://medium.com/@digitialghost-dev"><i class='fa-brands fa-medium fa-2x fa-fade' style='color: #000000;'></i></a>
+        </div>
+        """
+        )
 
     # Tab 2, top teams, top players, and rest of league forms.
     with tab2:
@@ -417,6 +433,19 @@ def streamlit_app():
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[19][0])}'/>", unsafe_allow_html=True)
                 st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>20. {((teams_df.iloc[19][1])[-5:])}</p>", unsafe_allow_html=True)
 
+        st.divider()
+        st.subheader("Social")
+        components.html(
+        """
+        <script src="https://kit.fontawesome.com/84587c6ecd.js" crossorigin="anonymous"></script>
+        <div style="display: flex; flex-direction: row;"
+            <a href="https://github.com/digitalghost-dev/premier-league"><i class='fa-brands fa-github fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
+            <a href="https://www.linkedin.com/in/christian-sanchez-nv/"><i class='fa-brands fa-linkedin fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
+            <a href="https://medium.com/@digitialghost-dev"><i class='fa-brands fa-medium fa-2x fa-fade' style='color: #000000;'></i></a>
+        </div>
+        """
+        )
+
     with tab3:
 
         st.subheader("Fixtures per Round")
@@ -503,6 +532,19 @@ def streamlit_app():
                     st.divider()
 
             round_count -= 1
+
+        st.divider()
+        st.subheader("Social")
+        components.html(
+        """
+        <script src="https://kit.fontawesome.com/84587c6ecd.js" crossorigin="anonymous"></script>
+        <div style="display: flex; flex-direction: row;"
+            <a href="https://github.com/digitalghost-dev/premier-league"><i class='fa-brands fa-github fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
+            <a href="https://www.linkedin.com/in/christian-sanchez-nv/"><i class='fa-brands fa-linkedin fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
+            <a href="https://medium.com/@digitialghost-dev"><i class='fa-brands fa-medium fa-2x fa-fade' style='color: #000000;'></i></a>
+        </div>
+        """
+        )
 
 local_css("style.css")
 streamlit_app()
