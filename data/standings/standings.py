@@ -232,13 +232,12 @@ def dataframe():
 
 class Standings:
     """Functions to drop and load the standings table."""
-    
+
     # Dropping BigQuery table.
     def drop(self):
-        
         # Construct a BigQuery client object.
         client = bigquery.Client()
-        
+
         query = f"""
             DROP TABLE 
             {STANDINGS_TABLE}
@@ -254,7 +253,9 @@ class Standings:
         # Construct a BigQuery client object.
         client = bigquery.Client()
 
-        job = client.load_table_from_dataframe(df, STANDINGS_TABLE)  # Make an API request.
+        job = client.load_table_from_dataframe(
+            df, STANDINGS_TABLE
+        )  # Make an API request.
         job.result()  # Wait for the job to complete.
 
         table = client.get_table(STANDINGS_TABLE)  # Make an API request.

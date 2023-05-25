@@ -157,7 +157,7 @@ def create_dataframe():
 
 class Teams:
     """Functions to drop and load the teams table."""
-    
+
     # Dropping BigQuery table.
     def drop(self):
         client = bigquery.Client()
