@@ -10,7 +10,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * **MINOR:** Any changes to the Streamlit dashboard that adds a new interaction/feature or removal of one.
 * **PATCH:** Any changes that fix bugs.
 
-## [2.3.1] - 20230-05-25
+## [2.4.0] - 2023-05-26
+
+### **Added**
+* Added number to `Top 5 Teams` section to indicate current rank.
+* Added suffix to rank number in `Forms for the Rest of the League` section.
+
+### **Changed**
+* Changed hyperlink for GitHub icon to point to GitHub profile instead of repository for project. A link to GitHub repository already exists by default.
+
+### **Fixed**
+* Added `target="_blank" rel="noopener noreferrer"` to anchor elements to allow linked icons to open properly.
+
+---
+
+## [2.3.1][2.3.1] - 20230-05-25
 
 ### **Fixed**
 * Fixed broken link for GitHub Icon on all tabs.
@@ -150,6 +164,8 @@ Top Teams Tab
 
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
+
+[2.3.1]: https://github.com/digitalghost-dev/premier-league/commit/c11bfaa2f2aa0317783be65f935387e25cf180de#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
 [2.3.0]: https://github.com/digitalghost-dev/premier-league/commit/5e3cadd68cefef3abf7dbe1809257a9fae39af4a#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
