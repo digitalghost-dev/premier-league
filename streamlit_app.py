@@ -235,17 +235,19 @@ def streamlit_app():
 
         st.plotly_chart(stadium_map, height=1000, use_container_width=True)
 
+        # Social media icons section.
         st.divider()
         st.subheader("Social")
+
         components.html(
-        """
-        <script src="https://kit.fontawesome.com/84587c6ecd.js" crossorigin="anonymous"></script>
-        <div style="display: flex; flex-direction: row;">
-            <a href="https://github.com/digitalghost-dev/premier-league"><i class='fa-brands fa-github fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
-            <a href="https://www.linkedin.com/in/christian-sanchez-nv/"><i class='fa-brands fa-linkedin fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
-            <a href="https://medium.com/@digitialghost-dev"><i class='fa-brands fa-medium fa-2x fa-fade' style='color: #000000;'></i></a>
-        </div>
-        """
+            """
+            <script src="https://kit.fontawesome.com/84587c6ecd.js" crossorigin="anonymous"></script>
+            <div style="display: flex; flex-direction: row;">
+                <a target="_blank" rel="noopener noreferrer" href="https://github.com/digitalghost-dev/"><i class='fa-brands fa-github fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
+                <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/christian-sanchez-nv/"><i class='fa-brands fa-linkedin fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
+                <a target="_blank" rel="noopener noreferrer" href="https://medium.com/@digitialghost-dev"><i class='fa-brands fa-medium fa-2x fa-fade' style='color: #000000;'></i></a>
+            </div>
+            """
         )
 
     # Tab 2, top teams, top players, and rest of league forms.
@@ -259,7 +261,7 @@ def streamlit_app():
             # First top team.
             # st.markdown(f"![Image]({(teams_df.iloc[0][0])})")
             st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(teams_df.iloc[0][0])}'/>", unsafe_allow_html=True)
-            st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'><b>Form (Last 5):</b> {((teams_df.iloc[0][1])[-5:])}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'><b>1st / Form (Last 5):</b> {((teams_df.iloc[0][1])[-5:])}</p>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center;'><b>Clean Sheets:</b> {(teams_df.iloc[0][2])}</p>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center;'><b>Penalties Scored:</b> {(teams_df.iloc[0][3])}</p>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center;'><b>Penalties Missed:</b> {(teams_df.iloc[0][4])}</p>", unsafe_allow_html=True)
@@ -267,7 +269,7 @@ def streamlit_app():
         with col2:
             # Second top team.
             st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(teams_df.iloc[1][0])}'/>", unsafe_allow_html=True)
-            st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'><b>Form (Last 5):</b> {((teams_df.iloc[1][1])[-5:])}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'><b>2nd / Form (Last 5):</b> {((teams_df.iloc[1][1])[-5:])}</p>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center;'><b>Clean Sheets:</b> {(teams_df.iloc[1][2])}</p>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center;'><b>Penalties Scored:</b> {(teams_df.iloc[1][3])}</p>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center;'><b>Penalties Missed:</b> {(teams_df.iloc[1][4])}</p>", unsafe_allow_html=True)
@@ -275,7 +277,7 @@ def streamlit_app():
         with col3:
             # Third top team.
             st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(teams_df.iloc[2][0])}'/>", unsafe_allow_html=True)
-            st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'><b>Form (Last 5):</b> {((teams_df.iloc[2][1])[-5:])}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'><b>3rd / Form (Last 5):</b> {((teams_df.iloc[2][1])[-5:])}</p>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center;'><b>lean Sheets:</b> {(teams_df.iloc[2][2])}</p>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center;'><b>Penalties Scored:</b> {(teams_df.iloc[2][3])}</p>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center;'><b>Penalties Missed:</b> {(teams_df.iloc[2][4])}</p>", unsafe_allow_html=True)
@@ -283,7 +285,7 @@ def streamlit_app():
         with col4:
             # Fourth top team.
             st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(teams_df.iloc[3][0])}'/>", unsafe_allow_html=True)
-            st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'><b>Form (Last 5):</b> {((teams_df.iloc[3][1])[-5:])}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'><b>4th / Form (Last 5):</b> {((teams_df.iloc[3][1])[-5:])}</p>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center;'><b>lean Sheets:</b> {(teams_df.iloc[3][2])}</p>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center;'><b>Penalties Scored:</b> {(teams_df.iloc[3][3])}</p>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center;'><b>Penalties Missed:</b> {(teams_df.iloc[3][4])}</p>", unsafe_allow_html=True)
@@ -291,7 +293,7 @@ def streamlit_app():
         with col5:
             # Fifth top team.
             st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(teams_df.iloc[4][0])}'/>", unsafe_allow_html=True)
-            st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'><b>Form (Last 5):</b> {((teams_df.iloc[4][1])[-5:])}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'><b>5th / Form (Last 5):</b> {((teams_df.iloc[4][1])[-5:])}</p>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center;'><b>Clean Sheets:</b> {(teams_df.iloc[4][2])}</p>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center;'><b>Penalties Scored:</b> {(teams_df.iloc[4][3])}</p>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center;'><b>Penalties Missed:</b> {(teams_df.iloc[4][4])}</p>", unsafe_allow_html=True)
@@ -385,65 +387,67 @@ def streamlit_app():
 
             with col1:
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[5][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>6. {((teams_df.iloc[5][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>6th / {((teams_df.iloc[5][1])[-5:])}</p>", unsafe_allow_html=True)
 
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[10][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>11. {((teams_df.iloc[10][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>11th / {((teams_df.iloc[10][1])[-5:])}</p>", unsafe_allow_html=True)
 
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[15][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>16. {((teams_df.iloc[15][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>16th / {((teams_df.iloc[15][1])[-5:])}</p>", unsafe_allow_html=True)
 
             with col2:
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[6][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>7. {((teams_df.iloc[6][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>7th / {((teams_df.iloc[6][1])[-5:])}</p>", unsafe_allow_html=True)
 
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[11][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>12. {((teams_df.iloc[11][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>12th / {((teams_df.iloc[11][1])[-5:])}</p>", unsafe_allow_html=True)
 
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[16][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>17. {((teams_df.iloc[16][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>17th / {((teams_df.iloc[16][1])[-5:])}</p>", unsafe_allow_html=True)
 
             with col3:
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[7][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>8. {((teams_df.iloc[7][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>8th / {((teams_df.iloc[7][1])[-5:])}</p>", unsafe_allow_html=True)
 
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[12][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>13. {((teams_df.iloc[12][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>13th / {((teams_df.iloc[12][1])[-5:])}</p>", unsafe_allow_html=True)
 
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[17][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>18. {((teams_df.iloc[17][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>18th / {((teams_df.iloc[17][1])[-5:])}</p>", unsafe_allow_html=True)
 
             with col4:
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[8][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>9. {((teams_df.iloc[8][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>9th / {((teams_df.iloc[8][1])[-5:])}</p>", unsafe_allow_html=True)
 
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[13][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>14. {((teams_df.iloc[13][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>14th / {((teams_df.iloc[13][1])[-5:])}</p>", unsafe_allow_html=True)
 
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[18][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>19. {((teams_df.iloc[18][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>19th / {((teams_df.iloc[18][1])[-5:])}</p>", unsafe_allow_html=True)
 
             with col5:
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[9][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>10. {((teams_df.iloc[9][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>10th / {((teams_df.iloc[9][1])[-5:])}</p>", unsafe_allow_html=True)
 
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[14][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>15. {((teams_df.iloc[14][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>15th / {((teams_df.iloc[14][1])[-5:])}</p>", unsafe_allow_html=True)
 
                 st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[19][0])}'/>", unsafe_allow_html=True)
-                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>20. {((teams_df.iloc[19][1])[-5:])}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'>20th / {((teams_df.iloc[19][1])[-5:])}</p>", unsafe_allow_html=True)
 
+        # Social media icons section.
         st.divider()
         st.subheader("Social")
+
         components.html(
-        """
-        <script src="https://kit.fontawesome.com/84587c6ecd.js" crossorigin="anonymous"></script>
-        <div style="display: flex; flex-direction: row;">
-            <a href="https://github.com/digitalghost-dev/premier-league"><i class='fa-brands fa-github fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
-            <a href="https://www.linkedin.com/in/christian-sanchez-nv/"><i class='fa-brands fa-linkedin fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
-            <a href="https://medium.com/@digitialghost-dev"><i class='fa-brands fa-medium fa-2x fa-fade' style='color: #000000;'></i></a>
-        </div>
-        """
+            """
+            <script src="https://kit.fontawesome.com/84587c6ecd.js" crossorigin="anonymous"></script>
+            <div style="display: flex; flex-direction: row;">
+                <a target="_blank" rel="noopener noreferrer" href="https://github.com/digitalghost-dev/"><i class='fa-brands fa-github fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
+                <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/christian-sanchez-nv/"><i class='fa-brands fa-linkedin fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
+                <a target="_blank" rel="noopener noreferrer" href="https://medium.com/@digitialghost-dev"><i class='fa-brands fa-medium fa-2x fa-fade' style='color: #000000;'></i></a>
+            </div>
+            """
         )
 
     with tab3:
@@ -533,17 +537,19 @@ def streamlit_app():
 
             round_count -= 1
 
+        # Social media icons section.
         st.divider()
         st.subheader("Social")
+
         components.html(
-        """
-        <script src="https://kit.fontawesome.com/84587c6ecd.js" crossorigin="anonymous"></script>
-        <div style="display: flex; flex-direction: row;">
-            <a href="https://github.com/digitalghost-dev/premier-league"><i class='fa-brands fa-github fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
-            <a href="https://www.linkedin.com/in/christian-sanchez-nv/"><i class='fa-brands fa-linkedin fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
-            <a href="https://medium.com/@digitialghost-dev"><i class='fa-brands fa-medium fa-2x fa-fade' style='color: #000000;'></i></a>
-        </div>
-        """
+            """
+            <script src="https://kit.fontawesome.com/84587c6ecd.js" crossorigin="anonymous"></script>
+            <div style="display: flex; flex-direction: row;">
+                <a target="_blank" rel="noopener noreferrer" href="https://github.com/digitalghost-dev/"><i class='fa-brands fa-github fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
+                <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/christian-sanchez-nv/"><i class='fa-brands fa-linkedin fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
+                <a target="_blank" rel="noopener noreferrer" href="https://medium.com/@digitialghost-dev"><i class='fa-brands fa-medium fa-2x fa-fade' style='color: #000000;'></i></a>
+            </div>
+            """
         )
 
 local_css("style.css")
