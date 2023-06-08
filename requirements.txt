@@ -2,7 +2,7 @@ numpy==1.24.3
 pandas==1.4.2
 plotly==5.14.1
 requests==2.29.0
-streamlit==1.22.0
+streamlit==1.23.1
 SQLAlchemy==2.0.15
 firebase-admin==6.1.0
 psycopg2-binary==2.9.6
