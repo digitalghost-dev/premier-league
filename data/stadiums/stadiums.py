@@ -71,7 +71,9 @@ def dataframe():
 
     # Setting the headers then zipping the lists to create a dataframe.
     headers = ["team", "stadium", "latitude", "longitude", "capacity", "year_opened"]
-    zipped = list(zip(team_list, stadium_list, lat_list, lon_list, capacity_list, year_opened))
+    zipped = list(
+        zip(team_list, stadium_list, lat_list, lon_list, capacity_list, year_opened)
+    )
 
     locations_df = pd.DataFrame(zipped, columns=headers)
 
