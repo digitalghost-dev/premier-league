@@ -1,5 +1,9 @@
 # Dockerfile to build and host the Streamlit app.
 
+# build and run commands while in pwd:
+# build: docker build -t streamlit:{tag} .
+# run: docker run -p 8501:8501 -v $(pwd)/.streamlit/secrets.toml:/app/.streamlit/secrets.toml streamlit:{tag}
+
 FROM python:3.9-slim
 
 WORKDIR /app
@@ -13,6 +17,7 @@ RUN apt-get update && apt-get install -y \
 
 COPY requirements.txt .
 COPY streamlit_app.py .
+COPY pages/Playground.py pages/Playground.py
 COPY .streamlit/config.toml ./.streamlit/config.toml
 COPY style.css .
 
