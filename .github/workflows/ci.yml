@@ -155,6 +155,9 @@ jobs:
         
   # stadiums container build and deploy --------------------------------------
   build-stadiums:
+    permissions:
+      contents: write
+
     runs-on: ubuntu-latest
     needs: [check-for-changes, black-formatting]
     if: |
@@ -253,6 +256,9 @@ jobs:
 
   # players container build and deploy --------------------------------------
   build-players:
+    permissions:
+      contents: write
+
     runs-on: ubuntu-latest
     needs: [check-for-changes, black-formatting]
     if: |
@@ -351,6 +357,9 @@ jobs:
 
   # standings container build and deploy --------------------------------------
   build-standings:
+    permissions:
+      contents: write
+
     runs-on: ubuntu-latest
     needs: [check-for-changes, black-formatting]
     if: |
@@ -449,6 +458,9 @@ jobs:
 
   # teams container build and deploy --------------------------------------
   build-teams:
+    permissions:
+      contents: write
+      
     runs-on: ubuntu-latest
     needs: [check-for-changes, black-formatting]
     if: |
@@ -547,6 +559,9 @@ jobs:
 
   # fixtures container build and deploy --------------------------------------
   build-fixtures:
+    permissions:
+      contents: write
+
     runs-on: ubuntu-latest
     needs: [check-for-changes, black-formatting]
     if: |
