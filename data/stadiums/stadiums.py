@@ -15,7 +15,7 @@ import requests
 os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
 
 # Settings the project environment.
-LOCATIONS_TABLE = "cloud-data-infrastructure.premier_league_dataset.locations"
+LOCATIONS_TABLE = "cloud-data-infrastructure.premier_league_dataset.stadiums"
 
 
 def gcp_secret():
