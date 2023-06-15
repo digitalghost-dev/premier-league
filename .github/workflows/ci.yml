@@ -19,6 +19,7 @@ on:
     paths-ignore:
       - '.github/**'
       - '.streamlit/**'
+      - 'go_api/'
       - 'CHANGELOG.md'
       - 'Dockerfile'
       - '.dockerignore'
