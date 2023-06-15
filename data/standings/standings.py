@@ -61,9 +61,10 @@ def call_api():
     # Filling in empty lists.
     count = 0
     while count < 20:
-
         # Team ID.
-        id_list.append(int(json_res["response"][0]["league"]["standings"][0][count]["team"]["id"]))
+        id_list.append(
+            int(json_res["response"][0]["league"]["standings"][0][count]["team"]["id"])
+        )
 
         # Team rank.
         rank_list.append(
