@@ -1,6 +1,12 @@
+# Files
 *.json
-testing/
 .DS_store
+data/.DS_store
+go_api/.DS_store
+pages/.DS_store
+
+# Folders
+testing/
 .github/
 locations-api/
 
@@ -8,6 +14,7 @@ locations-api/
 ./__pycache__
 data/__pycache__
 data/teams/__pycache__
+pages/__pycache__
 
 # Environments
 .env
