@@ -16,7 +16,7 @@ import json
 os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
 
 # Setting table names.
-STANDINGS_TABLE = "cloud-data-infrastructure.football_data_dataset.standings"
+STANDINGS_TABLE = "cloud-data-infrastructure.premier_league_dataset.standings"
 
 
 def gcp_secret():
@@ -52,6 +52,7 @@ def call_api():
     wins_list = []
     draws_list = []
     loses_list = []
+    form_list = []
     points_list = []
     goals_for = []
     goals_against = []
@@ -60,16 +61,9 @@ def call_api():
     # Filling in empty lists.
     count = 0
     while count < 20:
+
         # Team ID.
-        id_list.append(
-            int(
-                json.dumps(
-                    json_res["response"][0]["league"]["standings"][0][count]["team"][
-                        "id"
-                    ]
-                )
-            )
-        )
+        id_list.append(int(json_res["response"][0]["league"]["standings"][0][count]["team"]["id"]))
 
         # Team rank.
         rank_list.append(
@@ -124,6 +118,15 @@ def call_api():
             )
         )
 
+        # Team forms.
+        form_list.append(
+            str(
+                json.dumps(
+                    json_res["response"][0]["league"]["standings"][0][count]["form"]
+                )
+            ).strip('"')
+        )
+
         # Number of points.
         points_list.append(
             int(
@@ -175,6 +178,7 @@ def call_api():
         wins_list,
         draws_list,
         loses_list,
+        form_list,
         points_list,
         goals_for,
         goals_against,
@@ -191,6 +195,7 @@ def dataframe():
         wins_list,
         draws_list,
         loses_list,
+        form_list,
         points_list,
         goals_for,
         goals_against,
@@ -205,6 +210,7 @@ def dataframe():
         "Wins",
         "Draws",
         "Loses",
+        "Recent_Form",
         "Points",
         "GF",
         "GA",
@@ -218,6 +224,7 @@ def dataframe():
             wins_list,
             draws_list,
             loses_list,
+            form_list,
             points_list,
             goals_for,
             goals_against,

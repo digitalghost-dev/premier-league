@@ -15,12 +15,12 @@ import requests
 os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
 
 # Settings the project environment.
-LOCATIONS_TABLE = "cloud-data-infrastructure.football_data_dataset.locations"
+LOCATIONS_TABLE = "cloud-data-infrastructure.premier_league_dataset.locations"
 
 
 def gcp_secret():
     client = secretmanager.SecretManagerServiceClient()
-    name = "projects/463690670206/secrets/locations_api/versions/1"
+    name = "projects/463690670206/secrets/stadiums-api/versions/1"
     response = client.access_secret_version(request={"name": name})
     payload = response.payload.data.decode("UTF-8")
 
@@ -38,6 +38,8 @@ def call_api():
     stadium_list = []
     lat_list = []
     lon_list = []
+    capacity_list = []
+    year_opened = []
 
     count = 0
     while count < 20:
@@ -53,17 +55,23 @@ def call_api():
         # Retrieving stadium's longitude.
         lon_list.append(float(json_res[count]["longitude"]))
 
+        # Retrieving stadium's capacity.
+        capacity_list.append(str(json_res[count]["capacity"]))
+
+        # Retrieving stadium's year opened.
+        year_opened.append(str(json_res[count]["year_opened"]))
+
         count += 1
 
-    return team_list, stadium_list, lat_list, lon_list
+    return team_list, stadium_list, lat_list, lon_list, capacity_list, year_opened
 
 
 def dataframe():
-    team_list, stadium_list, lat_list, lon_list = call_api()
+    team_list, stadium_list, lat_list, lon_list, capacity_list, year_opened = call_api()
 
     # Setting the headers then zipping the lists to create a dataframe.
-    headers = ["team", "stadium", "latitude", "longitude"]
-    zipped = list(zip(team_list, stadium_list, lat_list, lon_list))
+    headers = ["team", "stadium", "latitude", "longitude", "capacity", "year_opened"]
+    zipped = list(zip(team_list, stadium_list, lat_list, lon_list, capacity_list, year_opened))
 
     locations_df = pd.DataFrame(zipped, columns=headers)
 

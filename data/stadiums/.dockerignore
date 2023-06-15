@@ -6,6 +6,7 @@ locations-api/
 # Files
 ./keys.json
 ./.DS_store
+data/.DS_store
 ./CHANGELOG.md
 ./README.md
 ./streamlit_app.py

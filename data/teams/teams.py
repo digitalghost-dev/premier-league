@@ -16,8 +16,8 @@ import json
 os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
 
 # Setting table names.
-STANDINGS_TABLE = "cloud-data-infrastructure.football_data_dataset.standings"
-TEAMS_TABLE = "cloud-data-infrastructure.football_data_dataset.teams"
+STANDINGS_TABLE = "cloud-data-infrastructure.premier_league_dataset.standings"
+TEAMS_TABLE = "cloud-data-infrastructure.premier_league_dataset.teams"
 
 
 def gcp_secret():
