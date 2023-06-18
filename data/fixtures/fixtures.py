@@ -57,7 +57,7 @@ def get_current_round():
     headers = call_api("projects/463690670206/secrets/rapid-api/versions/1")
 
     url = "https://api-football-v1.p.rapidapi.com/v3/fixtures/rounds"
-    querystring = {"league": "39", "season": "2022", "current": "true"}
+    querystring = {"league": "39", "season": "2023", "current": "true"}
     response = requests.get(url, headers=headers, params=querystring, timeout=20)
 
     current_round_response = response.json()["response"][0]
@@ -73,7 +73,7 @@ def retrieve_data_for_current_round():
     current_round_response = get_current_round()
 
     url = "https://api-football-v1.p.rapidapi.com/v3/fixtures"
-    querystring = {"league": "39", "season": "2022", "round": current_round_response}
+    querystring = {"league": "39", "season": "2023", "round": current_round_response}
     build_current_response = requests.get(
         url, headers=headers, params=querystring, timeout=20
     )
