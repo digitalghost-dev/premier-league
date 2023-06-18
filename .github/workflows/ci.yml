@@ -172,10 +172,7 @@ jobs:
       - name: Prepare Docker Build Context
         run: |
           mkdir docker-context
-          cp ./requirements.txt docker-context
-          cp ./data/stadiums/stadiums.py docker-context
-          cp ./data/stadiums/Dockerfile docker-context
-          cp ./data/stadiums/.dockerignore docker-context
+          cp -r ./data/stadiums/. docker-context
         
       - name: Build and Export
         uses: docker/build-push-action@v4
@@ -270,10 +267,7 @@ jobs:
       - name: Prepare Docker Build Context
         run: |
           mkdir docker-context
-          cp ./requirements.txt docker-context
-          cp ./data/players/players.py docker-context
-          cp ./data/players/Dockerfile docker-context
-          cp ./data/players/.dockerignore docker-context
+          cp -r ./data/players/. docker-context
         
       - name: Build and Export
         uses: docker/build-push-action@v4
@@ -368,10 +362,7 @@ jobs:
       - name: Prepare Docker Build Context
         run: |
           mkdir docker-context
-          cp ./requirements.txt docker-context
-          cp ./data/standings/standings.py docker-context
-          cp ./data/standings/Dockerfile docker-context
-          cp ./data/standings/.dockerignore docker-context
+          cp -r ./data/standings/. docker-context
         
       - name: Build and Export
         uses: docker/build-push-action@v4
@@ -466,10 +457,7 @@ jobs:
       - name: Prepare Docker Build Context
         run: |
           mkdir docker-context
-          cp ./requirements.txt docker-context
-          cp ./data/teams/teams.py docker-context
-          cp ./data/teams/Dockerfile docker-context
-          cp ./data/teams/.dockerignore docker-context
+          cp -r ./data/teams/. docker-context
         
       - name: Build and Export
         uses: docker/build-push-action@v4
@@ -564,10 +552,7 @@ jobs:
       - name: Prepare Docker Build Context
         run: |
           mkdir docker-context
-          cp ./requirements.txt docker-context
-          cp ./data/fixtures/fixtures.py docker-context
-          cp ./data/fixtures/Dockerfile docker-context
-          cp ./data/fixtures/.dockerignore docker-context
+          cp -r ./data/fixtures/. docker-context
         
       - name: Build and Export
         uses: docker/build-push-action@v4
