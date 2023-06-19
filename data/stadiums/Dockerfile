@@ -13,8 +13,8 @@ WORKDIR /home/nonroot
 RUN mkdir /home/nonroot/app
 
 
-COPY ./requirements.txt .
-RUN pip3 install --no-cache-dir -r requirements.txt
+COPY stadiums-requirements.txt .
+RUN pip3 install --no-cache-dir -r stadiums-requirements.txt
 
 COPY . .
 
