@@ -20,6 +20,7 @@ on:
       - '.github/**'
       - '.streamlit/**'
       - 'go_api/'
+      - 'pages/'
       - 'CHANGELOG.md'
       - 'Dockerfile'
       - '.dockerignore'
