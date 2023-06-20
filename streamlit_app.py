@@ -141,99 +141,33 @@ def streamlit_app():
         col1.title("Premier League Statistics / 2022-23")
 
     # Tab menu.
-    tab1, tab2, tab3 = st.tabs(["Overview", "Statistics", "Fixtures"])
+    tab1, tab2, tab3 = st.tabs(["Standings", "Statistics", "Fixtures"])
 
     # Tab 1, overview
     with tab1:
 
-        col1, col2 = st.columns(2)
+        # Get the current date
+        current_date = datetime.now()
+        formatted_date = current_date.strftime("%B %dth, %Y")
+        st.write(f"{formatted_date}")
 
         # Standings table.
-        with col1:
-            st.subheader("Standings")
+        st.subheader("Standings")
 
-            # Standings table.
-            st.table(standings_df)
+        # Standings table.
+        st.table(standings_df)
 
-            # List of promotions/demotions for the league.
-            st.markdown(
-                # '&nbsp' adds a non-breaking space.
-                """
-                    <p style='color:#55A630'>- Champions League</p>
-                    <p style='color:#0077B6'>- Europa League</p>
-                    <p style='color:#48cae4'>- Europa Conference League Qualification</p>
-                    <p style='color:#d00000'>- Relegation</p>
-                """,
-                unsafe_allow_html=True
-            )
-
-        # Slider and bar graph.
-        with col2:
-            st.subheader("Points per Team:")
-
-            # Creating the slider.
-            points = standings_df['Points'].tolist()
-            points_selection = st.slider(
-                'Select a Range of Points:',
-                min_value = min(points),
-                max_value = max(points),
-                value = (min(points), max(points))
-            )
-
-            # Picking colors to use for the bar chart.
-            colors = ['indigo',] * 20
-
-            # Making sure the bar chart changes with the slider.
-            mask = standings_df['Points'].between(*points_selection)
-            results = standings_df[mask].shape[0]
-            st.markdown(f'*Teams within range of selected points: {results}*')
-            df_grouped = standings_df[mask]
-            df_grouped = df_grouped.reset_index()
-
-            # Creating the bar chart.
-            points_chart = go.Figure(data=[go.Bar(
-                x = df_grouped['Team'],
-                y = df_grouped['Points'],
-                marker_color = colors,
-                text = df_grouped['Points'],
-                textposition = 'auto'
-            )])
-
-            # Rotating x axis lables.
-            points_chart.update_layout(
-                xaxis_tickangle = -35,
-                autosize = False,
-                margin = dict (
-                    l = 0, # left
-                    r = 0, # right
-                    b = 0, # bottom
-                    t = 0  # top
-                )
-            )
-
-            st.plotly_chart(points_chart, use_container_width = True)
-
-            st.subheader("Season ends May 28th, 2023")
-
-        # Map of stadiums.
-        st.subheader("Location of Stadiums")
-
-        mapbox_access_token = st.secrets["mapbox"]["mapbox_key"]
-
-        px.set_mapbox_access_token(mapbox_access_token)
-
-        stadium_map = px.scatter_mapbox(locations_df, lat="latitude", lon="longitude", hover_name="stadium", hover_data="team")
-
-        stadium_map.update_layout(
-            mapbox_style="light", 
-            margin={"r":0,"t":0,"l":0,"b":0}, 
-            mapbox_bounds={"west": -17, "east": 17, "south": 45, "north": 60})
-
-        stadium_map.update_traces(marker=dict(size=8), marker_color="indigo") 
-
-        stadium_map.update_mapboxes(zoom=4)
-
-        st.plotly_chart(stadium_map, height=1000, use_container_width=True)
+        # List of promotions/demotions for the league.
+        st.markdown(
+            # '&nbsp' adds a non-breaking space.
+            """
+                <p style='color:#55A630'>- Champions League</p>
+                <p style='color:#0077B6'>- Europa League</p>
+                <p style='color:#48cae4'>- Europa Conference League Qualification</p>
+                <p style='color:#d00000'>- Relegation</p>
+            """,
+            unsafe_allow_html=True
+        )
 
         # Social media icons section.
         st.divider()

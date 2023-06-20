@@ -10,7 +10,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * **MINOR:** Any changes to the Streamlit dashboard that adds a new interaction/feature or removal of one.
 * **PATCH:** Any changes that fix bugs.
 
-## [2.4.0] - 2023-05-26
+## [2.5.0] - 2023-06-19
+
+### **Added**
+* Added a new page: **Playground**, that holds graphs with slicers, filters, and other sortable features that allows the end user view statitics in a custom way.
+* Added `Recent_Form` to `standings` table as a new column.
+* Added string to display current date on `Standings` tab.
+
+### **Changed**
+* Changed page title from `Overivew` to `Premier League - Statistics, Scores & More`.
+* Changed `Overview` tab name to `Standings`.
+
+### **Removed**
+* Removed map of stadium locations; moved it to the new **Playground** page.
+
+## [2.4.0][2.4.0] - 2023-05-26
 
 ### **Added**
 * Added number to `Top 5 Teams` section to indicate current rank.
@@ -164,6 +178,8 @@ Top Teams Tab
 
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
+
+[2.4.0]: https://github.com/digitalghost-dev/premier-league/commit/19ff4063496a646aad3b8750a7c434cdeb1004e9#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
 [2.3.1]: https://github.com/digitalghost-dev/premier-league/commit/c11bfaa2f2aa0317783be65f935387e25cf180de#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
