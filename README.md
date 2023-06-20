@@ -1,15 +1,16 @@
 # Premier League Data Visualization with Streamlit
 
 ![builds](https://img.shields.io/github/actions/workflow/status/digitalghost-dev/premier-league/ci.yml?style=flat-square)
-![version](https://img.shields.io/badge/streamlit_app_version-2.4.0-blue?style=flat-square)
+![version](https://img.shields.io/badge/streamlit_app_version-2.5.0-blue?style=flat-square)
 ![size](https://img.shields.io/github/repo-size/digitalghost-dev/premier-league?style=flat-square)
 ![black](https://img.shields.io/badge/code%20style-black-black?style=flat-square)
 ![pyling](https://img.shields.io/badge/linting-pylint-yellowgreen?style=flat-square)
 
 ## Overview
-* Extracts Premier League data with a self written API in Go and a Football API using Python.
-* Data is transformed and processed, loaded into BigQuery, then sent to a Streamlit dashboard.
-* Project is containerized with Docker and uses GitHub Actions for CI/CD.
+* Python scripts extract data from two API sources, perfom transformations, then load processed data into BigQuery and Firestore.
+* Each Python script is containerized with its dependencies and pushed to Artifact Registry.
+* Using Cloud Run, Jobs are created to run the containers on a specified schedule.
+* CI/CD is implemented with GitHub Actions to push new containers to artifact registry when new commits are made to the repository.
 
 ### Important Links
 
@@ -23,9 +24,9 @@
 2. Docker containers that are stored in Artifact Registry are ran as Jobs.
 3. Each Docker container holds a Python script that is responsible for calling its respective API endpoint to extract, transform, and load the data.
 
-|            | Fixtures      | Locations      | Players      | Standings      | Teams        |
+|            | Fixtures      | Stadiums       | Players      | Standings      | Teams        |
 | ---------- | ------------- | -------------- | ------------ | -------------- | ------------ |
-| File       | `fixtures.py` | `locations.py` | `players.py` | `standings.py` | `teams.py`   |
+| File       | `fixtures.py` | `stadiums.py`  | `players.py` | `standings.py` | `teams.py`   |
 | API Source | Football API  | Cloud Run      | Football API | Football API   | Football API |
 | Storage    | Firestore     | BigQuery       |  BigQuery    | BigQuery       |  BigQuery    |
 
