@@ -106,6 +106,14 @@ def background_processing():
         """
     )
 
+    # Splitting Standings table to get values to build metric cards.
+    status_data = run_query(f"""
+        SELECT Rank, Team, Points, Status
+        FROM {standings_table}
+        ORDER BY Rank
+        """
+    )
+
     # Teams table.
     teams_data = run_query(f"""
         SELECT logo, form, clean_sheets, penalties_scored, penalties_missed
@@ -120,13 +128,14 @@ def background_processing():
     locations_df = pd.DataFrame(data = locations_data)
     players_df = pd.DataFrame(data = players_data)
     standings_df = pd.DataFrame(data = standings_data)
+    status_df = pd.DataFrame(data = status_data)
     teams_df = pd.DataFrame(data = teams_data)
 
-    return locations_df, players_df, standings_df, teams_df, db, min_round_postgres, max_round_postgres
+    return locations_df, players_df, standings_df, status_df, teams_df, db, min_round_postgres, max_round_postgres
 
 # Function that holds all elements of display for the dashboard.
 def streamlit_app():
-    locations_df, players_df, standings_df, teams_df, db, min_round_postgres, max_round_postgres = background_processing()
+    locations_df, players_df, standings_df, status_df, teams_df, db, min_round_postgres, max_round_postgres = background_processing()
 
     logo = st.secrets["elements"]["logo_image"]
 
@@ -138,7 +147,12 @@ def streamlit_app():
     # Title.
     col1, col = st.columns((9, 1))
     with st.container():
-        col1.title("Premier League Statistics / 2022-23")
+        col1.title("Premier League Statistics / 2023-24")
+
+        # Get the current date
+        current_date = datetime.now()
+        formatted_date = current_date.strftime("%B %dth, %Y")
+        st.write(f"{formatted_date}")
 
     # Tab menu.
     tab1, tab2, tab3 = st.tabs(["Standings", "Statistics", "Fixtures"])
@@ -146,10 +160,23 @@ def streamlit_app():
     # Tab 1, overview
     with tab1:
 
-        # Get the current date
-        current_date = datetime.now()
-        formatted_date = current_date.strftime("%B %dth, %Y")
-        st.write(f"{formatted_date}")
+        st.subheader("Top Teams Movement")
+        col1, col2, col3, col4, col5 = st.columns(5)
+
+        for col, index in zip([col1, col2, col3, col4, col5], range(5)):
+            with col:
+                if status_df.iloc[index][3] == "same":
+                    status = None
+                elif status_df.iloc[index][3] == "down":
+                    status = "-down"
+                else:
+                    status = "up"
+
+                st.metric(
+                    label = f"Points: {status_df.iloc[index][2]}", # Points
+                    value = f"{status_df.iloc[index][1]}", 
+                    delta = status,
+                )
 
         # Standings table.
         st.subheader("Standings")
@@ -275,43 +302,48 @@ def streamlit_app():
 
         with col1:
             # First top scorer.
-            st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(players_df.iloc[0][4])}'/>", unsafe_allow_html=True)
+            st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(players_df.iloc[0][5])}'/>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'><b>{(players_df.iloc[0][0])}</b></p>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center;'><b>Goals:</b> {(players_df.iloc[0][1])}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='text-align: center;'><b>Assists:</b> {(players_df.iloc[0][3])}</p>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center;'><b>Team:</b> {(players_df.iloc[0][2])}</p>", unsafe_allow_html=True)
-            st.markdown(f"<p style='text-align: center;'><b>Nationality:</b> {(players_df.iloc[0][3])}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='text-align: center;'><b>Nationality:</b> {(players_df.iloc[0][4])}</p>", unsafe_allow_html=True)
         
         with col2:
             # Second top scorer.
-            st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(players_df.iloc[1][4])}'/>", unsafe_allow_html=True)
+            st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(players_df.iloc[1][5])}'/>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'><b>{(players_df.iloc[1][0])}</b></p>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center;'><b>Goals:</b> {(players_df.iloc[1][1])}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='text-align: center;'><b>Assists:</b> {(players_df.iloc[1][3])}</p>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center;'><b>Team:</b> {(players_df.iloc[1][2])}</p>", unsafe_allow_html=True)
-            st.markdown(f"<p style='text-align: center;'><b>Nationality:</b> {(players_df.iloc[1][3])}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='text-align: center;'><b>Nationality:</b> {(players_df.iloc[1][4])}</p>", unsafe_allow_html=True)
 
         with col3:
             # Third top scorer.
-            st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(players_df.iloc[2][4])}'/>", unsafe_allow_html=True)
+            st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(players_df.iloc[2][5])}'/>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'><b>{(players_df.iloc[2][0])}</b></p>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center;'><b>Goals:</b> {(players_df.iloc[2][1])}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='text-align: center;'><b>Assists:</b> {(players_df.iloc[2][3])}</p>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center;'><b>Team:</b> {(players_df.iloc[2][2])}</p>", unsafe_allow_html=True)
-            st.markdown(f"<p style='text-align: center;'><b>Nationality:</b> {(players_df.iloc[2][3])}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='text-align: center;'><b>Nationality:</b> {(players_df.iloc[2][4])}</p>", unsafe_allow_html=True)
 
         with col4:
             # Fourth top scorer.
-            st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(players_df.iloc[3][4])}'/>", unsafe_allow_html=True)
+            st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(players_df.iloc[3][5])}'/>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'><b>{(players_df.iloc[3][0])}</b></p>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center;'><b>Goals:</b> {(players_df.iloc[3][1])}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='text-align: center;'><b>Assists:</b> {(players_df.iloc[3][3])}</p>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center;'><b>Team:</b> {(players_df.iloc[3][2])}</p>", unsafe_allow_html=True)
-            st.markdown(f"<p style='text-align: center;'><b>Nationality:</b> {(players_df.iloc[3][3])}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='text-align: center;'><b>Nationality:</b> {(players_df.iloc[3][4])}</p>", unsafe_allow_html=True)
             
         with col5:
             # Fifth top scorer.
-            st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(players_df.iloc[4][4])}'/>", unsafe_allow_html=True)
+            st.markdown(f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(players_df.iloc[4][5])}'/>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center; padding-top: 0.8rem;'><b>{(players_df.iloc[4][0])}</b></p>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center;'><b>Goals:</b> {(players_df.iloc[4][1])}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='text-align: center;'><b>Assists:</b> {(players_df.iloc[4][3])}</p>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center;'><b>Team:</b> {(players_df.iloc[4][2])}</p>", unsafe_allow_html=True)
-            st.markdown(f"<p style='text-align: center;'><b>Nationality:</b> {(players_df.iloc[4][3])}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='text-align: center;'><b>Nationality:</b> {(players_df.iloc[4][4])}</p>", unsafe_allow_html=True)
 
         with st.container():
             st.subheader("")
@@ -395,21 +427,25 @@ def streamlit_app():
             # Function to pull collection and documents.
             def firestore_pull():
 
+                # Calling each document in the collection in ascending order by date.
                 collection_ref = db.collection(f'Regular Season - {round_count}')
-                docs = collection_ref.get()
+                query = collection_ref.order_by("date", direction=firestore.Query.ASCENDING)
+                results = query.stream()
 
+                # Setting an empty list. This list will contain each fixtures' details that can later be called by referecing its index.
                 documents = []
 
-                for doc in docs:
+                # Iterating through the query results to get the document ID (ex: 'Manchester City vs Burnley') and its data.
+                for doc in results:
                     document_dict = {
                         "id": doc.id,
                         "data": doc.to_dict()
                     }
                     documents.append(document_dict)
 
-                # Retrieving match date.
+                # Retrieving and formatting match date.
                 match_date = [datetime.strptime(documents[count]['data']['date'], 
-                    '%Y-%m-%dT%H:%M:%S+00:00').strftime('%B, %d{}, %Y - %H:%M').format("th" if 4<=int(datetime.strptime(documents[count]['data']['date'], 
+                    '%Y-%m-%dT%H:%M:%S+00:00').strftime('%B %d{}, %Y - %H:%M').format("th" if 4<=int(datetime.strptime(documents[count]['data']['date'], 
                     '%Y-%m-%dT%H:%M:%S+00:00').strftime("%d"))<=20 else {1:"st", 2:"nd", 3:"rd"}.get(int(datetime.strptime(documents[count]['data']['date'], 
                     '%Y-%m-%dT%H:%M:%S+00:00').strftime("%d"))%10, "th")) for count in range(10)]
 
