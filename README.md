@@ -1,7 +1,7 @@
 # Premier League Data Visualization with Streamlit
 
 ![builds](https://img.shields.io/github/actions/workflow/status/digitalghost-dev/premier-league/ci.yml?style=flat-square)
-![version](https://img.shields.io/badge/streamlit_app_version-2.5.0-blue?style=flat-square)
+![version](https://img.shields.io/badge/streamlit_app_version-2.6.0-blue?style=flat-square)
 ![size](https://img.shields.io/github/repo-size/digitalghost-dev/premier-league?style=flat-square)
 ![black](https://img.shields.io/badge/code%20style-black-black?style=flat-square)
 ![pyling](https://img.shields.io/badge/linting-pylint-yellowgreen?style=flat-square)

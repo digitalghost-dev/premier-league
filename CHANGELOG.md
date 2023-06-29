@@ -10,7 +10,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * **MINOR:** Any changes to the Streamlit dashboard that adds a new interaction/feature or removal of one.
 * **PATCH:** Any changes that fix bugs.
 
-## [2.5.0] - 2023-06-19
+## [2.6.0] | 2023-06-28
+
+### **Added**
+* **Playground** Page: Added social media icons to bottom of page.
+* **Main** Page, *Statistics Tab*: Added `assists` metric to the *Top 5 Scorers Section*.
+* **Main** Page, *Standings Tab*: Added a metric card to display the top 5 teams' position movement throughout the season.
+
+### **Changed**
+* **Main** Page: Changed  title to "2023-24" to reflect the new season.
+* **Main** Page, *Fixtures Tab*: Changed ordering of `fixtures` to appear in chronological order.
+
+### **Removed**
+* **Main** Page, *Fixtures Tab*: Removed extra comma from `fixtures` date.
+
+ 
+---
+
+## [2.5.0][2.5.0] | 2023-06-19
 
 ### **Added**
 * Added a new page: **Playground**, that holds graphs with slicers, filters, and other sortable features that allows the end user view statitics in a custom way.
@@ -22,13 +39,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Changed `Overview` tab name to `Standings`.
 
 ### **Removed**
-* Removed map of stadium locations; moved it to the new **Playground** page.
+* Removed map of stadium locations from **Main** page; moved it to the new **Playground** page.
 
-## [2.4.0][2.4.0] - 2023-05-26
+---
+
+## [2.4.0][2.4.0] | 2023-05-26
 
 ### **Added**
-* Added number to `Top 5 Teams` section to indicate current rank.
-* Added suffix to rank number in `Forms for the Rest of the League` section.
+* Added number to *Top 5 Teams* section to indicate current rank.
+* Added suffix to rank number in *Forms for the Rest of the League section*.
 
 ### **Changed**
 * Changed hyperlink for GitHub icon to point to GitHub profile instead of repository for project. A link to GitHub repository already exists by default.
@@ -38,14 +57,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [2.3.1][2.3.1] - 20230-05-25
+## [2.3.1][2.3.1] | 2023-05-25
 
 ### **Fixed**
 * Fixed broken link for GitHub Icon on all tabs.
 
 ---
 
-## [2.3.0][2.3.0] - 2023-05-24
+## [2.3.0][2.3.0] | 2023-05-24
 
 ### **Added**
 * Added text that displays the final gameday of the season.
@@ -56,27 +75,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [2.2.1][2.2.1] - 2023-05-19
+## [2.2.1][2.2.1] | 2023-05-19
 
 ### **Fixed**
 * Fixed promotion/demotion legend by displaying items as a column instead of in a row.
 
 ---
 
-## [2.2.0][2.2.0] - 2023-05-17
+## [2.2.0][2.2.0] | 2023-05-17
 
 ### **Changed**
 * Changed the hex colors used for promtion/demotion status.
 * Changed the color of `locations` map markers to `indigo` to match the rest of the theme.
 
 ### **Added**
-* Added an extra color to denote `europa conference league qualification` promotion.
+* Added an extra color to denote europa conference league qualification promotion.
 * Added solid border element to `standings` table to better denote promotion/demotion status.
 * Added text under table to explain which color denotes which promotion/demotion status.
 
 ---
 
-## [2.1.0][2.1.0] - 2023-05-10
+## [2.1.0][2.1.0] | 2023-05-10
 
 ### **Changed**
 * Changed stadium `locations` map to use [plotly express](https://plotly.com/python/mapbox-layers/) `scatter_mapbox` instead of Streamlit's built in `st.map()` function.
@@ -85,21 +104,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [2.0.2][2.0.2] - 2023-05-08
+## [2.0.2][2.0.2] | 2023-05-08
 
 ### **Fixed**
 * Fixed the sorting of `rounds` to appear in decending order on the `fixtures` tab.
 
 ---
 
-## [2.0.1][2.0.1] - 2023-05-05
+## [2.0.1][2.0.1] | 2023-05-05
 
 ### **Fixed**
 * Adding '`<=`' to `while` loop to get the current round. Previously, the Streamlit app would only select rounds that were *less* than the `MAX` round which would omit the final round.
 
 ---
 
-## [2.0.0][2.0.0] - 2023-05-02
+## [2.0.0][2.0.0] | 2023-05-02
 Now using [Firestore](https://firebase.google.com/docs/firestore/) to store fixture data in a document format.
 
 ### **Added**
@@ -107,7 +126,7 @@ Now using [Firestore](https://firebase.google.com/docs/firestore/) to store fixt
 
 ---
 
-## [1.3.0][1.3.0] - 2023-04-17
+## [1.3.0][1.3.0] | 2023-04-17
 
 ### **Added**
 
@@ -124,7 +143,7 @@ Now using [Firestore](https://firebase.google.com/docs/firestore/) to store fixt
 
 ---
 
-## [1.2.0][1.2.0] - 2023-04-16
+## [1.2.0][1.2.0] | 2023-04-16
 
 ### **Changed**
 
@@ -140,7 +159,7 @@ Top Players Tab
 
 ---
 
-## [1.1.0][1.1.0] - 2023-04-07
+## [1.1.0][1.1.0] | 2023-04-07
 
 ### **Added**
 
@@ -162,7 +181,7 @@ Top Players Tab
 
 ---
 
-## [1.0.0][1.0.0] - 2023-04-05
+## [1.0.0][1.0.0] | 2023-04-05
 
 ### **Added**
 
@@ -178,6 +197,8 @@ Top Teams Tab
 
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
+
+[2.5.0]: https://github.com/digitalghost-dev/premier-league/commit/247029c3a94e607d5ffd2adabc41178647d1796e#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
 [2.4.0]: https://github.com/digitalghost-dev/premier-league/commit/19ff4063496a646aad3b8750a7c434cdeb1004e9#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 

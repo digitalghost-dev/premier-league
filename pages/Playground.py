@@ -21,7 +21,7 @@ from google.oauth2 import service_account
 from streamlit_app import background_processing
 
 def playground_page():
-    locations_df, players_df, standings_df, teams_df, db, min_round_postgres, max_round_postgres = background_processing()
+    locations_df, players_df, standings_df, status_df, teams_df, db, min_round_postgres, max_round_postgres = background_processing()
 
     logo = st.secrets["elements"]["logo_image"]
 
@@ -108,5 +108,20 @@ def playground_page():
     stadium_map.update_mapboxes(zoom=4)
 
     st.plotly_chart(stadium_map, height=1000, use_container_width=True)
+
+    # Social media icons section.
+    st.divider()
+    st.subheader("Social")
+
+    components.html(
+        """
+        <script src="https://kit.fontawesome.com/84587c6ecd.js" crossorigin="anonymous"></script>
+        <div style="display: flex; flex-direction: row;">
+            <a target="_blank" rel="noopener noreferrer" href="https://github.com/digitalghost-dev/"><i class='fa-brands fa-github fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
+            <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/christian-sanchez-nv/"><i class='fa-brands fa-linkedin fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
+            <a target="_blank" rel="noopener noreferrer" href="https://medium.com/@digitialghost-dev"><i class='fa-brands fa-medium fa-2x fa-fade' style='color: #000000;'></i></a>
+        </div>
+        """
+    )
 
 playground_page()
