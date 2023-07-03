@@ -19,8 +19,8 @@ on:
     paths-ignore:
       - '.github/**'
       - '.streamlit/**'
-      - 'go_api/'
-      - 'pages/'
+      - 'api/**'
+      - 'pages/**'
       - 'CHANGELOG.md'
       - 'Dockerfile'
       - '.dockerignore'
@@ -31,6 +31,12 @@ on:
       - 'style.css'
     branches:
       - "main"
+
+  pull_request:
+    branches-ignore:
+      - '2.**'
+      - '3.**'
+      - '4.**'
 
 env:
   GAR_LOCATION: us-central1
