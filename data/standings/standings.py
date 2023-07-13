@@ -4,13 +4,13 @@ This file pulls data from an API relating to the English Premier League standing
 
 # System libraries
 import os
+import json
 
 # Importing needed libraries.
 from google.cloud import secretmanager
 from google.cloud import bigquery
 import pandas as pd
 import requests
-import json
 
 # Settings the project environment.
 os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
@@ -20,6 +20,8 @@ STANDINGS_TABLE = "cloud-data-infrastructure.premier_league_dataset.standings"
 
 
 def gcp_secret():
+    """Fetching RapidAPI key from Secret Manager"""
+
     client = secretmanager.SecretManagerServiceClient()
     name = "projects/463690670206/secrets/rapid-api/versions/1"
     response = client.access_secret_version(request={"name": name})
@@ -28,8 +30,9 @@ def gcp_secret():
     return payload
 
 
-# Function to call the Football API.
 def call_api():
+    """ Calling the API then filling in the empty lists """
+
     payload = gcp_secret()
     # Headers used for RapidAPI.
     headers = {
@@ -40,13 +43,13 @@ def call_api():
     # Standings endpoint from RapidAPI.
     url = "https://api-football-v1.p.rapidapi.com/v3/standings"
 
-    # Building query to retrieve data.
-    query = {"season": "2022", "league": "39"}
+    # Building GET request to retrieve data.
+    query = {"season": "2023", "league": "39"}
     response = requests.request("GET", url, headers=headers, params=query)
     json_res = response.json()
 
     # Empty lists that will be filled and then used to create a dataframe.
-    id_list = []
+    team_id_list = []
     rank_list = []
     team_list = []
     wins_list = []
@@ -57,22 +60,19 @@ def call_api():
     goals_for = []
     goals_against = []
     goals_diff = []
+    status_list = []
 
     # Filling in empty lists.
     count = 0
     while count < 20:
         # Team ID.
-        id_list.append(
+        team_id_list.append(
             int(json_res["response"][0]["league"]["standings"][0][count]["team"]["id"])
         )
 
         # Team rank.
         rank_list.append(
-            int(
-                json.dumps(
-                    json_res["response"][0]["league"]["standings"][0][count]["rank"]
-                )
-            )
+            int(json_res["response"][0]["league"]["standings"][0][count]["rank"])
         )
 
         # Team names.
@@ -88,35 +88,17 @@ def call_api():
 
         # Number of wins.
         wins_list.append(
-            int(
-                json.dumps(
-                    json_res["response"][0]["league"]["standings"][0][count]["all"][
-                        "win"
-                    ]
-                )
-            )
+            int(json_res["response"][0]["league"]["standings"][0][count]["all"]["win"]  )
         )
 
         # Number of draws.
         draws_list.append(
-            int(
-                json.dumps(
-                    json_res["response"][0]["league"]["standings"][0][count]["all"][
-                        "draw"
-                    ]
-                )
-            )
+            int(json_res["response"][0]["league"]["standings"][0][count]["all"]["draw"])
         )
 
         # Number of loses.
         loses_list.append(
-            int(
-                json.dumps(
-                    json_res["response"][0]["league"]["standings"][0][count]["all"][
-                        "lose"
-                    ]
-                )
-            )
+            int(json_res["response"][0]["league"]["standings"][0][count]["all"]["lose"])
         )
 
         # Team forms.
@@ -130,50 +112,33 @@ def call_api():
 
         # Number of points.
         points_list.append(
-            int(
-                json.dumps(
-                    json_res["response"][0]["league"]["standings"][0][count]["points"]
-                )
-            )
+            int(json_res["response"][0]["league"]["standings"][0][count]["points"])
         )
 
         # Number of goals for.
         goals_for.append(
-            int(
-                json.dumps(
-                    json_res["response"][0]["league"]["standings"][0][count]["all"][
-                        "goals"
-                    ]["for"]
-                )
-            )
+            int(json_res["response"][0]["league"]["standings"][0][count]["all"]["goals"]["for"])
         )
 
         # Number of goals against.
         goals_against.append(
-            int(
-                json.dumps(
-                    json_res["response"][0]["league"]["standings"][0][count]["all"][
-                        "goals"
-                    ]["against"]
-                )
-            )
+            int(json_res["response"][0]["league"]["standings"][0][count]["all"]["goals"]["against"])
         )
 
         # Number of goal differential.
         goals_diff.append(
-            int(
-                json.dumps(
-                    json_res["response"][0]["league"]["standings"][0][count][
-                        "goalsDiff"
-                    ]
-                )
-            )
+            int(json_res["response"][0]["league"]["standings"][0][count]["goalsDiff"])
+        )
+
+        # Each team's position status.
+        status_list.append(
+            str(json_res["response"][0]["league"]["standings"][0][count]["status"])
         )
 
         count += 1
 
     return (
-        id_list,
+        team_id_list,
         rank_list,
         team_list,
         wins_list,
@@ -184,13 +149,15 @@ def call_api():
         goals_for,
         goals_against,
         goals_diff,
+        status_list
     )
 
 
-# Function to build the dataframe from the lists in the previous function.
 def dataframe():
+    """ This function creates a datafreame from lists created in the last function: call_api() """
+
     (
-        id_list,
+        team_id_list,
         rank_list,
         team_list,
         wins_list,
@@ -201,11 +168,12 @@ def dataframe():
         goals_for,
         goals_against,
         goals_diff,
+        status_list
     ) = call_api()
 
     # Setting the headers then zipping the lists to create a dataframe.
     headers = [
-        "ID",
+        "Team_ID",
         "Rank",
         "Team",
         "Wins",
@@ -216,10 +184,11 @@ def dataframe():
         "GF",
         "GA",
         "GD",
+        "Status"
     ]
     zipped = list(
         zip(
-            id_list,
+            team_id_list,
             rank_list,
             team_list,
             wins_list,
@@ -230,6 +199,7 @@ def dataframe():
             goals_for,
             goals_against,
             goals_diff,
+            status_list
         )
     )
 
@@ -239,11 +209,11 @@ def dataframe():
 
 
 class Standings:
-    """Functions to drop and load the standings table."""
+    """ Functions to drop and load the standings table """
 
-    # Dropping BigQuery table.
     def drop(self):
-        # Construct a BigQuery client object.
+        """ Dropping the BigQuery table """
+
         client = bigquery.Client()
 
         query = f"""
@@ -256,7 +226,9 @@ class Standings:
         print("Standings table dropped...")
 
     def load(self):
-        df = dataframe()  # Getting dataframe creating in dataframe() function.
+        """ Loading the dataframe to the BigQuery table """
+
+        df = dataframe()
 
         # Construct a BigQuery client object.
         client = bigquery.Client()
@@ -274,6 +246,7 @@ class Standings:
 # Creating an instance of the class.
 standings = Standings()
 
-# Calling the functions.
-standings.drop()
-standings.load()
+if __name__ == "__main__":
+    # Calling the functions.
+    standings.drop()
+    standings.load()
