@@ -4,13 +4,13 @@ This file pulls data from an API relating to the English Premier League teams da
 
 # System libraries
 import os
+import json
 
 # Importing needed libraries.
 from google.cloud import secretmanager
 from google.cloud import bigquery
 import pandas as pd
 import requests
-import json
 
 # Settings the project environment.
 os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
@@ -21,6 +21,8 @@ TEAMS_TABLE = "cloud-data-infrastructure.premier_league_dataset.teams"
 
 
 def gcp_secret():
+    """ Fetching RapidAPI key from Secret Manager """
+
     client = secretmanager.SecretManagerServiceClient()
     name = "projects/463690670206/secrets/rapid-api/versions/1"
     response = client.access_secret_version(request={"name": name})
@@ -29,8 +31,8 @@ def gcp_secret():
     return payload
 
 
-# Function to call the Teams table in BigQuery.
 def bigquery_call():
+    """ Fetching the Standings table from BigQuery """
     bqclient = bigquery.Client()
 
     # SQL query
@@ -53,8 +55,9 @@ def bigquery_call():
     return bigquery_dataframe
 
 
-# Function to call the Football API.
 def call_api():
+    """ Calling the API then filling in the empty lists """
+
     payload = gcp_secret()
     bigquery_dataframe = bigquery_call()
 
@@ -71,19 +74,25 @@ def call_api():
     url = "https://api-football-v1.p.rapidapi.com/v3/teams/statistics"
 
     # Empty lists that will be filled and then used to create a dataframe.
+    team_id_list = []
     team_list = []
     logo_list = []
     form_list = []
     clean_sheets_list = []
     penalty_scored_list = []
     penalty_missed_list = []
+    average_goals_list = []
+    win_streak_list = []
 
     count = 0
     while count < 20:
-        # Building query to retrieve data.
-        query = {"league": "39", "season": "2022", "team": id_list[count]}
+        # Building GET request to retrieve data.
+        query = {"league": "39", "season": "2023", "team": id_list[count]}
         response = requests.request("GET", url, headers=headers, params=query)
         json_res = response.json()
+
+        # Team ID.
+        team_id_list.append(int(json_res["response"]["team"]["id"]))
 
         # Team's name.
         team_list.append(str(json_res["response"]["team"]["name"]))
@@ -107,46 +116,65 @@ def call_api():
             int(json_res["response"]["penalty"]["missed"]["total"])
         )
 
+        # Team's average goals.
+        average_goals_list.append(float(json_res["response"]["goals"]["for"]["average"]["total"]))
+
+        # Team's win streak.
+        win_streak_list.append(int(json_res["response"]["biggest"]["streak"]["wins"]))
+
         count += 1
 
     return (
+        team_id_list,
         team_list,
         logo_list,
         form_list,
         clean_sheets_list,
         penalty_scored_list,
         penalty_missed_list,
+        average_goals_list,
+        win_streak_list
     )
 
 
-# Function to build the dataframe from the lists in the previous function.
 def create_dataframe():
+    """ This function creates a datafreame from lists created in the last function: call_api() """
+
     (
+        team_id_list,
         team_list,
         logo_list,
         form_list,
         clean_sheets_list,
         penalty_scored_list,
         penalty_missed_list,
+        average_goals_list,
+        win_streak_list
     ) = call_api()
 
     # Setting the headers then zipping the lists to create a dataframe.
     headers = [
+        "team_id",
         "team",
         "logo",
         "form",
         "clean_sheets",
         "penalties_scored",
         "penalties_missed",
+        "average_goals",
+        "win_streak"
     ]
     zipped = list(
         zip(
+            team_id_list,
             team_list,
             logo_list,
             form_list,
             clean_sheets_list,
             penalty_scored_list,
             penalty_missed_list,
+            average_goals_list,
+            win_streak_list
         )
     )
 
@@ -158,8 +186,9 @@ def create_dataframe():
 class Teams:
     """Functions to drop and load the teams table."""
 
-    # Dropping BigQuery table.
     def drop(self):
+        """ Dropping the BigQuery table """
+
         client = bigquery.Client()
         query = f"""
             DROP TABLE 
@@ -171,7 +200,9 @@ class Teams:
         print("Teams table dropped...")
 
     def load(self):
-        df = create_dataframe()  # Getting dataframe creating in dataframe() function.
+        """ Loading the dataframe to the BigQuery table """
+
+        df = create_dataframe()
 
         # Construct a BigQuery client object.
         client = bigquery.Client()
@@ -187,6 +218,7 @@ class Teams:
 # Creating an instance of the class.
 teams = Teams()
 
-# Calling the functions.
-teams.drop()
-teams.load()
+if __name__ == "__main__":
+    # Calling the functions.
+    teams.drop()
+    teams.load()
