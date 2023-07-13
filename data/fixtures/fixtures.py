@@ -21,7 +21,7 @@ def call_api(secret_name):
     This function fetches the RapidAPI key from Secret Manager and
     and sets up the headers for an API call.
     """
-    
+
     client = secretmanager.SecretManagerServiceClient()
     response = client.access_secret_version(request={"name": secret_name})
     payload = response.payload.data.decode("UTF-8")
@@ -56,7 +56,7 @@ class Fixture:
 
 
 def get_current_round():
-    """ 
+    """
     This function calls the Football API to get the current round of the regular season.
     This will get the string of  "Regular Season - 1" which is needed as a parameter
     in the next function to pull correct round.
@@ -75,7 +75,7 @@ def get_current_round():
 
 
 def retrieve_data_for_current_round():
-    """ Retrieving the data for the current round based on get_current_round() function's response """
+    """Retrieving the data for the current round based on get_current_round() function's response"""
 
     headers = call_api("projects/463690670206/secrets/rapid-api/versions/1")
     current_round_response = get_current_round()
@@ -90,7 +90,7 @@ def retrieve_data_for_current_round():
 
 
 def load_firestore():
-    """ This function loads the data into Firestore """
+    """This function loads the data into Firestore"""
 
     current_round_response = get_current_round()
     build_current_response = retrieve_data_for_current_round()
@@ -118,7 +118,7 @@ def load_firestore():
         ]
 
         fixture = Fixture(date=(fixture_date), teams=teams_dict, goals=goal_dict)
-        
+
         db.collection(f"{current_round_response}").document(
             f"{away_team} vs {home_team}"
         ).set(fixture.to_dict())

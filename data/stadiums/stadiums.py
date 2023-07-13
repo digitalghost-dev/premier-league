@@ -30,7 +30,7 @@ def gcp_secret():
 
 
 def call_api():
-    """ Calling the API then filling in the empty lists """
+    """Calling the API then filling in the empty lists"""
 
     payload = gcp_secret()
 
@@ -72,7 +72,7 @@ def call_api():
 
 
 def dataframe():
-    """ This function creates a datafreame from lists created in the last function: call_api() """
+    """This function creates a datafreame from lists created in the last function: call_api()"""
 
     team_list, stadium_list, lat_list, lon_list, capacity_list, year_opened = call_api()
 
@@ -91,7 +91,7 @@ class Locations:
     """Functions to drop and load the locations table."""
 
     def drop(self):
-        """ Dropping the BigQuery table """
+        """Dropping the BigQuery table"""
 
         client = bigquery.Client()
         query = f"""
@@ -104,7 +104,7 @@ class Locations:
         print("Location table dropped...")
 
     def load(self):
-        """ Loading the dataframe to the BigQuery table """
+        """Loading the dataframe to the BigQuery table"""
 
         locations_df = (
             dataframe()

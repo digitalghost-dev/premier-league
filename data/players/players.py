@@ -21,7 +21,7 @@ PLAYERS_TABLE = "cloud-data-infrastructure.premier_league_dataset.players"
 
 
 def gcp_secret():
-    """ Fetching RapidAPI key from Secret Manager """
+    """Fetching RapidAPI key from Secret Manager"""
 
     client = secretmanager.SecretManagerServiceClient()
     name = "projects/463690670206/secrets/rapid-api/versions/1"
@@ -32,7 +32,7 @@ def gcp_secret():
 
 
 def call_api():
-    """ Calling the API then filling in the empty lists """
+    """Calling the API then filling in the empty lists"""
 
     payload = gcp_secret()
     # Headers used for RapidAPI.
@@ -108,18 +108,39 @@ def call_api():
 
         count += 1
 
-    return full_name_list, goals_list, team_list, assists_list, nationality_list, photo_list
+    return (
+        full_name_list,
+        goals_list,
+        team_list,
+        assists_list,
+        nationality_list,
+        photo_list,
+    )
 
 
 def create_dataframe():
-    """ This function creates a datafreame from lists created in the last function: call_api() """
+    """This function creates a datafreame from lists created in the last function: call_api()"""
 
-    full_name_list, goals_list, team_list, assists_list, nationality_list, photo_list = call_api()
+    (
+        full_name_list,
+        goals_list,
+        team_list,
+        assists_list,
+        nationality_list,
+        photo_list,
+    ) = call_api()
 
     # Setting the headers then zipping the lists.
     headers = ["name", "goals", "team", "assists", "nationality", "photo"]
     zipped = list(
-        zip(full_name_list, goals_list, team_list, assists_list, nationality_list, photo_list)
+        zip(
+            full_name_list,
+            goals_list,
+            team_list,
+            assists_list,
+            nationality_list,
+            photo_list,
+        )
     )
 
     df = pd.DataFrame(zipped, columns=headers)
@@ -128,10 +149,10 @@ def create_dataframe():
 
 
 class Players:
-    """ Functions to drop and load the players table """
+    """Functions to drop and load the players table"""
 
     def drop(self):
-        """ Dropping the BigQuery table """
+        """Dropping the BigQuery table"""
 
         client = bigquery.Client()
         query = f"""
@@ -144,7 +165,7 @@ class Players:
         print("Players table dropped...")
 
     def load(self):
-        """ Loading the dataframe to the BigQuery table """
+        """Loading the dataframe to the BigQuery table"""
 
         df = create_dataframe()
 

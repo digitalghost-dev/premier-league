@@ -21,7 +21,7 @@ TEAMS_TABLE = "cloud-data-infrastructure.premier_league_dataset.teams"
 
 
 def gcp_secret():
-    """ Fetching RapidAPI key from Secret Manager """
+    """Fetching RapidAPI key from Secret Manager"""
 
     client = secretmanager.SecretManagerServiceClient()
     name = "projects/463690670206/secrets/rapid-api/versions/1"
@@ -32,7 +32,7 @@ def gcp_secret():
 
 
 def bigquery_call():
-    """ Fetching the Standings table from BigQuery """
+    """Fetching the Standings table from BigQuery"""
     bqclient = bigquery.Client()
 
     # SQL query
@@ -56,7 +56,7 @@ def bigquery_call():
 
 
 def call_api():
-    """ Calling the API then filling in the empty lists """
+    """Calling the API then filling in the empty lists"""
 
     payload = gcp_secret()
     bigquery_dataframe = bigquery_call()
@@ -117,7 +117,9 @@ def call_api():
         )
 
         # Team's average goals.
-        average_goals_list.append(float(json_res["response"]["goals"]["for"]["average"]["total"]))
+        average_goals_list.append(
+            float(json_res["response"]["goals"]["for"]["average"]["total"])
+        )
 
         # Team's win streak.
         win_streak_list.append(int(json_res["response"]["biggest"]["streak"]["wins"]))
@@ -133,12 +135,12 @@ def call_api():
         penalty_scored_list,
         penalty_missed_list,
         average_goals_list,
-        win_streak_list
+        win_streak_list,
     )
 
 
 def create_dataframe():
-    """ This function creates a datafreame from lists created in the last function: call_api() """
+    """This function creates a datafreame from lists created in the last function: call_api()"""
 
     (
         team_id_list,
@@ -149,7 +151,7 @@ def create_dataframe():
         penalty_scored_list,
         penalty_missed_list,
         average_goals_list,
-        win_streak_list
+        win_streak_list,
     ) = call_api()
 
     # Setting the headers then zipping the lists to create a dataframe.
@@ -162,7 +164,7 @@ def create_dataframe():
         "penalties_scored",
         "penalties_missed",
         "average_goals",
-        "win_streak"
+        "win_streak",
     ]
     zipped = list(
         zip(
@@ -174,7 +176,7 @@ def create_dataframe():
             penalty_scored_list,
             penalty_missed_list,
             average_goals_list,
-            win_streak_list
+            win_streak_list,
         )
     )
 
@@ -187,7 +189,7 @@ class Teams:
     """Functions to drop and load the teams table."""
 
     def drop(self):
-        """ Dropping the BigQuery table """
+        """Dropping the BigQuery table"""
 
         client = bigquery.Client()
         query = f"""
@@ -200,7 +202,7 @@ class Teams:
         print("Teams table dropped...")
 
     def load(self):
-        """ Loading the dataframe to the BigQuery table """
+        """Loading the dataframe to the BigQuery table"""
 
         df = create_dataframe()
 

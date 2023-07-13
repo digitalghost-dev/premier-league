@@ -31,7 +31,7 @@ def gcp_secret():
 
 
 def call_api():
-    """ Calling the API then filling in the empty lists """
+    """Calling the API then filling in the empty lists"""
 
     payload = gcp_secret()
     # Headers used for RapidAPI.
@@ -88,7 +88,7 @@ def call_api():
 
         # Number of wins.
         wins_list.append(
-            int(json_res["response"][0]["league"]["standings"][0][count]["all"]["win"]  )
+            int(json_res["response"][0]["league"]["standings"][0][count]["all"]["win"])
         )
 
         # Number of draws.
@@ -117,12 +117,20 @@ def call_api():
 
         # Number of goals for.
         goals_for.append(
-            int(json_res["response"][0]["league"]["standings"][0][count]["all"]["goals"]["for"])
+            int(
+                json_res["response"][0]["league"]["standings"][0][count]["all"][
+                    "goals"
+                ]["for"]
+            )
         )
 
         # Number of goals against.
         goals_against.append(
-            int(json_res["response"][0]["league"]["standings"][0][count]["all"]["goals"]["against"])
+            int(
+                json_res["response"][0]["league"]["standings"][0][count]["all"][
+                    "goals"
+                ]["against"]
+            )
         )
 
         # Number of goal differential.
@@ -149,12 +157,12 @@ def call_api():
         goals_for,
         goals_against,
         goals_diff,
-        status_list
+        status_list,
     )
 
 
 def dataframe():
-    """ This function creates a datafreame from lists created in the last function: call_api() """
+    """This function creates a datafreame from lists created in the last function: call_api()"""
 
     (
         team_id_list,
@@ -168,7 +176,7 @@ def dataframe():
         goals_for,
         goals_against,
         goals_diff,
-        status_list
+        status_list,
     ) = call_api()
 
     # Setting the headers then zipping the lists to create a dataframe.
@@ -184,7 +192,7 @@ def dataframe():
         "GF",
         "GA",
         "GD",
-        "Status"
+        "Status",
     ]
     zipped = list(
         zip(
@@ -199,7 +207,7 @@ def dataframe():
             goals_for,
             goals_against,
             goals_diff,
-            status_list
+            status_list,
         )
     )
 
@@ -209,10 +217,10 @@ def dataframe():
 
 
 class Standings:
-    """ Functions to drop and load the standings table """
+    """Functions to drop and load the standings table"""
 
     def drop(self):
-        """ Dropping the BigQuery table """
+        """Dropping the BigQuery table"""
 
         client = bigquery.Client()
 
@@ -226,7 +234,7 @@ class Standings:
         print("Standings table dropped...")
 
     def load(self):
-        """ Loading the dataframe to the BigQuery table """
+        """Loading the dataframe to the BigQuery table"""
 
         df = dataframe()
 
