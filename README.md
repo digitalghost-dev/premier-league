@@ -14,7 +14,7 @@
 
 ### Important Links
 
-* [Documentation](https://digitalghost-dev.github.io)
+* [Documentation](https://github.com/digitalghost-dev/premier-league/wiki/Premier-League-Project-Documentation)
 * [Visualization](https://premierleague.streamlit.app/)
 * [Version History](https://github.com/digitalghost-dev/premier-league/blob/main/CHANGELOG.md)
 
