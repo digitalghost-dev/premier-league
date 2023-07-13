@@ -34,9 +34,9 @@ on:
 
   pull_request:
     branches-ignore:
-      - '2.**'
-      - '3.**'
-      - '4.**'
+      - '2.*'
+      - '3.*'
+      - '4.*'
 
 env:
   GAR_LOCATION: us-central1
