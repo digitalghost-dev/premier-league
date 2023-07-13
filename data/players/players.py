@@ -1,16 +1,17 @@
 """
-This file pulls data from an API relating to the English Premier League players data and loads it into BigQuery.
+This file pulls data from an API relating to the English Premier League 
+players data and loads it into BigQuery.
 """
 
 # System libraries
 import os
+import json
 
 # Importing needed libraries.
 from google.cloud import secretmanager
 from google.cloud import bigquery
 import pandas as pd
 import requests
-import json
 
 # Settings the project environment.
 os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
@@ -20,6 +21,8 @@ PLAYERS_TABLE = "cloud-data-infrastructure.premier_league_dataset.players"
 
 
 def gcp_secret():
+    """ Fetching RapidAPI key from Secret Manager """
+
     client = secretmanager.SecretManagerServiceClient()
     name = "projects/463690670206/secrets/rapid-api/versions/1"
     response = client.access_secret_version(request={"name": name})
@@ -29,6 +32,8 @@ def gcp_secret():
 
 
 def call_api():
+    """ Calling the API then filling in the empty lists """
+
     payload = gcp_secret()
     # Headers used for RapidAPI.
     headers = {
@@ -39,7 +44,7 @@ def call_api():
     # Standings endpoint from RapidAPI.
     url = "https://api-football-v1.p.rapidapi.com/v3/players/topscorers"
 
-    # Building query to retrieve data.
+    # Building GET request to retrieve data.
     query = {"league": "39", "season": "2022"}
     response = requests.request("GET", url, headers=headers, params=query, timeout=20)
     json_res = response.json()
@@ -47,6 +52,7 @@ def call_api():
     # Empty lists that will be filled and then used to create a dataframe.
     full_name_list = []
     goals_list = []
+    assists_list = []
     team_list = []
     nationality_list = []
     photo_list = []
@@ -80,6 +86,11 @@ def call_api():
             int(json_res["response"][count]["statistics"][0]["goals"]["total"])
         )
 
+        # Retrieving amount of assists per player.
+        assists_list.append(
+            int(json_res["response"][count]["statistics"][0]["goals"]["assists"])
+        )
+
         # Retrieving player's team name.
         team_list.append(
             str(json_res["response"][count]["statistics"][0]["team"]["name"]).strip('"')
@@ -97,16 +108,18 @@ def call_api():
 
         count += 1
 
-    return full_name_list, goals_list, team_list, nationality_list, photo_list
+    return full_name_list, goals_list, team_list, assists_list, nationality_list, photo_list
 
 
-def dataframe():
-    full_name_list, goals_list, team_list, nationality_list, photo_list = call_api()
+def create_dataframe():
+    """ This function creates a datafreame from lists created in the last function: call_api() """
 
-    # Setting the headers then zipping the lists to create a dataframe.
-    headers = ["name", "goals", "team", "nationality", "photo"]
+    full_name_list, goals_list, team_list, assists_list, nationality_list, photo_list = call_api()
+
+    # Setting the headers then zipping the lists.
+    headers = ["name", "goals", "team", "assists", "nationality", "photo"]
     zipped = list(
-        zip(full_name_list, goals_list, team_list, nationality_list, photo_list)
+        zip(full_name_list, goals_list, team_list, assists_list, nationality_list, photo_list)
     )
 
     df = pd.DataFrame(zipped, columns=headers)
@@ -115,10 +128,11 @@ def dataframe():
 
 
 class Players:
-    """Functions to drop and load the players table."""
+    """ Functions to drop and load the players table """
 
-    # Dropping BigQuery table.
     def drop(self):
+        """ Dropping the BigQuery table """
+
         client = bigquery.Client()
         query = f"""
             DROP TABLE
@@ -130,7 +144,9 @@ class Players:
         print("Players table dropped...")
 
     def load(self):
-        df = dataframe()  # Getting dataframe creating in dataframe() function.
+        """ Loading the dataframe to the BigQuery table """
+
+        df = create_dataframe()
 
         # Construct a BigQuery client object.
         client = bigquery.Client()
@@ -148,6 +164,7 @@ class Players:
 # Creating an instance of the class.
 players = Players()
 
-# Calling the functions.
-players.drop()
-players.load()
+if __name__ == "__main__":
+    # Calling the functions.
+    players.drop()
+    players.load()
