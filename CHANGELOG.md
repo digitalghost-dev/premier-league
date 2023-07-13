@@ -10,19 +10,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * **MINOR:** Any changes to the Streamlit dashboard that adds a new interaction/feature or removal of one.
 * **PATCH:** Any changes that fix bugs.
 
-## [2.6.0] | 2023-06-28
+## [2.7.0] | 2023-07-12
 
 ### **Added**
-* **Playground** Page: Added social media icons to bottom of page.
-* **Main** Page, *Statistics Tab*: Added `assists` metric to the *Top 5 Scorers Section*.
-* **Main** Page, *Standings Tab*: Added a metric card to display the top 5 teams' position movement throughout the season.
+* **Main Page**, *Standings Tab*: Added 3 `st.column_config.ProgressColumn` cards to display rankings of teams with the highest `penalties_scored`, `average_goals`, and `win_streak` during the season.
+
+### **Changed** 
+* **Main Pages**, *Standings Tab*: Changed the data values for `label` and `value` for the `st.metric` card. 
+
+## [2.6.0][2.6.0] | 2023-06-28
+
+### **Added**
+* **Playground Page**: Added social media icons to bottom of page.
+* **Main Page**, *Statistics Tab*: Added `assists` metric to the *Top 5 Scorers Section*.
+* **Main Page**, *Standings Tab*: Added a metric card to display the top 5 teams' position movement throughout the season.
 
 ### **Changed**
-* **Main** Page: Changed  title to "2023-24" to reflect the new season.
-* **Main** Page, *Fixtures Tab*: Changed ordering of `fixtures` to appear in chronological order.
+* **Main Page**: Changed  title to "2023-24" to reflect the new season.
+* **Main Page**, *Fixtures Tab*: Changed ordering of `fixtures` to appear in chronological order.
 
 ### **Removed**
-* **Main** Page, *Fixtures Tab*: Removed extra comma from `fixtures` date.
+* **Main Page**, *Fixtures Tab*: Removed extra comma from `fixtures` date.
 
  
 ---
@@ -197,6 +205,8 @@ Top Teams Tab
 
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
+
+[2.6.0]: https://github.com/digitalghost-dev/premier-league/commit/de5b6c14e370ec08f0a79a2cc1dafd84a144411a#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
 [2.5.0]: https://github.com/digitalghost-dev/premier-league/commit/247029c3a94e607d5ffd2adabc41178647d1796e#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 

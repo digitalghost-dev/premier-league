@@ -116,7 +116,7 @@ def background_processing():
 
     # Teams table.
     teams_data = run_query(f"""
-        SELECT logo, form, clean_sheets, penalties_scored, penalties_missed
+        SELECT t.team, logo, form, clean_sheets, penalties_scored, penalties_missed, average_goals, win_streak
         FROM {teams_table} AS t
         LEFT JOIN {standings_table} AS s
         ON t.team = s.Team
@@ -159,7 +159,7 @@ def streamlit_app():
 
     # Tab 1, overview
     with tab1:
-
+        
         st.subheader("Top Teams Movement")
         col1, col2, col3, col4, col5 = st.columns(5)
 
@@ -173,10 +173,82 @@ def streamlit_app():
                     status = "up"
 
                 st.metric(
-                    label = f"Points: {status_df.iloc[index][2]}", # Points
-                    value = f"{status_df.iloc[index][1]}", 
+                    label = f"{status_df.iloc[index][1]}", # Teams
+                    value = f"Pts: {status_df.iloc[index][2]}", # Points
                     delta = status,
                 )
+
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            penalties_scored_df = pd.DataFrame(
+                {
+                    "Penalties Scored": [teams_df.iloc[0][4], teams_df.iloc[1][4], teams_df.iloc[2][4], teams_df.iloc[3][4], teams_df.iloc[4][4]],
+                    "Team": [teams_df.iloc[0][0], teams_df.iloc[1][0], teams_df.iloc[2][0], teams_df.iloc[3][0], teams_df.iloc[4][0]]
+                }
+            )
+
+
+            st.data_editor(
+                penalties_scored_df,
+                column_config={
+                    "Penalties Scored": st.column_config.ProgressColumn(
+                        "Penalties Scored",
+                        help="The Amount of Penalties Scored by Each Team.",
+                        format="%d",
+                        min_value=0,
+                        max_value=20,
+                    ),
+                },
+                hide_index=True,
+                key="penalties_scored"
+            )
+
+        with col2:
+            average_goals_df = pd.DataFrame(
+                {
+                    "Average Goals": [teams_df.iloc[0][6], teams_df.iloc[1][6], teams_df.iloc[2][6], teams_df.iloc[3][6], teams_df.iloc[4][6]],
+                    "Team": [teams_df.iloc[0][0], teams_df.iloc[1][0], teams_df.iloc[2][0], teams_df.iloc[3][0], teams_df.iloc[4][0]]
+                }
+            )
+
+            st.data_editor(
+                average_goals_df,
+                column_config={
+                    "Average Goals": st.column_config.ProgressColumn(
+                        "Average Goals",
+                        help="The Average Goals Scored by Each Team.",
+                        format="%f",
+                        min_value=0,
+                        max_value=20,
+                    ),
+                },
+                hide_index=True,
+                key="average_goals"
+            )
+
+        with col3:
+            win_streak_df = pd.DataFrame(
+                {
+                    "Win Streak": [teams_df.iloc[0][7], teams_df.iloc[1][7], teams_df.iloc[2][7], teams_df.iloc[3][7], teams_df.iloc[4][7]],
+                    "Team": [teams_df.iloc[0][0], teams_df.iloc[1][0], teams_df.iloc[2][0], teams_df.iloc[3][0], teams_df.iloc[4][0]]
+                }
+            )
+
+
+            st.data_editor(
+                win_streak_df,
+                column_config={
+                    "Win Streak": st.column_config.ProgressColumn(
+                        "Win Streak",
+                        help="The Win Streak by Each Team.",
+                        format="%d",
+                        min_value=0,
+                        max_value=15
+                    ),
+                },
+                hide_index=True,
+                key="win_streak"
+            )
 
         # Standings table.
         st.subheader("Standings")
