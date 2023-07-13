@@ -10,7 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * **MINOR:** Any changes to the Streamlit dashboard that adds a new interaction/feature or removal of one.
 * **PATCH:** Any changes that fix bugs.
 
-## [2.7.0] | 2023-07-12
+## [2.7.1] | 2023-07-13
+
+### Fixed
+* **Main Page**, *Standings Page*: Fixed `iloc[X][X]` values to match the correct column to pull in correct data for the Top 5 Teams section.
+
+## [2.7.0][2.7.0] | 2023-07-12
 
 ### **Added**
 * **Main Page**, *Standings Tab*: Added 3 `st.column_config.ProgressColumn` cards to display rankings of teams with the highest `penalties_scored`, `average_goals`, and `win_streak` during the season.
@@ -205,6 +210,8 @@ Top Teams Tab
 
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
+
+[2.7.0]: https://github.com/digitalghost-dev/premier-league/commit/522600c0da5c6c20dd51528794bc959c1adcd9e3#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
 [2.6.0]: https://github.com/digitalghost-dev/premier-league/commit/de5b6c14e370ec08f0a79a2cc1dafd84a144411a#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
