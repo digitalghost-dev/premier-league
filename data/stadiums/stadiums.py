@@ -19,8 +19,10 @@ LOCATIONS_TABLE = "cloud-data-infrastructure.premier_league_dataset.stadiums"
 
 
 def gcp_secret():
+    """Fetching RapidAPI key from Secret Manager"""
+
     client = secretmanager.SecretManagerServiceClient()
-    name = "projects/463690670206/secrets/stadiums-api/versions/1"
+    name = "projects/463690670206/secrets/go-api/versions/1"
     response = client.access_secret_version(request={"name": name})
     payload = response.payload.data.decode("UTF-8")
 
@@ -28,8 +30,11 @@ def gcp_secret():
 
 
 def call_api():
+    """ Calling the API then filling in the empty lists """
+
     payload = gcp_secret()
-    # Building query to retrieve data.
+
+    # Building GET request to retrieve data.
     response = requests.request("GET", payload, timeout=20)
     json_res = response.json()
 
@@ -67,6 +72,8 @@ def call_api():
 
 
 def dataframe():
+    """ This function creates a datafreame from lists created in the last function: call_api() """
+
     team_list, stadium_list, lat_list, lon_list, capacity_list, year_opened = call_api()
 
     # Setting the headers then zipping the lists to create a dataframe.
@@ -84,6 +91,8 @@ class Locations:
     """Functions to drop and load the locations table."""
 
     def drop(self):
+        """ Dropping the BigQuery table """
+
         client = bigquery.Client()
         query = f"""
             DROP TABLE 
@@ -95,6 +104,8 @@ class Locations:
         print("Location table dropped...")
 
     def load(self):
+        """ Loading the dataframe to the BigQuery table """
+
         locations_df = (
             dataframe()
         )  # Getting dataframe creating in dataframe() function.
@@ -114,6 +125,7 @@ class Locations:
 # Creating an instance of the class.
 locations = Locations()
 
-# Calling the functions.
-locations.drop()
-locations.load()
+if __name__ == "__main__":
+    # Calling the functions.
+    locations.drop()
+    locations.load()
