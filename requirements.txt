@@ -3,7 +3,7 @@ pandas==1.4.2
 plotly==5.15.0
 requests==2.29.0
 streamlit==1.24.1
-SQLAlchemy==2.0.15
+SQLAlchemy==2.0.18
 firebase-admin==6.2.0
 psycopg2-binary==2.9.6
 google-cloud-core==2.3.2
