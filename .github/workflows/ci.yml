@@ -40,7 +40,7 @@ on:
 
 env:
   GAR_LOCATION: us-central1
-  VERSION_NUMBER: '2.5'
+  VERSION_NUMBER: '2.7.1'
   CLOUD_BUCKET: ${{ secrets.CLOUD_BUCKET }}
   EMAIL: ${{ secrets.EMAIL }}
   NAME: ${{ secrets.NAME }}
