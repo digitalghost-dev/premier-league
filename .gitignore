@@ -9,6 +9,10 @@ tests/
 testing/
 test*
 
+# Terraform secrets and state files
+terraform/.terraform*
+terraform/terraform*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 data/__pycache__
