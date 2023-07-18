@@ -1,8 +1,0 @@
-numpy==1.24.3
-pandas==1.4.2
-requests==2.29.0
-google-cloud-core==2.3.2
-google-cloud-bigquery==3.10.0
-google-cloud-secret-manager==2.16.1
-google-cloud-bigquery[pandas]==3.10.0
-google-cloud-bigquery-storage==2.19.1
