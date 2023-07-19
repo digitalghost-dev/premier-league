@@ -6,7 +6,4 @@ updates:
       interval: "monthly"
     open-pull-requests-limit: 15
     ignore:
-      - dependency-name: "SQLAlchemy"
-      - dependency-name: "psycopg2-binary"
-      - dependency-name: "pylint"
-      - dependency-name: "requests"
+      - dependency-name: "pandas"
