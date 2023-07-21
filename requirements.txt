@@ -1,14 +1,18 @@
-numpy==1.24.3
-pandas==1.4.2
-plotly==5.15.0
+# HTTP
 requests==2.29.0
+
+# Numbers and graphs or visualizations.
+numpy==1.24.3
+plotly==5.15.0
 streamlit==1.24.1
-SQLAlchemy==2.0.15
-firebase-admin==6.2.0
+
+# Data and databases
+pandas==1.4.2
+SQLAlchemy==1.4.45
 psycopg2-binary==2.9.6
+
+# Google Cloud
+firebase-admin==6.2.0
 google-cloud-core==2.3.2
-google-cloud-bigquery==3.11.3
 google-cloud-firestore==2.11.0
 google-cloud-secret-manager==2.16.1
-google-cloud-bigquery[pandas]==3.10.0
-google-cloud-bigquery-storage==2.20.0
