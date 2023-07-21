@@ -1,41 +1,48 @@
 """
-This file pulls data from an API relating to the English Premier League stadium location data and loads it into BigQuery.
+This file pulls data from an API relating to the English Premier League stadium location data and loads it into a PostgreSQL database.
 """
 
-# System libraries
+# Standard libraries
+from typing import Dict, Optional
 import os
 
 # Importing needed libraries.
 from google.cloud import secretmanager
-from google.cloud import bigquery
+from sqlalchemy import create_engine
+from sqlalchemy.types import *
+from pandas import DataFrame
 import pandas as pd
 import requests
 
 # Settings the project environment.
 os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
 
-# Settings the project environment.
-LOCATIONS_TABLE = "cloud-data-infrastructure.premier_league_dataset.stadiums"
-
-
-def gcp_secret():
+def gcp_secret_rapid_api():
     """Fetching RapidAPI key from Secret Manager"""
 
     client = secretmanager.SecretManagerServiceClient()
     name = "projects/463690670206/secrets/go-api/versions/1"
     response = client.access_secret_version(request={"name": name})
-    payload = response.payload.data.decode("UTF-8")
+    go_api_key = response.payload.data.decode("UTF-8")
 
-    return payload
+    return go_api_key
+
+def gcp_secret_database_uri():
+    client = secretmanager.SecretManagerServiceClient()
+    name = "projects/463690670206/secrets/premier-league-database-connection-uri/versions/2"
+    response = client.access_secret_version(request={"name": name})
+    database_uri = response.payload.data.decode("UTF-8")
+
+    return database_uri
 
 
 def call_api():
     """Calling the API then filling in the empty lists"""
 
-    payload = gcp_secret()
+    go_api_key = gcp_secret_rapid_api()
 
     # Building GET request to retrieve data.
-    response = requests.request("GET", payload, timeout=20)
+    response = requests.request("GET", go_api_key, timeout=20)
     json_res = response.json()
 
     # Empty lists that will be filled and then used to create a dataframe.
@@ -71,7 +78,7 @@ def call_api():
     return team_list, stadium_list, lat_list, lon_list, capacity_list, year_opened
 
 
-def dataframe():
+def create_dataframe():
     """This function creates a datafreame from lists created in the last function: call_api()"""
 
     team_list, stadium_list, lat_list, lon_list, capacity_list, year_opened = call_api()
@@ -82,50 +89,64 @@ def dataframe():
         zip(team_list, stadium_list, lat_list, lon_list, capacity_list, year_opened)
     )
 
-    locations_df = pd.DataFrame(zipped, columns=headers)
+    df = pd.DataFrame(zipped, columns=headers)
 
-    return locations_df
+    return df
 
+def define_table_schema() -> Dict[str, type]:
+    schema_definition = {
+        "team": String(64),    
+        "stadium": String(64),
+        "latitude": DECIMAL(8, 6),
+        "longitude": DECIMAL(8, 6),
+        "capacity": String(10), 
+        "year_opened": String(4)
+    }
 
-class Locations:
-    """Functions to drop and load the locations table."""
+    return schema_definition
 
-    def drop(self):
-        """Dropping the BigQuery table"""
+def send_dataframe_to_postgresql(
+        database_uri: str, 
+        schema_name: str, 
+        table_name: str,
+        df: DataFrame, 
+        schema_definition: Optional[Dict[str, type]] = None
+    ):
+    """Sending dataframe to PostgreSQL.
 
-        client = bigquery.Client()
-        query = f"""
-            DROP TABLE 
-            {LOCATIONS_TABLE}
-        """
+    Args:
+        database_uri (str): The URI to connect to the PostgreSQL database.
+        schema (str): The schema name in which the table should be created.
+        table_name (str): The name of the table to be created.
+        df (DataFrame): The DataFrame containing the data to be inserted.
+        schema_definition (Dict[str, type], optional): A dictionary defining the table schema with column names
+                                                       as keys and their corresponding SQLAlchemy data types.
+                                                       Defaults to None. If None, the function will use the schema
+                                                       from the define_table_schema() function.
 
-        client.query(query)
+    Raises:
+        ValueError: If the DataFrame is empty or schema_definition is not a valid dictionary.
+    """
 
-        print("Location table dropped...")
+    if df.empty:
+        raise ValueError("DataFrame is empty.")
 
-    def load(self):
-        """Loading the dataframe to the BigQuery table"""
+    if schema_definition is None:
+        schema_definition = define_table_schema()
 
-        locations_df = (
-            dataframe()
-        )  # Getting dataframe creating in dataframe() function.
+    if not isinstance(schema_definition, dict):
+        raise ValueError("schema_definition must be a dictionary.")
 
-        client = bigquery.Client()
+    engine = create_engine(database_uri)
+    df.to_sql(table_name, con=engine, schema=schema_name, if_exists="replace", index=False, dtype=schema_definition)
 
-        job = client.load_table_from_dataframe(
-            locations_df, LOCATIONS_TABLE
-        )  # Make an API request.
-        job.result()  # Wait for the job to complete.
-
-        table = client.get_table(LOCATIONS_TABLE)  # Make an API request.
-
-        print(f"Loaded {table.num_rows} rows and {len(table.schema)} columns")
-
-
-# Creating an instance of the class.
-locations = Locations()
 
 if __name__ == "__main__":
-    # Calling the functions.
-    locations.drop()
-    locations.load()
+    database_uri = gcp_secret_database_uri()
+    schema_name = "premier-league-schema"
+    table_name = "stadiums"
+    df = create_dataframe()
+    schema_definition = define_table_schema()
+
+    send_dataframe_to_postgresql(database_uri, schema_name, table_name, df)
+    print(f"Data loaded into {table_name}!")

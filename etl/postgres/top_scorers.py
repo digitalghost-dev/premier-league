@@ -1,43 +1,48 @@
 """
 This file pulls data from an API relating to the English Premier League 
-players data and loads it into BigQuery.
+top scoring players data and loads it into a PostgreSQL database.
 """
 
-# System libraries
-import os
+# Standard libraries
+from typing import Dict, Optional
 import json
+import os
 
 # Importing needed libraries.
 from google.cloud import secretmanager
-from google.cloud import bigquery
+from sqlalchemy import create_engine
+from sqlalchemy.types import *
+from pandas import DataFrame
 import pandas as pd
 import requests
 
 # Settings the project environment.
 os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
 
-# Settings the project environment.
-PLAYERS_TABLE = "cloud-data-infrastructure.premier_league_dataset.players"
-
-
-def gcp_secret():
-    """Fetching RapidAPI key from Secret Manager"""
-
+def gcp_secret_rapid_api():
     client = secretmanager.SecretManagerServiceClient()
     name = "projects/463690670206/secrets/rapid-api/versions/1"
     response = client.access_secret_version(request={"name": name})
-    payload = response.payload.data.decode("UTF-8")
+    rapid_api_key = response.payload.data.decode("UTF-8")
 
-    return payload
+    return rapid_api_key
+
+def gcp_secret_database_uri():
+    client = secretmanager.SecretManagerServiceClient()
+    name = "projects/463690670206/secrets/premier-league-database-connection-uri/versions/2"
+    response = client.access_secret_version(request={"name": name})
+    database_uri = response.payload.data.decode("UTF-8")
+
+    return database_uri
 
 
 def call_api():
     """Calling the API then filling in the empty lists"""
 
-    payload = gcp_secret()
+    rapid_api_key = gcp_secret_rapid_api()
     # Headers used for RapidAPI.
     headers = {
-        "X-RapidAPI-Key": payload,
+        "X-RapidAPI-Key": rapid_api_key,
         "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com",
     }
 
@@ -148,44 +153,60 @@ def create_dataframe():
     return df
 
 
-class Players:
-    """Functions to drop and load the players table"""
+def define_table_schema() -> Dict[str, type]:
+    schema_definition = {
+        "name": String(64),    
+        "goals": SMALLINT,
+        "team": String(64),
+        "assists": SMALLINT,
+        "nationality": String(64),
+        "photo": String(256)
+    }
 
-    def drop(self):
-        """Dropping the BigQuery table"""
+    return schema_definition
 
-        client = bigquery.Client()
-        query = f"""
-            DROP TABLE
-            {PLAYERS_TABLE}
-        """
+def send_dataframe_to_postgresql(
+        database_uri: str, 
+        schema_name: str, 
+        table_name: str,
+        df: DataFrame, 
+        schema_definition: Optional[Dict[str, type]] = None
+    ):
+    """Sending dataframe to PostgreSQL.
 
-        client.query(query)
+    Args:
+        database_uri (str): The URI to connect to the PostgreSQL database.
+        schema (str): The schema name in which the table should be created.
+        table_name (str): The name of the table to be created.
+        df (DataFrame): The DataFrame containing the data to be inserted.
+        schema_definition (Dict[str, type], optional): A dictionary defining the table schema with column names
+                                                       as keys and their corresponding SQLAlchemy data types.
+                                                       Defaults to None. If None, the function will use the schema
+                                                       from the define_table_schema() function.
 
-        print("Players table dropped...")
+    Raises:
+        ValueError: If the DataFrame is empty or schema_definition is not a valid dictionary.
+    """
 
-    def load(self):
-        """Loading the dataframe to the BigQuery table"""
+    if df.empty:
+        raise ValueError("DataFrame is empty.")
 
-        df = create_dataframe()
+    if schema_definition is None:
+        schema_definition = define_table_schema()
 
-        # Construct a BigQuery client object.
-        client = bigquery.Client()
+    if not isinstance(schema_definition, dict):
+        raise ValueError("schema_definition must be a dictionary.")
 
-        table_id = PLAYERS_TABLE
+    engine = create_engine(database_uri)
+    df.to_sql(table_name, con=engine, schema=schema_name, if_exists="replace", index=False, dtype=schema_definition)
 
-        job = client.load_table_from_dataframe(df, table_id)  # Make an API request.
-        job.result()  # Wait for the job to complete.
-
-        table = client.get_table(table_id)  # Make an API request.
-
-        print(f"Loaded {table.num_rows} rows and {len(table.schema)} columns")
-
-
-# Creating an instance of the class.
-players = Players()
 
 if __name__ == "__main__":
-    # Calling the functions.
-    players.drop()
-    players.load()
+    database_uri = gcp_secret_database_uri()
+    schema_name = "premier-league-schema"
+    table_name = "top_scorers"
+    df = create_dataframe()
+    schema_definition = define_table_schema()
+
+    send_dataframe_to_postgresql(database_uri, schema_name, table_name, df)
+    print(f"Data loaded into {table_name}!")
