@@ -26,7 +26,7 @@ on:
         
 env:
   GAR_LOCATION: us-central1
-  VERSION_NUMBER: '2.7.1'
+  VERSION_NUMBER: '3.0.0'
   CLOUD_BUCKET: ${{ secrets.CLOUD_BUCKET }}
   CLOUD_SQL_INSTANCE: ${{ secrets.CLOUD_SQL_INSTANCE }}
   EMAIL: ${{ secrets.EMAIL }}
@@ -249,9 +249,13 @@ jobs:
       actions: read
       contents: read
       security-events: write
-      
-    needs: [syft]
+
     runs-on: ubuntu-latest
+    needs: [syft]
+
+    if: |
+      always() &&
+      (needs.syft.result == 'success')
     steps:
     
       - uses: actions/download-artifact@v3
