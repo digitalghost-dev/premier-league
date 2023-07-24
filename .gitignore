@@ -1,6 +1,6 @@
 # Files
-**/.json
-**/.DS_store
+**.json
+**.DS_store
 .streamlit/secrets.toml
 
 # Testing files and directories
