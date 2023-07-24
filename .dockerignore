@@ -1,20 +1,24 @@
 # Files
-*.json
-.DS_store
-data/.DS_store
-go_api/.DS_store
-pages/.DS_store
+**/.json
+**/.DS_store
+.streamlit/secrets.toml
+.gitignore
+.pylintrc
+README.md
 
 # Folders
 testing/
 .github/
-locations-api/
+api/
+etl/
 
-# Cache
-./__pycache__
-data/__pycache__
-data/teams/__pycache__
-pages/__pycache__
+# Terraform
+terraform/
+
+# Byte-compiled / optimized / DLL files
+**/__pycache__
+*.py[cod]
+*$py.class
 
 # Environments
 .env

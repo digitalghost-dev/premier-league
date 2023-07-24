@@ -10,10 +10,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * **MINOR:** Any changes to the Streamlit dashboard that adds a new interaction/feature or removal of one.
 * **PATCH:** Any changes that fix bugs.
 
+## [3.0.0] | 2023-07-23
+
+Fully replaced [BigQuery](https://cloud.google.com/bigquery) with [PostgreSQL](https://www.postgresql.org) running on [Cloud SQL](https://cloud.google.com/sql) as the main database. This will also be used for Airflow since the default SQLite database is not recommended for production. [Firestore](https://firebase.google.com/docs/firestore/) is still being used as a document database to house `fixture` data.
+
+### Added
+* Added `st.spinner` to run when page loads to allow all tabs and data to load before a user can start navigating.
+
+### Changed
+* Changed `st.subheader` from "Standings" to "Current Standings".
+* Changed `st.table` to `st.dataframe` for showing current standings.
+* Changed `st.map` location from *Playground* to *Standings* tab.
+
+### Removed
+* Removed *Playground Tab*.
+* Removed `pages/` directory as this app will continue development as a single page.
+* Removed `style.css`, standings table is no longer stylized with CSS.
+* Removed `st.slider` as interactive Streamlit elements in dashboards with tabs seemed to currently be bugged. 
+    * Related issues: [#4996](https://github.com/streamlit/streamlit/issues/4996), [#6257](https://github.com/streamlit/streamlit/issues/6257), and [#7017](https://github.com/streamlit/streamlit/issues/7017).
+* `st.bar_chart` has also been removed due to this bug.
+
 ## [2.7.1] | 2023-07-13
 
 ### Fixed
-* **Main Page**, *Standings Page*: Fixed `iloc[X][X]` values to match the correct column to pull in correct data for the Top 5 Teams section.
+* **Main Page**, *Standings Tab*: Fixed `iloc[X][X]` values to match the correct column to pull in correct data for the Top 5 Teams section.
 
 ## [2.7.0][2.7.0] | 2023-07-12
 
@@ -210,6 +230,8 @@ Top Teams Tab
 
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
+
+[2.7.1]: https://github.com/digitalghost-dev/premier-league/commit/a18341f802c46043fa8122c517e479103c067870#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
 [2.7.0]: https://github.com/digitalghost-dev/premier-league/commit/522600c0da5c6c20dd51528794bc959c1adcd9e3#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 

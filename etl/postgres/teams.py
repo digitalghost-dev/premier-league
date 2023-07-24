@@ -196,7 +196,7 @@ def define_table_schema() -> Dict[str, type]:
         "clean_sheets": SMALLINT,
         "penalties_scored": SMALLINT, 
         "penalties_missed": SMALLINT,
-        "average_goals": DECIMAL(2,1),
+        "average_goals": SMALLINT,
         "win_streak": SMALLINT,
     }
 

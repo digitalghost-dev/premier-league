@@ -1,10 +1,13 @@
 # Premier League Data Visualization with Streamlit
 
-![builds](https://img.shields.io/github/actions/workflow/status/digitalghost-dev/premier-league/ci.yml?style=flat-square)
+![builds](https://img.shields.io/github/actions/workflow/status/digitalghost-dev/premier-league/ci.yaml?style=flat-square)
 ![version](https://img.shields.io/badge/streamlit_app_version-2.7.1-blue?style=flat-square)
 ![size](https://img.shields.io/github/repo-size/digitalghost-dev/premier-league?style=flat-square)
 ![black](https://img.shields.io/badge/code%20style-black-black?style=flat-square)
-![pyling](https://img.shields.io/badge/linting-pylint-yellowgreen?style=flat-square)
+![pylint](https://img.shields.io/badge/linting-pylint-yellowgreen?style=flat-square)
+![sbom](https://img.shields.io/badge/sbom-syft-D939AB?style=flat-square)
+![scanning](https://img.shields.io/badge/scanning-grype-4A8CFF?style=flat-square)
+![dependency-security](https://img.shields.io/badge/dependency%20security-snyk-E5E4E2?style=flat-square)
 
 ## Overview
 * Python scripts extract data from two API sources, perfom transformations, then load processed data into BigQuery and Firestore.
@@ -14,7 +17,7 @@
 
 ### Important Links
 
-* [Documentation](https://github.com/digitalghost-dev/premier-league/wiki/Premier-League-Project-Documentation)
+* [Documentation](https://digitalghost-dev.notion.site/12d644bff83f46359c3de9036d84f0b0?v=8e7efc5e047840a1adfce3c9cf1c63ba&pvs=4)
 * [Visualization](https://premierleague.streamlit.app/)
 * [Version History](https://github.com/digitalghost-dev/premier-league/blob/main/CHANGELOG.md)
 
