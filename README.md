@@ -18,7 +18,7 @@
 
 ## Important Links
 
-* [Documentation](https://digitalghost-dev.notion.site/12d644bff83f46359c3de9036d84f0b0?v=8e7efc5e047840a1adfce3c9cf1c63ba&pvs=4)
+* [Documentation](https://digitalghost-dev.notion.site/12d644bff83f46359c3de9036d84f0b0?v=8e7efc5e047840a1adfce3c9cf1c63ba&pvs=4)  - *Not up-to-date, currently a work in progress*
 * [Visualization](https://premierleague.streamlit.app/)
 * [Version History](https://github.com/digitalghost-dev/premier-league/blob/main/CHANGELOG.md)
 
