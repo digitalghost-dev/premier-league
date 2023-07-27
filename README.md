@@ -10,7 +10,7 @@
 ![dependency-security](https://img.shields.io/badge/dependency%20security-snyk-E5E4E2?style=flat-square)
 
 ## Overview
-* Airflow orchestrates Python scripts that extract data from two API sources, perfom transformations, then load processed data into a PostgreSQL database.
+* Prefect orchestrates Python scripts that extract data from two API sources, perfom transformations, then load processed data into a PostgreSQL database.
 * Cloud Scheduler triggers a Docker container to run using Cloud Run Jobs. This container also performs ETL but loads the data into Firestore.
 * The Streamlit App is containerized with Docker and hosted on Cloud Run as a Service.
 * CI/CD is implemented with GitHub Actions to push a new Streamlit App image to Artifact Registry abnd deploy to Cloud Run as a Service when `streamlit_app.py` and/or `Dockerfile` files are updated.
@@ -26,7 +26,7 @@
 
 ## ETL and CI/CD Pipelines
 ### Data Pipeline
-1. Airflow and Cloud Scheduler are the orchestration tools that trigger the ETL scripts.
+1. Prefect and Cloud Scheduler are the orchestration tools that trigger the ETL scripts.
 2. Cloud Scheduler triggers the Cloud Run Job to execute.
 3. The ETL process starts.
     * `ETL 1` calls the Football API `standings`, `teams`, and `top-scorers` endpoints and calls the `stadiums` endpoints from the Go API (`api/`); applies tranformations, creates dataframes, and defines schemas; then loads the dataframes into PostgreSQL. 
@@ -65,5 +65,5 @@
     * **Repository:** [Artifact Registry](https://cloud.google.com/artifact-registry)
     * **Scheduler:** [Cloud Scheduler](https://cloud.google.com/scheduler)
     * **Serverless Computing:** [Cloud Run](https://cloud.google.com/run/docs/overview/what-is-cloud-run)
-* **Orchestration:** [Airflow](https://airflow.apache.org/)
+* **Orchestration:** [Prefect](https://www.prefect.io)
 * **Visualization:** [Streamlit](https://streamlit.io)
