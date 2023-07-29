@@ -239,7 +239,8 @@ jobs:
           docker load --input /tmp/streamlit.tar
           docker image ls -a
           
-      - uses: anchore/sbom-action@v0
+      - name: Create and Upload SBOM
+        uses: anchore/sbom-action@v0
         with:
           image: streamlit:${{ env.VERSION_NUMBER }}
           artifact-name: streamlit-sbom-${{ env.VERSION_NUMBER }}.spdx.json
@@ -259,7 +260,8 @@ jobs:
       (needs.syft.result == 'success')
     steps:
     
-      - uses: actions/download-artifact@v3
+      - name: Download SBOM
+        uses: actions/download-artifact@v3
         with:
           name: streamlit-sbom-${{ env.VERSION_NUMBER }}.spdx.json
           
@@ -350,7 +352,10 @@ jobs:
       security-events: write
 
     steps:
-      - uses: actions/checkout@v3
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/python-3.10@master
         continue-on-error: true # To make sure that SARIF upload gets called
@@ -358,6 +363,7 @@ jobs:
           SNYK_TOKEN: ${{ env.SNYK_TOKEN }}
         with:
           args: --sarif-file-output=snyk.sarif
+
       - name: Upload result to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v2
         with:
