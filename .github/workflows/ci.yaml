@@ -20,6 +20,7 @@ on:
       - 'terraform/**'
       - 'CHANGELOG.md'
       - '.gitignore'
+      - '.prefectignore'
       - '.pylintrc'
       - 'README.md'
     branches:
@@ -207,7 +208,7 @@ jobs:
         with: 
           service: streamlit
           image: "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/streamlit:${{ env.VERSION_NUMBER }}"
-          secrets: /app/.streamlit/secrets.toml=secrets_toml:latest
+          secrets: /app/.streamlit/secrets.toml=streamlit-secret:latest
           flags: "--add-cloudsql-instances=${{ env.CLOUD_SQL_INSTANCE }}"
           
   syft:
