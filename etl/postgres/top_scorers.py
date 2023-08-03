@@ -3,23 +3,24 @@ This file pulls data from an API relating to the English Premier League
 top scoring players data and loads it into a PostgreSQL database.
 """
 
-# Standard libraries
-from typing import Dict, Optional
 import json
 import os
+from typing import Dict, Optional
 
-# Importing needed libraries.
-from google.cloud import secretmanager
-from sqlalchemy import create_engine
-from sqlalchemy.types import *
-from pandas import DataFrame
 import pandas as pd
-import requests
+import requests  # type: ignore
+from google.cloud import secretmanager
+from pandas import DataFrame
+from sqlalchemy import create_engine  # type: ignore
+from sqlalchemy.types import SMALLINT, String  # type: ignore
 
 # Settings the project environment.
 os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
 
-def gcp_secret_rapid_api():
+
+def gcp_secret_rapid_api() -> str:
+    """This function retrieves the Rapid API key from GCP Secret Manager."""
+
     client = secretmanager.SecretManagerServiceClient()
     name = "projects/463690670206/secrets/rapid-api/versions/1"
     response = client.access_secret_version(request={"name": name})
@@ -27,7 +28,10 @@ def gcp_secret_rapid_api():
 
     return rapid_api_key
 
-def gcp_secret_database_uri():
+
+def gcp_secret_database_uri() -> str:
+    """This function retrieves the database URI from GCP Secret Manager."""
+
     client = secretmanager.SecretManagerServiceClient()
     name = "projects/463690670206/secrets/premier-league-database-connection-uri/versions/2"
     response = client.access_secret_version(request={"name": name})
@@ -36,7 +40,9 @@ def gcp_secret_database_uri():
     return database_uri
 
 
-def call_api():
+def call_api() -> (
+    tuple[list[str], list[int], list[str], list[int], list[str], list[str]]
+):
     """Calling the API then filling in the empty lists"""
 
     rapid_api_key = gcp_secret_rapid_api()
@@ -123,7 +129,7 @@ def call_api():
     )
 
 
-def create_dataframe():
+def create_dataframe() -> DataFrame:
     """This function creates a datafreame from lists created in the last function: call_api()"""
 
     (
@@ -154,24 +160,27 @@ def create_dataframe():
 
 
 def define_table_schema() -> Dict[str, type]:
+    """This function defines the table schema for the PostgreSQL table."""
+
     schema_definition = {
-        "name": String(64),    
+        "name": String(64),
         "goals": SMALLINT,
         "team": String(64),
         "assists": SMALLINT,
         "nationality": String(64),
-        "photo": String(256)
+        "photo": String(256),
     }
 
     return schema_definition
 
+
 def send_dataframe_to_postgresql(
-        database_uri: str, 
-        schema_name: str, 
-        table_name: str,
-        df: DataFrame, 
-        schema_definition: Optional[Dict[str, type]] = None
-    ):
+    database_uri: str,
+    schema_name: str,
+    table_name: str,
+    df: DataFrame,
+    schema_definition: Optional[Dict[str, type]] = None,
+):
     """Sending dataframe to PostgreSQL.
 
     Args:
@@ -198,15 +207,21 @@ def send_dataframe_to_postgresql(
         raise ValueError("schema_definition must be a dictionary.")
 
     engine = create_engine(database_uri)
-    df.to_sql(table_name, con=engine, schema=schema_name, if_exists="replace", index=False, dtype=schema_definition)
+    df.to_sql(
+        table_name,
+        con=engine,
+        schema=schema_name,
+        if_exists="replace",
+        index=False,
+        dtype=schema_definition,
+    )
 
 
 if __name__ == "__main__":
-    database_uri = gcp_secret_database_uri()
-    schema_name = "premier-league-schema"
-    table_name = "top_scorers"
-    df = create_dataframe()
-    schema_definition = define_table_schema()
+    uri = gcp_secret_database_uri()
+    schema = "premier-league-schema"
+    table = "top_scorers"
+    dataframe = create_dataframe()
 
-    send_dataframe_to_postgresql(database_uri, schema_name, table_name, df)
-    print(f"Data loaded into {table_name}!")
+    send_dataframe_to_postgresql(uri, schema, table, dataframe)
+    print(f"Data loaded into {table}!")
