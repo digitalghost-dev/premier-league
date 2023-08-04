@@ -21,14 +21,15 @@ on:
       - 'CHANGELOG.md'
       - '.gitignore'
       - '.prefectignore'
-      - '.pylintrc'
+      - '.pre-commit-config.yaml'
+      - 'pyproject.toml'
       - 'README.md'
     branches:
       - "main"
         
 env:
   GAR_LOCATION: us-central1
-  VERSION_NUMBER: '3.0.0'
+  VERSION_NUMBER: '3.1.0'
   CLOUD_BUCKET: ${{ secrets.CLOUD_BUCKET }}
   CLOUD_SQL_INSTANCE: ${{ secrets.CLOUD_SQL_INSTANCE }}
   EMAIL: ${{ secrets.EMAIL }}
