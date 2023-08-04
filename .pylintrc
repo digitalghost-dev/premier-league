@@ -1,9 +1,0 @@
-[MESSAGES CONTROL]
-
-disable=C0103, E0401, W0212, R0914
-
-# C0103: Argument name "x" doesn't conform to snake_case naming style (invalid-name)
-# C0116: Missing function or method docstring (missing-function-docstring)
-# E0401: Unable to import 'numpy' (import-error)
-# W0212: Access to a protected member _apps of a client class (protected-access)
-# R0914: Too many local variables (16/15) (too-many-locals)
