@@ -1,13 +1,27 @@
 # Premier League Data Pipeline & Visualization with Streamlit
 
-![builds](https://img.shields.io/github/actions/workflow/status/digitalghost-dev/premier-league/ci.yaml?style=flat-square)
-![version](https://img.shields.io/badge/streamlit_app_version-3.0.0-blue?style=flat-square)
-![size](https://img.shields.io/github/repo-size/digitalghost-dev/premier-league?style=flat-square)
-![black](https://img.shields.io/badge/code%20style-black-black?style=flat-square)
-![pylint](https://img.shields.io/badge/linting-pylint-yellowgreen?style=flat-square)
-![sbom](https://img.shields.io/badge/sbom-syft-D939AB?style=flat-square)
-![scanning](https://img.shields.io/badge/scanning-grype-4A8CFF?style=flat-square)
-![dependency-security](https://img.shields.io/badge/dependency%20security-snyk-E5E4E2?style=flat-square)
+![version](https://img.shields.io/badge/Streamlit_App_Version-3.1.0-FF4B4B?style=flat-square&logo=streamlit)
+![size](https://img.shields.io/github/repo-size/digitalghost-dev/premier-league?style=flat-square&label=Repo%20Size&color=DEA584)
+
+### CI/CD
+![builds](https://img.shields.io/github/actions/workflow/status/digitalghost-dev/premier-league/ci.yaml?style=flat-square&logo=github&label=CI%2FCD)
+![pre-commit](https://img.shields.io/badge/Validation-pre--commit-FAB040?style=flat-square&logo=pre-commit)
+![black](https://img.shields.io/badge/Code_Style-black-black?style=flat-square)
+![ruff](https://img.shields.io/badge/Linter-ruff-FCC21B?style=flat-square&logo=ruff)
+![syft](https://img.shields.io/badge/SBOM-syft-D939AB?style=flat-square)
+![grype](https://img.shields.io/badge/Image_Scanning-grype-4A8CFF?style=flat-square)
+![snyk](https://img.shields.io/badge/Dependency_Security-snyk-E5E4E2?style=flat-square&logo=Snyk)
+![bandit](https://img.shields.io/badge/Code_Security-bandit-yellow?style=flat-square)
+
+### Infrastructure
+![cloud](https://img.shields.io/badge/Cloud-GCP-4285F4?style=flat-square&logo=google-cloud)
+![terraform](https://img.shields.io/badge/IaC-Terraform-5C4EE5?style=flat-square&logo=terraform)
+![docker](https://img.shields.io/badge/Containers-Docker-2496ED?style=flat-square&logo=docker)
+![prefect](https://img.shields.io/badge/Orchestration-Prefect-024DFD?style=flat-square&logo=prefect)
+
+### Databases
+![postgres](https://img.shields.io/badge/RDMS-PostgreSQL-336791?style=flat-square&labelColor=white&logo=postgresql)
+![firestore](https://img.shields.io/badge/NoSQL-Firestore-FFA611?style=flat-square&logo=firebase)
 
 ## Overview
 * Prefect orchestrates Python scripts that extract data from two API sources, perfom transformations, then load processed data into a PostgreSQL database.

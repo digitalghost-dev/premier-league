@@ -1,22 +1,21 @@
 # System libraries
-import os
 import time
 from datetime import datetime
 
+# Google Cloud Libraries
+import firebase_admin  # type: ignore
+
 # Data libraries
 import pandas as pd
+import plotly.express as px  # type: ignore
 import psycopg2
 
 # Visualization Libraries
 import streamlit as st
-import plotly.express as px
-import plotly.graph_objects as go
 import streamlit.components.v1 as components
-
-# Google Cloud Libraries
-import firebase_admin
-from firebase_admin import firestore
-from google.oauth2 import service_account
+from firebase_admin import firestore  # type: ignore
+from google.oauth2 import service_account  # type: ignore
+from streamlit.delta_generator import DeltaGenerator
 
 st.set_page_config(page_title="Overview", layout="wide")
 
@@ -179,8 +178,24 @@ def streamlit_app():
 
     logo = st.secrets["elements"]["logo_image"]
 
-    # Premier League logo.
+    # Function to create the social media section.
+    def social_media():
+        st.divider()
+        st.subheader("Social")
+
+        components.html(
+            """
+            <script src="https://kit.fontawesome.com/84587c6ecd.js" crossorigin="anonymous"></script>
+            <div style="display: flex; flex-direction: row;">
+                <a target="_blank" rel="noopener noreferrer" href="https://github.com/digitalghost-dev/"><i class='fa-brands fa-github fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
+                <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/christian-sanchez-nv/"><i class='fa-brands fa-linkedin fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
+                <a target="_blank" rel="noopener noreferrer" href="https://medium.com/@digitialghost-dev"><i class='fa-brands fa-medium fa-2x fa-fade' style='color: #000000;'></i></a>
+            </div>
+            """
+        )
+
     col1, col = st.columns((2, 4))
+    # Premier League logo.
     with st.container():
         col1.image(logo)
 
@@ -190,8 +205,24 @@ def streamlit_app():
         col1.title("Premier League Statistics / 2023-24")
 
         # Get the current date
+        def get_suffix(day):
+            if 10 < day % 100 < 20:
+                suffix = "th"
+            else:
+                suffix = {1: "st", 2: "nd", 3: "rd"}.get(day % 10, "th")
+            return suffix
+
         current_date = datetime.now()
-        formatted_date = current_date.strftime("%B %dth, %Y")
+        day = current_date.day
+        suffix = get_suffix(day)
+        formatted_day = str(day).lstrip("0")
+        formatted_date = (
+            current_date.strftime("%B ")
+            + formatted_day
+            + suffix
+            + current_date.strftime(", %Y")
+        )
+
         st.write(f"{formatted_date}")
 
     with st.spinner("Creating Connections and Loading Data..."):
@@ -326,51 +357,53 @@ def streamlit_app():
                     key="win_streak",
                 )
 
-            st.subheader("Current Standings")
+            # Function to create the standings table (dataframe).
+            def standings_table() -> DeltaGenerator:
+                st.subheader("Current Standings")
 
-            st.dataframe(standings_df, hide_index=True, use_container_width=True)
+                standings_table = st.dataframe(
+                    standings_df, hide_index=True, use_container_width=True
+                )
 
-            # Map of stadiums.
-            st.subheader("Location of Stadiums")
+                return standings_table
 
-            mapbox_access_token = st.secrets["mapbox"]["mapbox_key"]
+            standings_table()
 
-            px.set_mapbox_access_token(mapbox_access_token)
+            # Function to create the map of stadiums.
+            def stadiums_map() -> DeltaGenerator:
+                st.subheader("Location of Stadiums")
 
-            stadium_map = px.scatter_mapbox(
-                stadiums_df,
-                lat="Latitude",
-                lon="Longitude",
-                hover_name="Stadium",
-                hover_data="Team",
-            )
+                mapbox_access_token = st.secrets["mapbox"]["mapbox_key"]
 
-            stadium_map.update_layout(
-                mapbox_style="light",
-                margin={"r": 0, "t": 0, "l": 0, "b": 0},
-                mapbox_bounds={"west": -17, "east": 17, "south": 45, "north": 60},
-            )
+                px.set_mapbox_access_token(mapbox_access_token)
 
-            stadium_map.update_traces(marker=dict(size=8), marker_color="indigo")
+                stadium_map = px.scatter_mapbox(
+                    stadiums_df,
+                    lat="Latitude",
+                    lon="Longitude",
+                    hover_name="Stadium",
+                    hover_data="Team",
+                )
 
-            stadium_map.update_mapboxes(zoom=4)
+                stadium_map.update_layout(
+                    mapbox_style="light",
+                    margin={"r": 0, "t": 0, "l": 0, "b": 0},
+                    mapbox_bounds={"west": -17, "east": 17, "south": 45, "north": 60},
+                )
 
-            st.plotly_chart(stadium_map, height=1000, use_container_width=True)
+                stadium_map.update_traces(marker=dict(size=8), marker_color="indigo")
 
-            # Social media icons section.
-            st.divider()
-            st.subheader("Social")
+                stadium_map.update_mapboxes(zoom=4)
 
-            components.html(
-                """
-                <script src="https://kit.fontawesome.com/84587c6ecd.js" crossorigin="anonymous"></script>
-                <div style="display: flex; flex-direction: row;">
-                    <a target="_blank" rel="noopener noreferrer" href="https://github.com/digitalghost-dev/"><i class='fa-brands fa-github fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
-                    <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/christian-sanchez-nv/"><i class='fa-brands fa-linkedin fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
-                    <a target="_blank" rel="noopener noreferrer" href="https://medium.com/@digitialghost-dev"><i class='fa-brands fa-medium fa-2x fa-fade' style='color: #000000;'></i></a>
-                </div>
-                """
-            )
+                map_plotly_chart = st.plotly_chart(
+                    stadium_map, height=1000, use_container_width=True
+                )
+
+                return map_plotly_chart
+
+            stadiums_map()
+
+            social_media()
 
         # --------- Statistics Tab ---------
         with tab2:
@@ -378,121 +411,66 @@ def streamlit_app():
 
             col1, col2, col3, col4, col5 = st.columns(5)
 
+            # First top team.
             with col1:
-                # First top team.
-                # st.markdown(f"![Image]({(teams_df.iloc[0][0])})")
-                st.markdown(
+                markdown_list = [
                     f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(teams_df.iloc[0][0])}'/>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center; padding-top: 0.8rem;'><b>1st / Form (Last 5):</b> {((teams_df.iloc[0][1])[-5:])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Clean Sheets:</b> {(teams_df.iloc[0][3])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Penalties Scored:</b> {(teams_df.iloc[0][4])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Penalties Missed:</b> {(teams_df.iloc[0][5])}</p>",
-                    unsafe_allow_html=True,
-                )
+                ]
+
+                for item in markdown_list:
+                    st.markdown(item, unsafe_allow_html=True)
 
             with col2:
-                # Second top team.
-                st.markdown(
+                markdown_list = [
                     f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(teams_df.iloc[1][0])}'/>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
-                    f"<p style='text-align: center; padding-top: 0.8rem;'><b>2nd / Form (Last 5):</b> {((teams_df.iloc[1][1])[-5:])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
+                    f"<p style='text-align: center; padding-top: 0.8rem;'><b>1st / Form (Last 5):</b> {((teams_df.iloc[1][1])[-5:])}</p>",
                     f"<p style='text-align: center;'><b>Clean Sheets:</b> {(teams_df.iloc[1][3])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Penalties Scored:</b> {(teams_df.iloc[1][4])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Penalties Missed:</b> {(teams_df.iloc[1][5])}</p>",
-                    unsafe_allow_html=True,
-                )
+                ]
+
+                for item in markdown_list:
+                    st.markdown(item, unsafe_allow_html=True)
 
             with col3:
-                # Third top team.
-                st.markdown(
+                markdown_list = [
                     f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(teams_df.iloc[2][0])}'/>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
-                    f"<p style='text-align: center; padding-top: 0.8rem;'><b>3rd / Form (Last 5):</b> {((teams_df.iloc[2][1])[-5:])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
-                    f"<p style='text-align: center;'><b>lean Sheets:</b> {(teams_df.iloc[2][3])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
+                    f"<p style='text-align: center; padding-top: 0.8rem;'><b>1st / Form (Last 5):</b> {((teams_df.iloc[2][1])[-5:])}</p>",
+                    f"<p style='text-align: center;'><b>Clean Sheets:</b> {(teams_df.iloc[2][3])}</p>",
                     f"<p style='text-align: center;'><b>Penalties Scored:</b> {(teams_df.iloc[2][4])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Penalties Missed:</b> {(teams_df.iloc[2][5])}</p>",
-                    unsafe_allow_html=True,
-                )
+                ]
+
+                for item in markdown_list:
+                    st.markdown(item, unsafe_allow_html=True)
 
             with col4:
-                # Fourth top team.
-                st.markdown(
+                markdown_list = [
                     f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(teams_df.iloc[3][0])}'/>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
-                    f"<p style='text-align: center; padding-top: 0.8rem;'><b>4th / Form (Last 5):</b> {((teams_df.iloc[3][1])[-5:])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
-                    f"<p style='text-align: center;'><b>lean Sheets:</b> {(teams_df.iloc[3][3])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
+                    f"<p style='text-align: center; padding-top: 0.8rem;'><b>1st / Form (Last 5):</b> {((teams_df.iloc[3][1])[-5:])}</p>",
+                    f"<p style='text-align: center;'><b>Clean Sheets:</b> {(teams_df.iloc[3][3])}</p>",
                     f"<p style='text-align: center;'><b>Penalties Scored:</b> {(teams_df.iloc[3][4])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Penalties Missed:</b> {(teams_df.iloc[3][5])}</p>",
-                    unsafe_allow_html=True,
-                )
+                ]
+
+                for item in markdown_list:
+                    st.markdown(item, unsafe_allow_html=True)
 
             with col5:
-                # Fifth top team.
-                st.markdown(
+                markdown_list = [
                     f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(teams_df.iloc[4][0])}'/>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
-                    f"<p style='text-align: center; padding-top: 0.8rem;'><b>5th / Form (Last 5):</b> {((teams_df.iloc[4][1])[-5:])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
+                    f"<p style='text-align: center; padding-top: 0.8rem;'><b>1st / Form (Last 5):</b> {((teams_df.iloc[4][1])[-5:])}</p>",
                     f"<p style='text-align: center;'><b>Clean Sheets:</b> {(teams_df.iloc[4][3])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Penalties Scored:</b> {(teams_df.iloc[4][4])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Penalties Missed:</b> {(teams_df.iloc[4][5])}</p>",
-                    unsafe_allow_html=True,
-                )
+                ]
+
+                for item in markdown_list:
+                    st.markdown(item, unsafe_allow_html=True)
 
             team_forms = [[], [], [], [], []]
 
@@ -551,138 +529,73 @@ def streamlit_app():
 
             with col1:
                 # First top scorer.
-                st.markdown(
+                markdown_list = [
                     f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(top_scorers_df.iloc[0][5])}'/>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center; padding-top: 0.8rem;'><b>{(top_scorers_df.iloc[0][0])}</b></p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Goals:</b> {(top_scorers_df.iloc[0][1])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Assists:</b> {(top_scorers_df.iloc[0][3])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Team:</b> {(top_scorers_df.iloc[0][2])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Nationality:</b> {(top_scorers_df.iloc[0][4])}</p>",
-                    unsafe_allow_html=True,
-                )
+                ]
+
+                for item in markdown_list:
+                    st.markdown(item, unsafe_allow_html=True)
 
             with col2:
                 # Second top scorer.
-                st.markdown(
+                markdown_list = [
                     f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(top_scorers_df.iloc[1][5])}'/>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center; padding-top: 0.8rem;'><b>{(top_scorers_df.iloc[1][0])}</b></p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Goals:</b> {(top_scorers_df.iloc[1][1])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Assists:</b> {(top_scorers_df.iloc[1][3])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Team:</b> {(top_scorers_df.iloc[1][2])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Nationality:</b> {(top_scorers_df.iloc[1][4])}</p>",
-                    unsafe_allow_html=True,
-                )
+                ]
+
+                for item in markdown_list:
+                    st.markdown(item, unsafe_allow_html=True)
 
             with col3:
                 # Third top scorer.
-                st.markdown(
+                markdown_list = [
                     f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(top_scorers_df.iloc[2][5])}'/>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center; padding-top: 0.8rem;'><b>{(top_scorers_df.iloc[2][0])}</b></p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Goals:</b> {(top_scorers_df.iloc[2][1])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Assists:</b> {(top_scorers_df.iloc[2][3])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Team:</b> {(top_scorers_df.iloc[2][2])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Nationality:</b> {(top_scorers_df.iloc[2][4])}</p>",
-                    unsafe_allow_html=True,
-                )
+                ]
+
+                for item in markdown_list:
+                    st.markdown(item, unsafe_allow_html=True)
 
             with col4:
                 # Fourth top scorer.
-                st.markdown(
+                markdown_list = [
                     f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(top_scorers_df.iloc[3][5])}'/>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center; padding-top: 0.8rem;'><b>{(top_scorers_df.iloc[3][0])}</b></p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Goals:</b> {(top_scorers_df.iloc[3][1])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Assists:</b> {(top_scorers_df.iloc[3][3])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Team:</b> {(top_scorers_df.iloc[3][2])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Nationality:</b> {(top_scorers_df.iloc[3][4])}</p>",
-                    unsafe_allow_html=True,
-                )
+                ]
+
+                for item in markdown_list:
+                    st.markdown(item, unsafe_allow_html=True)
 
             with col5:
                 # Fifth top scorer.
-                st.markdown(
+                markdown_list = [
                     f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(top_scorers_df.iloc[4][5])}'/>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center; padding-top: 0.8rem;'><b>{(top_scorers_df.iloc[4][0])}</b></p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Goals:</b> {(top_scorers_df.iloc[4][1])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Assists:</b> {(top_scorers_df.iloc[4][3])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Team:</b> {(top_scorers_df.iloc[4][2])}</p>",
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
                     f"<p style='text-align: center;'><b>Nationality:</b> {(top_scorers_df.iloc[4][4])}</p>",
-                    unsafe_allow_html=True,
-                )
+                ]
+
+                for item in markdown_list:
+                    st.markdown(item, unsafe_allow_html=True)
 
             with st.container():
                 st.subheader("")
@@ -691,159 +604,72 @@ def streamlit_app():
                 col1, col2, col3, col4, col5 = st.columns(5)
 
                 with col1:
-                    st.markdown(
+                    markdown_list = [
                         f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[5][0])}'/>",
-                        unsafe_allow_html=True,
-                    )
-                    st.markdown(
                         f"<p style='text-align: center; padding-top: 0.8rem;'>6th / {((teams_df.iloc[5][1])[-5:])}</p>",
-                        unsafe_allow_html=True,
-                    )
-
-                    st.markdown(
                         f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[10][0])}'/>",
-                        unsafe_allow_html=True,
-                    )
-                    st.markdown(
                         f"<p style='text-align: center; padding-top: 0.8rem;'>11th / {((teams_df.iloc[10][1])[-5:])}</p>",
-                        unsafe_allow_html=True,
-                    )
-
-                    st.markdown(
                         f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[15][0])}'/>",
-                        unsafe_allow_html=True,
-                    )
-                    st.markdown(
                         f"<p style='text-align: center; padding-top: 0.8rem;'>16th / {((teams_df.iloc[15][1])[-5:])}</p>",
-                        unsafe_allow_html=True,
-                    )
+                    ]
+
+                    for item in markdown_list:
+                        st.markdown(item, unsafe_allow_html=True)
 
                 with col2:
-                    st.markdown(
+                    markdown_list = [
                         f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[6][0])}'/>",
-                        unsafe_allow_html=True,
-                    )
-                    st.markdown(
                         f"<p style='text-align: center; padding-top: 0.8rem;'>7th / {((teams_df.iloc[6][1])[-5:])}</p>",
-                        unsafe_allow_html=True,
-                    )
-
-                    st.markdown(
                         f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[11][0])}'/>",
-                        unsafe_allow_html=True,
-                    )
-                    st.markdown(
                         f"<p style='text-align: center; padding-top: 0.8rem;'>12th / {((teams_df.iloc[11][1])[-5:])}</p>",
-                        unsafe_allow_html=True,
-                    )
-
-                    st.markdown(
                         f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[16][0])}'/>",
-                        unsafe_allow_html=True,
-                    )
-                    st.markdown(
                         f"<p style='text-align: center; padding-top: 0.8rem;'>17th / {((teams_df.iloc[16][1])[-5:])}</p>",
-                        unsafe_allow_html=True,
-                    )
+                    ]
+
+                    for item in markdown_list:
+                        st.markdown(item, unsafe_allow_html=True)
 
                 with col3:
-                    st.markdown(
+                    markdown_list = [
                         f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[7][0])}'/>",
-                        unsafe_allow_html=True,
-                    )
-                    st.markdown(
                         f"<p style='text-align: center; padding-top: 0.8rem;'>8th / {((teams_df.iloc[7][1])[-5:])}</p>",
-                        unsafe_allow_html=True,
-                    )
-
-                    st.markdown(
                         f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[12][0])}'/>",
-                        unsafe_allow_html=True,
-                    )
-                    st.markdown(
                         f"<p style='text-align: center; padding-top: 0.8rem;'>13th / {((teams_df.iloc[12][1])[-5:])}</p>",
-                        unsafe_allow_html=True,
-                    )
-
-                    st.markdown(
                         f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[17][0])}'/>",
-                        unsafe_allow_html=True,
-                    )
-                    st.markdown(
                         f"<p style='text-align: center; padding-top: 0.8rem;'>18th / {((teams_df.iloc[17][1])[-5:])}</p>",
-                        unsafe_allow_html=True,
-                    )
+                    ]
+
+                    for item in markdown_list:
+                        st.markdown(item, unsafe_allow_html=True)
 
                 with col4:
-                    st.markdown(
+                    markdown_list = [
                         f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[8][0])}'/>",
-                        unsafe_allow_html=True,
-                    )
-                    st.markdown(
                         f"<p style='text-align: center; padding-top: 0.8rem;'>9th / {((teams_df.iloc[8][1])[-5:])}</p>",
-                        unsafe_allow_html=True,
-                    )
-
-                    st.markdown(
                         f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[13][0])}'/>",
-                        unsafe_allow_html=True,
-                    )
-                    st.markdown(
                         f"<p style='text-align: center; padding-top: 0.8rem;'>14th / {((teams_df.iloc[13][1])[-5:])}</p>",
-                        unsafe_allow_html=True,
-                    )
-
-                    st.markdown(
                         f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[18][0])}'/>",
-                        unsafe_allow_html=True,
-                    )
-                    st.markdown(
                         f"<p style='text-align: center; padding-top: 0.8rem;'>19th / {((teams_df.iloc[18][1])[-5:])}</p>",
-                        unsafe_allow_html=True,
-                    )
+                    ]
+
+                    for item in markdown_list:
+                        st.markdown(item, unsafe_allow_html=True)
 
                 with col5:
-                    st.markdown(
+                    markdown_list = [
                         f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[9][0])}'/>",
-                        unsafe_allow_html=True,
-                    )
-                    st.markdown(
                         f"<p style='text-align: center; padding-top: 0.8rem;'>10th / {((teams_df.iloc[9][1])[-5:])}</p>",
-                        unsafe_allow_html=True,
-                    )
-
-                    st.markdown(
                         f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[14][0])}'/>",
-                        unsafe_allow_html=True,
-                    )
-                    st.markdown(
                         f"<p style='text-align: center; padding-top: 0.8rem;'>15th / {((teams_df.iloc[14][1])[-5:])}</p>",
-                        unsafe_allow_html=True,
-                    )
-
-                    st.markdown(
                         f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[19][0])}'/>",
-                        unsafe_allow_html=True,
-                    )
-                    st.markdown(
                         f"<p style='text-align: center; padding-top: 0.8rem;'>20th / {((teams_df.iloc[19][1])[-5:])}</p>",
-                        unsafe_allow_html=True,
-                    )
+                    ]
+
+                    for item in markdown_list:
+                        st.markdown(item, unsafe_allow_html=True)
 
             # Social media icons section.
-            st.divider()
-            st.subheader("Social")
-
-            components.html(
-                """
-                <script src="https://kit.fontawesome.com/84587c6ecd.js" crossorigin="anonymous"></script>
-                <div style="display: flex; flex-direction: row;">
-                    <a target="_blank" rel="noopener noreferrer" href="https://github.com/digitalghost-dev/"><i class='fa-brands fa-github fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
-                    <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/christian-sanchez-nv/"><i class='fa-brands fa-linkedin fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
-                    <a target="_blank" rel="noopener noreferrer" href="https://medium.com/@digitialghost-dev"><i class='fa-brands fa-medium fa-2x fa-fade' style='color: #000000;'></i></a>
-                </div>
-                """
-            )
+            social_media()
 
         # --------- Fixtures Tab ---------
         with tab3:
@@ -1012,19 +838,8 @@ def streamlit_app():
                 round_count -= 1
 
             # Social media icons section.
-            st.divider()
-            st.subheader("Social")
-
-            components.html(
-                """
-                <script src="https://kit.fontawesome.com/84587c6ecd.js" crossorigin="anonymous"></script>
-                <div style="display: flex; flex-direction: row;">
-                    <a target="_blank" rel="noopener noreferrer" href="https://github.com/digitalghost-dev/"><i class='fa-brands fa-github fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
-                    <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/christian-sanchez-nv/"><i class='fa-brands fa-linkedin fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
-                    <a target="_blank" rel="noopener noreferrer" href="https://medium.com/@digitialghost-dev"><i class='fa-brands fa-medium fa-2x fa-fade' style='color: #000000;'></i></a>
-                </div>
-                """
-            )
+            social_media()
 
 
-streamlit_app()
+if __name__ == "__main__":
+    streamlit_app()

@@ -10,9 +10,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * **MINOR:** Any changes to the Streamlit dashboard that adds a new interaction/feature or removal of one.
 * **PATCH:** Any changes that fix bugs.
 
-## [3.0.0] | 2023-07-23
+## [3.1.0] | 2023-08-04
 
-Fully replaced [BigQuery](https://cloud.google.com/bigquery) with [PostgreSQL](https://www.postgresql.org) running on [Cloud SQL](https://cloud.google.com/sql) as the main database. This will also be used for Airflow since the default SQLite database is not recommended for production. [Firestore](https://firebase.google.com/docs/firestore/) is still being used as a document database to house `fixture` data.
+### Changed
+* Changed the Social Media section to exist inside a function: `social_media()` and be called later in each tab.
+* Changed the standings table code to exist inside a function: `standings_table()`.
+* Changed the map code to exist inside a function: `stadiums_map()`.
+* Changed the format of writing out the Top 5 Teams, Top 5 Scorers, and Forms for the Rest of the League sections to use a `for` loop instead of writing out each section individually.
+
+### Added
+* Added type annotations to `standings_table()` function to return `DeltaGenerator`.
+* Added type annotations to `stadiums_map()` function to return `DeltaGenerator`.
+
+### Fixed
+* Fixed the date to correctly display the suffix of the number *(i.e. 1st, 2nd, 3rd, etc.)* and to remove leading zeroes for single digit dates.
+
+### Removed
+* Removed `import os` and `import plotly.graph_objects as go` as they are no longer needed.
+
+---
+
+## [3.0.0][3.0.0] | 2023-07-23
+
+Fully replaced [BigQuery](https://cloud.google.com/bigquery) with [PostgreSQL](https://www.postgresql.org) running on [Cloud SQL](https://cloud.google.com/sql) as the main database. [Firestore](https://firebase.google.com/docs/firestore/) is still being used as a NoSQL document database to house `fixture` data.
 
 ### Added
 * Added `st.spinner` to run when page loads to allow all tabs and data to load before a user can start navigating.
@@ -30,10 +50,14 @@ Fully replaced [BigQuery](https://cloud.google.com/bigquery) with [PostgreSQL](h
     * Related issues: [#4996](https://github.com/streamlit/streamlit/issues/4996), [#6257](https://github.com/streamlit/streamlit/issues/6257), and [#7017](https://github.com/streamlit/streamlit/issues/7017).
 * `st.bar_chart` has also been removed due to this bug.
 
+---
+
 ## [2.7.1] | 2023-07-13
 
 ### Fixed
 * **Main Page**, *Standings Tab*: Fixed `iloc[X][X]` values to match the correct column to pull in correct data for the Top 5 Teams section.
+
+---
 
 ## [2.7.0][2.7.0] | 2023-07-12
 
@@ -41,7 +65,9 @@ Fully replaced [BigQuery](https://cloud.google.com/bigquery) with [PostgreSQL](h
 * **Main Page**, *Standings Tab*: Added 3 `st.column_config.ProgressColumn` cards to display rankings of teams with the highest `penalties_scored`, `average_goals`, and `win_streak` during the season.
 
 ### **Changed** 
-* **Main Pages**, *Standings Tab*: Changed the data values for `label` and `value` for the `st.metric` card. 
+* **Main Pages**, *Standings Tab*: Changed the data values for `label` and `value` for the `st.metric` card.
+
+---
 
 ## [2.6.0][2.6.0] | 2023-06-28
 
@@ -57,7 +83,6 @@ Fully replaced [BigQuery](https://cloud.google.com/bigquery) with [PostgreSQL](h
 ### **Removed**
 * **Main Page**, *Fixtures Tab*: Removed extra comma from `fixtures` date.
 
- 
 ---
 
 ## [2.5.0][2.5.0] | 2023-06-19
@@ -65,11 +90,11 @@ Fully replaced [BigQuery](https://cloud.google.com/bigquery) with [PostgreSQL](h
 ### **Added**
 * Added a new page: **Playground**, that holds graphs with slicers, filters, and other sortable features that allows the end user view statitics in a custom way.
 * Added `Recent_Form` to `standings` table as a new column.
-* Added string to display current date on `Standings` tab.
+* Added string to display current date on **Standings** tab.
 
 ### **Changed**
-* Changed page title from `Overivew` to `Premier League - Statistics, Scores & More`.
-* Changed `Overview` tab name to `Standings`.
+* Changed page title from **Overivew** to **Premier League - Statistics, Scores & More**.
+* Changed **Overview** tab name to **Standings**.
 
 ### **Removed**
 * Removed map of stadium locations from **Main** page; moved it to the new **Playground** page.
@@ -104,7 +129,7 @@ Fully replaced [BigQuery](https://cloud.google.com/bigquery) with [PostgreSQL](h
 * Added linked icons to social media pages.
 
 ### **Changed**
-* Changed tab title from `Top Teams & Top Scorers` to `Statistics`.
+* Changed tab title from **Top Teams & Top Scorers** to **Statistics**.
 
 ---
 
@@ -164,11 +189,11 @@ Now using [Firestore](https://firebase.google.com/docs/firestore/) to store fixt
 ### **Added**
 
 * Added page title.
-* Added position number to teams in `Forms for the Rest of the League` section.
+* Added position number to teams in **Forms for the Rest of the League** section.
 
 ### **Fixed**
 
-* Fixing capitalization for `Forms for the Rest of the League` subheader.
+* Fixing capitalization for **Forms for the Rest of the League** subheader.
 
 ### **Removed**
 
@@ -230,6 +255,8 @@ Top Teams Tab
 
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
+
+[3.0.0]: https://github.com/digitalghost-dev/premier-league/commit/7c16ff428d5d1a40ff0b2f3f0d21e2c7a1e38cdd#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
 [2.7.1]: https://github.com/digitalghost-dev/premier-league/commit/a18341f802c46043fa8122c517e479103c067870#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
