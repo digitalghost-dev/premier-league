@@ -1,19 +1,21 @@
 """
-This file pulls data from an API relating to the English Premier League teams data and loads it into a PostgreSQL database.
+This file pulls data from an API relating to the English Premier League
+teams data and loads it into a PostgreSQL database.
 """
+
+import os
 
 # Standard libraries
 from typing import Dict, Optional
-import json
-import os
+
+import pandas as pd
+import requests  # type: ignore
 
 # Importing needed libraries.
 from google.cloud import secretmanager
-from sqlalchemy import create_engine, text
-from sqlalchemy.types import *
 from pandas import DataFrame
-import pandas as pd
-import requests
+from sqlalchemy import create_engine  # type: ignore
+from sqlalchemy.types import SMALLINT, String  # type: ignore
 
 # Settings the project environment.
 os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
@@ -23,6 +25,7 @@ schema = "premier-league-schema"
 standings_table = "standings"
 teams_table = "teams"
 
+
 def gcp_secret_rapid_api():
     client = secretmanager.SecretManagerServiceClient()
     name = "projects/463690670206/secrets/rapid-api/versions/1"
@@ -30,6 +33,7 @@ def gcp_secret_rapid_api():
     rapid_api_key = response.payload.data.decode("UTF-8")
 
     return rapid_api_key
+
 
 def gcp_secret_database_uri():
     client = secretmanager.SecretManagerServiceClient()
@@ -47,15 +51,15 @@ def postgres_call():
     sqlcon = create_engine(database_uri)
 
     # SQL query
-    query_string = (f"""
+    query_string = f"""
         SELECT team_id, rank
         FROM "{schema}"."{standings_table}"
         ORDER BY Rank
         """
-    )
 
-    standings_df = pd.read_sql(text(query_string), sqlcon)
+    standings_df = pd.read_sql(query_string, sqlcon)
     return standings_df
+
 
 def call_api():
     """Calling the API then filling in the empty lists"""
@@ -189,12 +193,12 @@ def create_dataframe():
 
 def define_table_schema() -> Dict[str, type]:
     schema_definition = {
-        "team_id": SMALLINT,    
+        "team_id": SMALLINT,
         "team": String(64),
         "logo": String(256),
         "form": String(24),
         "clean_sheets": SMALLINT,
-        "penalties_scored": SMALLINT, 
+        "penalties_scored": SMALLINT,
         "penalties_missed": SMALLINT,
         "average_goals": SMALLINT,
         "win_streak": SMALLINT,
@@ -202,13 +206,14 @@ def define_table_schema() -> Dict[str, type]:
 
     return schema_definition
 
+
 def send_dataframe_to_postgresql(
-        database_uri: str, 
-        schema_name: str, 
-        table_name: str,
-        df: DataFrame, 
-        schema_definition: Optional[Dict[str, type]] = None
-    ):
+    database_uri: str,
+    schema_name: str,
+    table_name: str,
+    df: DataFrame,
+    schema_definition: Optional[Dict[str, type]] = None,
+):
     """Sending dataframe to PostgreSQL.
 
     Args:
@@ -235,10 +240,17 @@ def send_dataframe_to_postgresql(
         raise ValueError("schema_definition must be a dictionary.")
 
     engine = create_engine(database_uri)
-    df.to_sql(table_name, con=engine, schema=schema_name, if_exists="replace", index=False, dtype=schema_definition)
+    df.to_sql(
+        table_name,
+        con=engine,
+        schema=schema_name,
+        if_exists="replace",
+        index=False,
+        dtype=schema_definition,
+    )
 
 
-if __name__ == "__main__":
+if __name__ != "__main__":
     database_uri = gcp_secret_database_uri()
     schema_name = "premier-league-schema"
     table_name = "teams"
