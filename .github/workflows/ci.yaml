@@ -32,6 +32,8 @@ env:
   VERSION_NUMBER: '3.1.0'
   CLOUD_BUCKET: ${{ secrets.CLOUD_BUCKET }}
   CLOUD_SQL_INSTANCE: ${{ secrets.CLOUD_SQL_INSTANCE }}
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_USERNAME }}
   EMAIL: ${{ secrets.EMAIL }}
   NAME: ${{ secrets.NAME }}
   PROJECT_ID: ${{ secrets.PROJECT_ID }}
@@ -39,57 +41,11 @@ env:
   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
   WIF_PROVIDER: ${{ secrets.WIF_PROVIDER }}
   WIF_SERVICE_ACCOUNT_ARTIFACT_REGISTRY: ${{ secrets.WIF_SERVICE_ACCOUNT_ARTIFACT_REGISTRY }}
-  WIF_SERVICE_ACCOUNT_CLOUD_STORAGE: ${{ secrets.WIF_SERVICE_ACCOUNT_CLOUD_STORAGE }}
   
 jobs:
 
-  check-for-changes:
-    runs-on: ubuntu-latest
-    outputs:
-      exit_code: ${{ steps.check.outputs.exit_code }}
-
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Install Black
-        run: python -m pip install black
-
-      - name: Check Black Formatting
-        id: check
-        run: |
-          black streamlit_app.py --check || exit_code=$?
-          echo "exit_code=$exit_code" >> $GITHUB_OUTPUT
-        
-  black:
-    runs-on: ubuntu-latest
-    needs: [check-for-changes]
-    if: ${{ needs.check-for-changes.outputs.exit_code == 1 }}
-
-    steps:
-        - name: Checkout Code
-          uses: actions/checkout@v3
-
-        - name: Install Black
-          run: python -m pip install black
-
-        - name: Apply Black Formatting
-          run: black streamlit_app.py
-
-        - name: Commit Changes
-          run: |
-            git config --local user.email "${{ env.EMAIL }}"
-            git config --local user.name "${{ env.NAME }}"
-            git add .
-            git commit -m "Apply Black Formatting" --allow-empty
-            git push
-
   build-streamlit-image:
     runs-on: ubuntu-latest
-    needs: [check-for-changes, black]
-    if: |
-      always() &&
-      (needs.black.result == 'success' || needs.black.result == 'skipped')
     
     steps:
       - name: Checkout
@@ -120,8 +76,47 @@ jobs:
         with:
           name: streamlit
           path: /tmp/streamlit.tar
+
+  push-docker-hub:
+    runs-on: ubuntu-latest
+    needs: [build-streamlit-image]
+    if: |
+      always() &&
+      (needs.build-streamlit-image.result == 'success')
+    steps:
+  
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ env.DOCKERHUB_USERNAME }}
+        password: ${{ env.DOCKERHUB_TOKEN }}
+
+    - name: Download Artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: streamlit
+        path: /tmp
+        
+    - name: Load Image
+      run: |
+        docker load --input /tmp/streamlit.tar
+        docker image ls -a
+
+    - name: Tag Image
+      run: |
+        docker tag \
+        streamlit:${{ env.VERSION_NUMBER }} \
+        ${{ env.DOCKERHUB_USERNAME }}/premier-league:latest
+
+    - name: Push Image
+      run: |
+        docker push \
+        ${{ env.DOCKERHUB_USERNAME }}/premier-league:latest
           
-  push-streamlit-image:
+  push-artifact-registry:
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -184,10 +179,10 @@ jobs:
       id-token: 'write'
     
     runs-on: ubuntu-latest
-    needs: [push-streamlit-image]
+    needs: [push-artifact-registry]
     if: |
       always() &&
-      (needs.push-streamlit-image.result == 'success')
+      (needs.push-artifact-registry.result == 'success')
       
     steps:
     
@@ -280,70 +275,6 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: ${{ steps.scan.outputs.sarif }}
-
-  pylint:
-    runs-on: ubuntu-latest
-    needs: [check-for-changes, black]
-    if: |
-      always() &&
-      (needs.black.result == 'success' || needs.black.result == 'skipped')
-      
-    steps:
-          
-      - name: Checkout
-        uses: actions/checkout@v3
-        
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-        
-      - name: Install Dependencies
-        run: pip install pylint
-        
-      - name: Run Pylint
-        continue-on-error: true
-        run: pylint streamlit_app.py > pylint_output.txt
-
-      - name: Upload Artifact	
-        uses: actions/upload-artifact@v3	
-        with:	
-          name: pylint_output
-          path: ./pylint_output.txt
-
-  google-cloud-upload:
-    permissions:
-      contents: 'read'
-      id-token: 'write'
-
-    runs-on: ubuntu-latest
-    needs: [pylint]
-    if: |
-      always() &&
-      (needs.pylint.result == 'success')
-
-    steps:
-    
-      - name: Checkout
-        uses: actions/checkout@v3
-        
-      - name: Download Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: pylint_output
-          path: .
-
-      - id: 'auth'
-        uses: 'google-github-actions/auth@v1'
-        with:
-          workload_identity_provider: '${{ env.WIF_PROVIDER }}'
-          service_account: ${{ env.WIF_SERVICE_ACCOUNT_CLOUD_STORAGE }}
-
-      - id: 'upload-file'
-        uses: 'google-github-actions/upload-cloud-storage@v1'
-        with:
-          path: 'pylint_output.txt'
-          destination: '${{ env.CLOUD_BUCKET }}'
   
   snyk:
     runs-on: ubuntu-latest
