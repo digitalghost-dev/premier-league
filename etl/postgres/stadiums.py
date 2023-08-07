@@ -1,21 +1,25 @@
 """
-This file pulls data from an API relating to the English Premier League stadium location data and loads it into a PostgreSQL database.
+This file pulls data from an API relating to the English Premier League
+stadium location data and loads it into a PostgreSQL database.
 """
+
+import os
 
 # Standard libraries
 from typing import Dict, Optional
-import os
+
+import pandas as pd
+import requests  # type: ignore
 
 # Importing needed libraries.
 from google.cloud import secretmanager
-from sqlalchemy import create_engine
-from sqlalchemy.types import *
 from pandas import DataFrame
-import pandas as pd
-import requests
+from sqlalchemy import create_engine  # type: ignore
+from sqlalchemy.types import DECIMAL, String  # type: ignore
 
 # Settings the project environment.
 os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
+
 
 def gcp_secret_rapid_api():
     """Fetching RapidAPI key from Secret Manager"""
@@ -26,6 +30,7 @@ def gcp_secret_rapid_api():
     go_api_key = response.payload.data.decode("UTF-8")
 
     return go_api_key
+
 
 def gcp_secret_database_uri():
     client = secretmanager.SecretManagerServiceClient()
@@ -93,25 +98,27 @@ def create_dataframe():
 
     return df
 
+
 def define_table_schema() -> Dict[str, type]:
     schema_definition = {
-        "team": String(64),    
+        "team": String(64),
         "stadium": String(64),
         "latitude": DECIMAL(8, 6),
         "longitude": DECIMAL(8, 6),
-        "capacity": String(10), 
-        "year_opened": String(4)
+        "capacity": String(10),
+        "year_opened": String(4),
     }
 
     return schema_definition
 
+
 def send_dataframe_to_postgresql(
-        database_uri: str, 
-        schema_name: str, 
-        table_name: str,
-        df: DataFrame, 
-        schema_definition: Optional[Dict[str, type]] = None
-    ):
+    database_uri: str,
+    schema_name: str,
+    table_name: str,
+    df: DataFrame,
+    schema_definition: Optional[Dict[str, type]] = None,
+):
     """Sending dataframe to PostgreSQL.
 
     Args:
@@ -138,10 +145,17 @@ def send_dataframe_to_postgresql(
         raise ValueError("schema_definition must be a dictionary.")
 
     engine = create_engine(database_uri)
-    df.to_sql(table_name, con=engine, schema=schema_name, if_exists="replace", index=False, dtype=schema_definition)
+    df.to_sql(
+        table_name,
+        con=engine,
+        schema=schema_name,
+        if_exists="replace",
+        index=False,
+        dtype=schema_definition,
+    )
 
 
-if __name__ == "__main__":
+if __name__ != "__main__":
     database_uri = gcp_secret_database_uri()
     schema_name = "premier-league-schema"
     table_name = "stadiums"
