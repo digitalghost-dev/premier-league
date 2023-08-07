@@ -1,11 +1,11 @@
 <p align="center">
-<img height="150" width="150" src="https://cdn.simpleicons.org/premierleague/black/lightgray"/>
+<img height="150" width="150" src="https://cdn.simpleicons.org/premierleague/gray"/>
 </p>
 
 <h1 align="center">Premier League Data Pipeline</h1>
 
 <p align="center">
-<img src="https://img.shields.io/github/actions/workflow/status/digitalghost-dev/premier-league/ci.yaml?style=flat-square&logo=github&label=CI%2FCD"/>
+<img src="https://img.shields.io/github/actions/workflow/status/digitalghost-dev/premier-league/ci_streamlit.yaml?style=flat-square&logo=github&label=CI%2FCD"/>
 <img src="https://img.shields.io/badge/Streamlit_App_Version-3.1.0-FF4B4B?style=flat-square&logo=streamlit"/>
 <img src="https://img.shields.io/github/repo-size/digitalghost-dev/premier-league?style=flat-square&label=Repo%20Size&color=DEA584">
 </p>
