@@ -217,7 +217,7 @@ def send_dataframe_to_postgresql(
     )
 
 
-if __name__ == "__main__":
+if __name__ != "__main__":
     uri = gcp_secret_database_uri()
     schema = "premier-league-schema"
     table = "top_scorers"
