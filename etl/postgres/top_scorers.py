@@ -33,7 +33,7 @@ def gcp_secret_database_uri() -> str:
     """This function retrieves the database URI from GCP Secret Manager."""
 
     client = secretmanager.SecretManagerServiceClient()
-    name = "projects/463690670206/secrets/premier-league-database-connection-uri/versions/2"
+    name = "projects/463690670206/secrets/premier-league-database-connection-uri/versions/3"
     response = client.access_secret_version(request={"name": name})
     database_uri = response.payload.data.decode("UTF-8")
 
