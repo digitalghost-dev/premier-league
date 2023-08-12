@@ -15,6 +15,10 @@ etl/
 # Terraform
 terraform/
 
+# Cache
+.mypy_cache/
+.ruff_cache/
+
 # Byte-compiled / optimized / DLL files
 **/__pycache__
 *.py[cod]

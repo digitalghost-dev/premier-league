@@ -1,6 +1,5 @@
 # Dockerfile to build and host the Streamlit app.
 
-# build and run commands while in pwd:
 # build: docker build -t streamlit:{tag} .
 # run: docker run -p 8501:8501 -v $(pwd)/.streamlit/secrets.toml:/app/.streamlit/secrets.toml streamlit:{tag}
 
