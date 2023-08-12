@@ -29,7 +29,7 @@ on:
         
 env:
   GAR_LOCATION: us-central1
-  VERSION_NUMBER: '3.1.0'
+  VERSION_NUMBER: '2.8.0'
   CLOUD_BUCKET: ${{ secrets.CLOUD_BUCKET }}
   CLOUD_SQL_INSTANCE: ${{ secrets.CLOUD_SQL_INSTANCE }}
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -199,7 +199,6 @@ jobs:
           service: streamlit
           image: "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_REPO }}/streamlit:${{ env.VERSION_NUMBER }}"
           secrets: /app/.streamlit/secrets.toml=streamlit-secret:latest
-          flags: "--add-cloudsql-instances=${{ env.CLOUD_SQL_INSTANCE }}"
 
   architecture-build:
     runs-on: ubuntu-latest
