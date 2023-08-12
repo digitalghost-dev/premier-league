@@ -2,33 +2,35 @@
 import time
 from datetime import datetime
 
-# Google Cloud Libraries
 import firebase_admin  # type: ignore
 
 # Data libraries
 import pandas as pd
 import plotly.express as px  # type: ignore
-import psycopg2
 
 # Visualization Libraries
 import streamlit as st
 import streamlit.components.v1 as components
 from firebase_admin import firestore  # type: ignore
+
+# Google Cloud Libraries
+from google.cloud import bigquery
 from google.oauth2 import service_account  # type: ignore
 from streamlit.delta_generator import DeltaGenerator
 
 st.set_page_config(page_title="Overview", layout="wide")
 
+# Create API client.
+credentials = service_account.Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"]
+)
+
+# Authenticating with Google Cloud.
+firestore_database = firestore.Client(credentials=credentials)
+client = bigquery.Client(credentials=credentials)
+
 
 def firestore_connection():
-    # Create API client.
-    credentials = service_account.Credentials.from_service_account_info(
-        st.secrets["gcp_service_account"]
-    )
-
-    # Authenticating with Google Cloud.
-    firestore_database = firestore.Client(credentials=credentials)
-
     # Check to see if firebase app has been initialized.
     if not firebase_admin._apps:
         firebase_admin.initialize_app()
@@ -36,121 +38,89 @@ def firestore_connection():
     return firestore_database
 
 
-def postgresql_connection():
-    # Initialize connection.
-    # Uses st.cache_resource to only run once.
-    @st.cache_resource
-    def init_connection():
-        return psycopg2.connect(**st.secrets["postgres"])
-
-    conn = init_connection()
-
-    # Perform query.
-    # Uses st.cache_data to only rerun when the query changes or after 10 min.
+def bigquery_connection():
     @st.cache_data(ttl=600)
     def run_query(query):
-        with conn.cursor() as cur:
-            cur.execute(query)
-            return cur.fetchall()
+        query_job = client.query(query)
+        raw_data = query_job.result()
+        # Convert to list of dicts. Required for st.experimental_memo to hash the return value.
+        data = [dict(data) for data in raw_data]
+        return data
 
-    schema = "premier-league-schema"
-
-    # Stadium query and dataframe.
+    # ---- Stadium query and dataframe ----
     stadiums_data = run_query(
-        f"""
-        SELECT latitude, longitude, stadium, team
-        FROM "{schema}"."stadiums"
-    """
+        """
+            SELECT latitude, longitude, stadium, team
+            FROM `premier_league_dataset.stadiums`;
+        """
     )
 
-    stadiums_df = pd.DataFrame(
-        data=stadiums_data, columns=["Latitude", "Longitude", "Stadium", "Team"]
-    )
+    stadiums_df = pd.DataFrame(data=stadiums_data)
 
-    # Standings query and dataframe.
+    # ---- Standings query and dataframe ----
     standings_data = run_query(
-        f"""
+        """
             SELECT rank, team, points, wins, draws, loses, goals_for, goals_against, goal_difference
-            FROM "{schema}"."standings";
-            """
+            FROM `premier_league_dataset.standings`;
+        """
     )
 
-    standings_df = pd.DataFrame(
-        data=standings_data,
-        columns=["Rank", "Team", "Points", "Wins", "Draws", "Loses", "GF", "GA", "GD"],
-    )
+    standings_df = pd.DataFrame(data=standings_data)
 
     # Splitting Standings table to get values to build metric cards.
     status_data = run_query(
-        f"""
-        SELECT rank, team, points, position_status
-        FROM "{schema}"."standings"
-        ORDER BY Rank
+        """
+            SELECT rank, team, points, position_status
+            FROM `premier_league_dataset.standings`
+            ORDER BY Rank;
         """
     )
 
-    status_df = pd.DataFrame(
-        data=status_data, columns=["Rank", "Team", "Points", "Status"]
-    )
+    status_df = pd.DataFrame(data=status_data)
 
-    # Teams query and dataframe.
+    # ---- Teams query and dataframe ----
     teams_data = run_query(
-        f"""
-        SELECT logo, form, t.team, clean_sheets, penalties_scored, penalties_missed, average_goals, win_streak
-        FROM "{schema}"."teams" AS t
-        LEFT JOIN "{schema}"."standings" AS s
-        ON t.team = s.Team
-        ORDER BY s.Rank
+        """
+            SELECT logo, form, t.team, clean_sheets, penalties_scored, penalties_missed, average_goals, win_streak
+            FROM `premier_league_dataset.teams` AS t
+            LEFT JOIN `premier_league_dataset.standings` AS s
+            ON t.team = s.Team
+            ORDER BY s.Rank;
         """
     )
 
-    teams_df = pd.DataFrame(
-        data=teams_data,
-        columns=[
-            "Logo",
-            "Form",
-            "Team",
-            "Clean Sheets",
-            "Penalties Scored",
-            "Penalties Missed",
-            "Average Goals",
-            "Win Streak",
-        ],
-    )
+    teams_df = pd.DataFrame(data=teams_data)
 
-    # Top Scorers query and dataframe.
+    # --- Top Scorers query and dataframe ----
     top_scorers_data = run_query(
-        f"""
-        SELECT *
-        FROM "{schema}"."top_scorers"
-        ORDER BY Goals DESC
+        """
+            SELECT *
+            FROM `premier_league_dataset.top_scorers`
+            ORDER BY Goals DESC;
         """
     )
 
-    top_scorers_df = pd.DataFrame(
-        data=top_scorers_data,
-        columns=["Name", "Goals", "Team", "Assists", "Nationality", "Photo"],
-    )
+    top_scorers_df = pd.DataFrame(data=top_scorers_data)
 
     # Fetching the minimun round number from the 'rounds' table.
     min_round_row = run_query(
-        f"""
-            SELECT MIN(round) 
-            FROM "{schema}"."rounds";
-            """
+        """
+            SELECT MIN(round) AS round
+            FROM `premier_league_dataset.current_round`;
+        """
     )
     # Converting tuple to list.
-    min_round = list(min_round_row[0])
+    min_round = min_round_row[0]["round"]
 
     # Fetching the maximum round number from the 'rounds' table.
     max_round_row = run_query(
-        f"""
-            SELECT MAX(round) 
-            FROM "{schema}"."rounds";
-            """
+        """
+            SELECT MAX(round) AS round 
+            FROM `cloud-data-infrastructure.premier_league_dataset.current_round`;
+        """
     )
     # Converting tuple to list.
-    max_round = list(max_round_row[0])
+    max_round = max_round_row[0]["round"]
 
     return (
         stadiums_df,
@@ -173,7 +143,7 @@ def streamlit_app():
         top_scorers_df,
         min_round,
         max_round,
-    ) = postgresql_connection()
+    ) = bigquery_connection()
     firestore_database = firestore_connection()
 
     logo = st.secrets["elements"]["logo_image"]
@@ -226,7 +196,7 @@ def streamlit_app():
         st.write(f"{formatted_date}")
 
     with st.spinner("Creating Connections and Loading Data..."):
-        time.sleep(6)
+        time.sleep(3)
 
         # Tab menu.
         tab1, tab2, tab3 = st.tabs(["Standings", "Statistics", "Fixtures"])
@@ -379,10 +349,10 @@ def streamlit_app():
 
                 stadium_map = px.scatter_mapbox(
                     stadiums_df,
-                    lat="Latitude",
-                    lon="Longitude",
-                    hover_name="Stadium",
-                    hover_data="Team",
+                    lat="latitude",
+                    lon="longitude",
+                    hover_name="stadium",
+                    hover_data="team",
                 )
 
                 stadium_map.update_layout(
@@ -676,8 +646,8 @@ def streamlit_app():
             st.subheader("Fixtures per Round")
 
             # Looping through each collection to get each round.
-            round_count = int(max_round[0])
-            while round_count >= int(min_round[0]):
+            round_count = int(max_round)
+            while round_count >= int(min_round):
                 # Function to pull collection and documents.
                 def firestore_pull():
                     # Calling each document in the collection in ascending order by date.

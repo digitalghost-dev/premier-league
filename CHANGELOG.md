@@ -10,37 +10,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * **MINOR:** Any changes to the Streamlit dashboard that adds a new interaction/feature or removal of one.
 * **PATCH:** Any changes that fix bugs.
 
-## [3.1.0] | 2023-08-04
-
-### Changed
-* Changed the Social Media section to exist inside a function: `social_media()` and be called later in each tab.
-* Changed the standings table code to exist inside a function: `standings_table()`.
-* Changed the map code to exist inside a function: `stadiums_map()`.
-* Changed the format of writing out the Top 5 Teams, Top 5 Scorers, and Forms for the Rest of the League sections to use a `for` loop instead of writing out each section individually.
-
-### Added
-* Added type annotations to `standings_table()` function to return `DeltaGenerator`.
-* Added type annotations to `stadiums_map()` function to return `DeltaGenerator`.
-
-### Fixed
-* Fixed the date to correctly display the suffix of the number *(i.e. 1st, 2nd, 3rd, etc.)* and to remove leading zeroes for single digit dates.
-
-### Removed
-* Removed `import os` and `import plotly.graph_objects as go` as they are no longer needed.
-
----
-
-## [3.0.0][3.0.0] | 2023-07-23
-
-Fully replaced [BigQuery](https://cloud.google.com/bigquery) with [PostgreSQL](https://www.postgresql.org) running on [Cloud SQL](https://cloud.google.com/sql) as the main database. [Firestore](https://firebase.google.com/docs/firestore/) is still being used as a NoSQL document database to house `fixture` data.
+## [2.8.0] | 2023-08-12
 
 ### Added
 * Added `st.spinner` to run when page loads to allow all tabs and data to load before a user can start navigating.
+* Added type annotations to `standings_table()` function to return `DeltaGenerator`.
+* Added type annotations to `stadiums_map()` function to return `DeltaGenerator`.
 
 ### Changed
 * Changed `st.subheader` from "Standings" to "Current Standings".
 * Changed `st.table` to `st.dataframe` for showing current standings.
 * Changed `st.map` location from *Playground* to *Standings* tab.
+* Changed the Social Media section to exist inside a function: `social_media()` and be called later in each tab.
+* Changed the standings table code to exist inside a function: `standings_table()`.
+* Changed the map code to exist inside a function: `stadiums_map()`.
+* Changed the format of writing out the Top 5 Teams, Top 5 Scorers, and Forms for the Rest of the League sections to use a `for` loop instead of writing out each section individually.
+
+### Fixed
+* Fixed the date to correctly display the suffix of the number *(i.e. 1st, 2nd, 3rd, etc.)* and to remove leading zeroes for single digit dates.
 
 ### Removed
 * Removed *Playground Tab*.
@@ -49,6 +36,7 @@ Fully replaced [BigQuery](https://cloud.google.com/bigquery) with [PostgreSQL](h
 * Removed `st.slider` as interactive Streamlit elements in dashboards with tabs seemed to currently be bugged. 
     * Related issues: [#4996](https://github.com/streamlit/streamlit/issues/4996), [#6257](https://github.com/streamlit/streamlit/issues/6257), and [#7017](https://github.com/streamlit/streamlit/issues/7017).
 * `st.bar_chart` has also been removed due to this bug.
+* Removed `import os`, `import psycopg2`, `import plotly.graph_objects as go` as they are no longer needed.
 
 ---
 
@@ -255,8 +243,6 @@ Top Teams Tab
 
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
-
-[3.0.0]: https://github.com/digitalghost-dev/premier-league/commit/7c16ff428d5d1a40ff0b2f3f0d21e2c7a1e38cdd#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
 [2.7.1]: https://github.com/digitalghost-dev/premier-league/commit/a18341f802c46043fa8122c517e479103c067870#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
