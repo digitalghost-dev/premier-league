@@ -5,25 +5,19 @@ teams data and loads it into a PostgreSQL database.
 
 import os
 
-# Standard libraries
-from typing import Dict, Optional
-
 import pandas as pd
 import requests  # type: ignore
 
 # Importing needed libraries.
-from google.cloud import secretmanager
+from google.cloud import bigquery, secretmanager
 from pandas import DataFrame
-from sqlalchemy import create_engine  # type: ignore
-from sqlalchemy.types import SMALLINT, String  # type: ignore
 
 # Settings the project environment.
 os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
 
-# Database details
-schema = "premier-league-schema"
-standings_table = "standings"
-teams_table = "teams"
+# Setting table names.
+STANDINGS_TABLE = "premier_league_dataset.standings"
+TEAMS_TABLE = "premier_league_dataset.teams"
 
 
 def gcp_secret_rapid_api():
@@ -35,40 +29,50 @@ def gcp_secret_rapid_api():
     return rapid_api_key
 
 
-def gcp_secret_database_uri():
-    client = secretmanager.SecretManagerServiceClient()
-    name = "projects/463690670206/secrets/premier-league-database-connection-uri/versions/3"
-    response = client.access_secret_version(request={"name": name})
-    database_uri = response.payload.data.decode("UTF-8")
-
-    return database_uri
-
-
-def postgres_call():
-    """Fetching the Standings table from PostgreSQL"""
-    database_uri = gcp_secret_database_uri()
-
-    sqlcon = create_engine(database_uri)
+# Function to call the Teams table in BigQuery.
+def bigquery_call():
+    bqclient = bigquery.Client()
 
     # SQL query
     query_string = f"""
-        SELECT team_id, rank
-        FROM "{schema}"."{standings_table}"
+        SELECT *
+        FROM {STANDINGS_TABLE}
         ORDER BY Rank
-        """
+    """
 
-    standings_df = pd.read_sql(query_string, sqlcon)
-    return standings_df
+    pd.dataframe = (
+        bqclient.query(query_string)
+        .result()
+        .to_dataframe(
+            create_bqstorage_client=True,
+        )
+    )
+
+    bigquery_dataframe = pd.dataframe
+
+    return bigquery_dataframe
 
 
-def call_api():
+def call_api() -> (
+    tuple[
+        list[int],
+        list[str],
+        list[str],
+        list[str],
+        list[int],
+        list[int],
+        list[int],
+        list[float],
+        list[int],
+    ]
+):
     """Calling the API then filling in the empty lists"""
 
     rapid_api_key = gcp_secret_rapid_api()
-    standings_df = postgres_call()
+    bigquery_dataframe = bigquery_call()
 
     # Iterate through bigquery_dataframe to get the team's id and create a list using list comprehension.
-    id_list = [standings_df.iloc[i][0] for i in range(20)]
+    id_list = [bigquery_dataframe.iloc[i][0] for i in range(20)]
 
     # Headers used for RapidAPI.
     headers = {
@@ -145,7 +149,7 @@ def call_api():
     )
 
 
-def create_dataframe():
+def create_dataframe() -> DataFrame:
     """This function creates a datafreame from lists created in the last function: call_api()"""
 
     (
@@ -191,71 +195,35 @@ def create_dataframe():
     return df
 
 
-def define_table_schema() -> Dict[str, type]:
-    schema_definition = {
-        "team_id": SMALLINT,
-        "team": String(64),
-        "logo": String(256),
-        "form": String(24),
-        "clean_sheets": SMALLINT,
-        "penalties_scored": SMALLINT,
-        "penalties_missed": SMALLINT,
-        "average_goals": SMALLINT,
-        "win_streak": SMALLINT,
-    }
+def define_table_schema() -> list[dict[str, str]]:
+    schema_definition = [
+        {"name": "team_id", "type": "INTEGER"},
+        {"name": "team", "type": "STRING"},
+        {"name": "logo", "type": "STRING"},
+        {"name": "form", "type": "STRING"},
+        {"name": "clean_sheets", "type": "INTEGER"},
+        {"name": "penalties_scored", "type": "INTEGER"},
+        {"name": "penalties_missed", "type": "INTEGER"},
+        {"name": "average_goals", "type": "INTEGER"},
+        {"name": "win_streak", "type": "INTEGER"},
+    ]
 
     return schema_definition
 
 
-def send_dataframe_to_postgresql(
-    database_uri: str,
-    schema_name: str,
-    table_name: str,
-    df: DataFrame,
-    schema_definition: Optional[Dict[str, type]] = None,
-):
-    """Sending dataframe to PostgreSQL.
-
-    Args:
-        database_uri (str): The URI to connect to the PostgreSQL database.
-        schema (str): The schema name in which the table should be created.
-        table_name (str): The name of the table to be created.
-        df (DataFrame): The DataFrame containing the data to be inserted.
-        schema_definition (Dict[str, type], optional): A dictionary defining the table schema with column names
-                                                       as keys and their corresponding SQLAlchemy data types.
-                                                       Defaults to None. If None, the function will use the schema
-                                                       from the define_table_schema() function.
-
-    Raises:
-        ValueError: If the DataFrame is empty or schema_definition is not a valid dictionary.
-    """
-
-    if df.empty:
-        raise ValueError("DataFrame is empty.")
-
-    if schema_definition is None:
-        schema_definition = define_table_schema()
-
-    if not isinstance(schema_definition, dict):
-        raise ValueError("schema_definition must be a dictionary.")
-
-    engine = create_engine(database_uri)
-    df.to_sql(
-        table_name,
-        con=engine,
-        schema=schema_name,
+def send_dataframe_to_bigquery(
+    standings_dataframe: DataFrame, schema_definition: list[dict[str, str]]
+) -> None:
+    teams_dataframe.to_gbq(
+        destination_table="premier_league_dataset.teams",
         if_exists="replace",
-        index=False,
-        dtype=schema_definition,
+        table_schema=schema_definition,
     )
 
+    print("Teams table loaded!")
 
-if __name__ != "__main__":
-    database_uri = gcp_secret_database_uri()
-    schema_name = "premier-league-schema"
-    table_name = "teams"
-    df = create_dataframe()
+
+if __name__ == "__main__":
+    teams_dataframe = create_dataframe()
     schema_definition = define_table_schema()
-
-    send_dataframe_to_postgresql(database_uri, schema_name, table_name, df)
-    print(f"Data loaded into {table_name}!")
+    send_dataframe_to_bigquery(teams_dataframe, schema_definition)

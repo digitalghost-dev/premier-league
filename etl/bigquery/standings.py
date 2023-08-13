@@ -1,13 +1,10 @@
 """
 This file pulls data from an API relating to the English Premier League
-standings data and loads it into a PostgreSQL database.
+standings data and loads it into a BigQuery table.
 """
 
 import json
 import os
-
-# Standard libraries
-from typing import Dict, Optional
 
 import pandas as pd
 import requests  # type: ignore
@@ -15,14 +12,12 @@ import requests  # type: ignore
 # Importing needed libraries.
 from google.cloud import secretmanager
 from pandas import DataFrame
-from sqlalchemy import create_engine  # type: ignore
-from sqlalchemy.types import SMALLINT, String  # type: ignore
 
 # Settings the project environment.
 os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
 
 
-def gcp_secret_rapid_api():
+def gcp_secret_rapid_api() -> str:
     client = secretmanager.SecretManagerServiceClient()
     name = "projects/463690670206/secrets/rapid-api/versions/1"
     response = client.access_secret_version(request={"name": name})
@@ -31,16 +26,22 @@ def gcp_secret_rapid_api():
     return rapid_api_key
 
 
-def gcp_secret_database_uri():
-    client = secretmanager.SecretManagerServiceClient()
-    name = "projects/463690670206/secrets/premier-league-database-connection-uri/versions/3"
-    response = client.access_secret_version(request={"name": name})
-    database_uri = response.payload.data.decode("UTF-8")
-
-    return database_uri
-
-
-def call_api():
+def call_api() -> (
+    tuple[
+        list[int],
+        list[int],
+        list[str],
+        list[int],
+        list[int],
+        list[int],
+        list[str],
+        list[int],
+        list[int],
+        list[int],
+        list[int],
+        list[str],
+    ]
+):
     """Calling the API then filling in the empty lists"""
 
     payload = gcp_secret_rapid_api()
@@ -171,7 +172,7 @@ def call_api():
     )
 
 
-def create_dataframe():
+def create_dataframe() -> DataFrame:
     """This function creates a datafreame from lists created in the last function: call_api()"""
 
     (
@@ -226,74 +227,38 @@ def create_dataframe():
     return df
 
 
-def define_table_schema() -> Dict[str, type]:
-    schema_definition = {
-        "team_id": SMALLINT,
-        "rank": SMALLINT,
-        "team": String(64),
-        "wins": SMALLINT,
-        "draws": SMALLINT,
-        "loses": SMALLINT,
-        "recent_form": String(5),
-        "points": String(4),
-        "goals_for": SMALLINT,
-        "goals_against": SMALLINT,
-        "goal_difference": SMALLINT,
-        "position_status": String(12),
-    }
+def define_table_schema() -> list[dict[str, str]]:
+    schema_definition = [
+        {"name": "team_id", "type": "INTEGER"},
+        {"name": "rank", "type": "INTEGER"},
+        {"name": "team", "type": "STRING"},
+        {"name": "wins", "type": "INTEGER"},
+        {"name": "draws", "type": "INTEGER"},
+        {"name": "loses", "type": "INTEGER"},
+        {"name": "recent_form", "type": "STRING"},
+        {"name": "points", "type": "STRING"},
+        {"name": "goals_for", "type": "INTEGER"},
+        {"name": "goals_against", "type": "INTEGER"},
+        {"name": "goal_difference", "type": "INTEGER"},
+        {"name": "position_status", "type": "STRING"},
+    ]
 
     return schema_definition
 
 
-def send_dataframe_to_postgresql(
-    database_uri: str,
-    schema_name: str,
-    table_name: str,
-    df: DataFrame,
-    schema_definition: Optional[Dict[str, type]] = None,
-):
-    """Sending dataframe to PostgreSQL.
-
-    Args:
-        database_uri (str): The URI to connect to the PostgreSQL database.
-        schema (str): The schema name in which the table should be created.
-        table_name (str): The name of the table to be created.
-        df (DataFrame): The DataFrame containing the data to be inserted.
-        schema_definition (Dict[str, type], optional): A dictionary defining the table schema with column names
-                                                       as keys and their corresponding SQLAlchemy data types.
-                                                       Defaults to None. If None, the function will use the schema
-                                                       from the define_table_schema() function.
-
-    Raises:
-        ValueError: If the DataFrame is empty or schema_definition is not a valid dictionary.
-    """
-
-    if df.empty:
-        raise ValueError("DataFrame is empty.")
-
-    if schema_definition is None:
-        schema_definition = define_table_schema()
-
-    if not isinstance(schema_definition, dict):
-        raise ValueError("schema_definition must be a dictionary.")
-
-    engine = create_engine(database_uri)
-    df.to_sql(
-        table_name,
-        con=engine,
-        schema=schema_name,
+def send_dataframe_to_bigquery(
+    standings_dataframe: DataFrame, schema_definition: list[dict[str, str]]
+) -> None:
+    standings_dataframe.to_gbq(
+        destination_table="premier_league_dataset.standings",
         if_exists="replace",
-        index=False,
-        dtype=schema_definition,
+        table_schema=schema_definition,
     )
 
+    print("Standings table loaded!")
 
-if __name__ != "__main__":
-    database_uri = gcp_secret_database_uri()
-    schema_name = "premier-league-schema"
-    table_name = "standings"
-    df = create_dataframe()
+
+if __name__ == "__main__":
+    standings_dataframe = create_dataframe()
     schema_definition = define_table_schema()
-
-    send_dataframe_to_postgresql(database_uri, schema_name, table_name, df)
-    print(f"Data loaded into {table_name}!")
+    send_dataframe_to_bigquery(standings_dataframe, schema_definition)

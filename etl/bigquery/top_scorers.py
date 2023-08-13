@@ -5,14 +5,11 @@ top scoring players data and loads it into a PostgreSQL database.
 
 import json
 import os
-from typing import Dict, Optional
 
 import pandas as pd
 import requests  # type: ignore
 from google.cloud import secretmanager
 from pandas import DataFrame
-from sqlalchemy import create_engine  # type: ignore
-from sqlalchemy.types import SMALLINT, String  # type: ignore
 
 # Settings the project environment.
 os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
@@ -29,20 +26,7 @@ def gcp_secret_rapid_api() -> str:
     return rapid_api_key
 
 
-def gcp_secret_database_uri() -> str:
-    """This function retrieves the database URI from GCP Secret Manager."""
-
-    client = secretmanager.SecretManagerServiceClient()
-    name = "projects/463690670206/secrets/premier-league-database-connection-uri/versions/3"
-    response = client.access_secret_version(request={"name": name})
-    database_uri = response.payload.data.decode("UTF-8")
-
-    return database_uri
-
-
-def call_api() -> (
-    tuple[list[str], list[int], list[str], list[int], list[str], list[str]]
-):
+def call_api():
     """Calling the API then filling in the empty lists"""
 
     rapid_api_key = gcp_secret_rapid_api()
@@ -56,7 +40,7 @@ def call_api() -> (
     url = "https://api-football-v1.p.rapidapi.com/v3/players/topscorers"
 
     # Building GET request to retrieve data.
-    query = {"league": "39", "season": "2022"}
+    query = {"league": "39", "season": "2023"}
     response = requests.request("GET", url, headers=headers, params=query, timeout=20)
     json_res = response.json()
 
@@ -98,9 +82,14 @@ def call_api() -> (
         )
 
         # Retrieving amount of assists per player.
-        assists_list.append(
-            int(json_res["response"][count]["statistics"][0]["goals"]["assists"])
-        )
+        try:
+            assists = json_res["response"][count]["statistics"][0]["goals"]["assists"]
+            if assists is not None:
+                assists_list.append(int(assists))
+            else:
+                assists_list.append(None)
+        except ValueError:
+            assists_list.append(None)
 
         # Retrieving player's team name.
         team_list.append(
@@ -159,69 +148,34 @@ def create_dataframe() -> DataFrame:
     return df
 
 
-def define_table_schema() -> Dict[str, type]:
+def define_table_schema() -> list[dict[str, str]]:
     """This function defines the table schema for the PostgreSQL table."""
 
-    schema_definition = {
-        "name": String(64),
-        "goals": SMALLINT,
-        "team": String(64),
-        "assists": SMALLINT,
-        "nationality": String(64),
-        "photo": String(256),
-    }
+    schema_definition = [
+        {"name": "name", "type": "STRING"},
+        {"name": "goals", "type": "INTEGER"},
+        {"name": "team", "type": "STRING"},
+        {"name": "assists", "type": "INTEGER"},
+        {"name": "nationality", "type": "STRING"},
+        {"name": "photo", "type": "STRING"},
+    ]
 
     return schema_definition
 
 
-def send_dataframe_to_postgresql(
-    database_uri: str,
-    schema_name: str,
-    table_name: str,
-    df: DataFrame,
-    schema_definition: Optional[Dict[str, type]] = None,
-):
-    """Sending dataframe to PostgreSQL.
-
-    Args:
-        database_uri (str): The URI to connect to the PostgreSQL database.
-        schema (str): The schema name in which the table should be created.
-        table_name (str): The name of the table to be created.
-        df (DataFrame): The DataFrame containing the data to be inserted.
-        schema_definition (Dict[str, type], optional): A dictionary defining the table schema with column names
-                                                       as keys and their corresponding SQLAlchemy data types.
-                                                       Defaults to None. If None, the function will use the schema
-                                                       from the define_table_schema() function.
-
-    Raises:
-        ValueError: If the DataFrame is empty or schema_definition is not a valid dictionary.
-    """
-
-    if df.empty:
-        raise ValueError("DataFrame is empty.")
-
-    if schema_definition is None:
-        schema_definition = define_table_schema()
-
-    if not isinstance(schema_definition, dict):
-        raise ValueError("schema_definition must be a dictionary.")
-
-    engine = create_engine(database_uri)
-    df.to_sql(
-        table_name,
-        con=engine,
-        schema=schema_name,
+def send_dataframe_to_bigquery(
+    standings_dataframe: DataFrame, schema_definition: list[dict[str, str]]
+) -> None:
+    top_scorers_dataframe.to_gbq(
+        destination_table="premier_league_dataset.top_scorers",
         if_exists="replace",
-        index=False,
-        dtype=schema_definition,
+        table_schema=schema_definition,
     )
 
+    print("Top Scorers table loaded!")
 
-if __name__ != "__main__":
-    uri = gcp_secret_database_uri()
-    schema = "premier-league-schema"
-    table = "top_scorers"
-    dataframe = create_dataframe()
 
-    send_dataframe_to_postgresql(uri, schema, table, dataframe)
-    print(f"Data loaded into {table}!")
+if __name__ == "__main__":
+    top_scorers_dataframe = create_dataframe()
+    schema_definition = define_table_schema()
+    send_dataframe_to_bigquery(top_scorers_dataframe, schema_definition)
