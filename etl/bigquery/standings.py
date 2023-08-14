@@ -18,6 +18,8 @@ os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
 
 
 def gcp_secret_rapid_api() -> str:
+    """This function retrieves the Rapid API key from GCP Secret Manager"""
+
     client = secretmanager.SecretManagerServiceClient()
     name = "projects/463690670206/secrets/rapid-api/versions/1"
     response = client.access_secret_version(request={"name": name})
@@ -42,7 +44,7 @@ def call_api() -> (
         list[str],
     ]
 ):
-    """Calling the API then filling in the empty lists"""
+    """This function calls the API then filling in the empty lists"""
 
     payload = gcp_secret_rapid_api()
     # Headers used for RapidAPI.
@@ -56,7 +58,7 @@ def call_api() -> (
 
     # Building GET request to retrieve data.
     query = {"season": "2023", "league": "39"}
-    response = requests.request("GET", url, headers=headers, params=query)
+    response = requests.get(url, headers=headers, params=query, timeout=10)
     json_res = response.json()
 
     # Empty lists that will be filled and then used to create a dataframe.
@@ -228,6 +230,8 @@ def create_dataframe() -> DataFrame:
 
 
 def define_table_schema() -> list[dict[str, str]]:
+    """This function defines the schema for the table in BigQuery"""
+
     schema_definition = [
         {"name": "team_id", "type": "INTEGER"},
         {"name": "rank", "type": "INTEGER"},
@@ -249,6 +253,8 @@ def define_table_schema() -> list[dict[str, str]]:
 def send_dataframe_to_bigquery(
     standings_dataframe: DataFrame, schema_definition: list[dict[str, str]]
 ) -> None:
+    """This function sends the dataframe to BigQuery"""
+
     standings_dataframe.to_gbq(
         destination_table="premier_league_dataset.standings",
         if_exists="replace",
@@ -258,7 +264,7 @@ def send_dataframe_to_bigquery(
     print("Standings table loaded!")
 
 
-if __name__ == "__main__":
+if __name__ != "__main__":
     standings_dataframe = create_dataframe()
     schema_definition = define_table_schema()
     send_dataframe_to_bigquery(standings_dataframe, schema_definition)

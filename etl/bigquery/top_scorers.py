@@ -16,7 +16,7 @@ os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
 
 
 def gcp_secret_rapid_api() -> str:
-    """This function retrieves the Rapid API key from GCP Secret Manager."""
+    """This function retrieves the Rapid API key from GCP Secret Manager"""
 
     client = secretmanager.SecretManagerServiceClient()
     name = "projects/463690670206/secrets/rapid-api/versions/1"
@@ -27,7 +27,7 @@ def gcp_secret_rapid_api() -> str:
 
 
 def call_api():
-    """Calling the API then filling in the empty lists"""
+    """This function calls the API then filling in the empty lists"""
 
     rapid_api_key = gcp_secret_rapid_api()
     # Headers used for RapidAPI.
@@ -41,7 +41,7 @@ def call_api():
 
     # Building GET request to retrieve data.
     query = {"league": "39", "season": "2023"}
-    response = requests.request("GET", url, headers=headers, params=query, timeout=20)
+    response = requests.get(url, headers=headers, params=query, timeout=10)
     json_res = response.json()
 
     # Empty lists that will be filled and then used to create a dataframe.
@@ -149,7 +149,7 @@ def create_dataframe() -> DataFrame:
 
 
 def define_table_schema() -> list[dict[str, str]]:
-    """This function defines the table schema for the PostgreSQL table."""
+    """This function defines the schema for the table in BigQuery"""
 
     schema_definition = [
         {"name": "name", "type": "STRING"},
@@ -166,6 +166,8 @@ def define_table_schema() -> list[dict[str, str]]:
 def send_dataframe_to_bigquery(
     standings_dataframe: DataFrame, schema_definition: list[dict[str, str]]
 ) -> None:
+    """This function sends the dataframe to BigQuery"""
+
     top_scorers_dataframe.to_gbq(
         destination_table="premier_league_dataset.top_scorers",
         if_exists="replace",
@@ -175,7 +177,7 @@ def send_dataframe_to_bigquery(
     print("Top Scorers table loaded!")
 
 
-if __name__ == "__main__":
+if __name__ != "__main__":
     top_scorers_dataframe = create_dataframe()
     schema_definition = define_table_schema()
     send_dataframe_to_bigquery(top_scorers_dataframe, schema_definition)

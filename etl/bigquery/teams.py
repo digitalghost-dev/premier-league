@@ -21,6 +21,8 @@ TEAMS_TABLE = "premier_league_dataset.teams"
 
 
 def gcp_secret_rapid_api():
+    """This function retrieves the Rapid API key from GCP Secret Manager"""
+
     client = secretmanager.SecretManagerServiceClient()
     name = "projects/463690670206/secrets/rapid-api/versions/1"
     response = client.access_secret_version(request={"name": name})
@@ -31,6 +33,8 @@ def gcp_secret_rapid_api():
 
 # Function to call the Teams table in BigQuery.
 def bigquery_call():
+    """This function calls the Teams table in BigQuery"""
+
     bqclient = bigquery.Client()
 
     # SQL query
@@ -66,7 +70,7 @@ def call_api() -> (
         list[int],
     ]
 ):
-    """Calling the API then filling in the empty lists"""
+    """This function calls the API then filling in the empty lists"""
 
     rapid_api_key = gcp_secret_rapid_api()
     bigquery_dataframe = bigquery_call()
@@ -98,7 +102,7 @@ def call_api() -> (
     while count < 20:
         # Building GET request to retrieve data.
         query = {"league": "39", "season": "2023", "team": id_list[count]}
-        response = requests.request("GET", url, headers=headers, params=query)
+        response = requests.get(url, headers=headers, params=query, timeout=10)
         json_res = response.json()
 
         # Team ID.
@@ -196,6 +200,8 @@ def create_dataframe() -> DataFrame:
 
 
 def define_table_schema() -> list[dict[str, str]]:
+    """This function defines the schema for the table in BigQuery"""
+
     schema_definition = [
         {"name": "team_id", "type": "INTEGER"},
         {"name": "team", "type": "STRING"},
@@ -214,6 +220,8 @@ def define_table_schema() -> list[dict[str, str]]:
 def send_dataframe_to_bigquery(
     standings_dataframe: DataFrame, schema_definition: list[dict[str, str]]
 ) -> None:
+    """This function sends the dataframe to BigQuery"""
+
     teams_dataframe.to_gbq(
         destination_table="premier_league_dataset.teams",
         if_exists="replace",
@@ -223,7 +231,7 @@ def send_dataframe_to_bigquery(
     print("Teams table loaded!")
 
 
-if __name__ == "__main__":
+if __name__ != "__main__":
     teams_dataframe = create_dataframe()
     schema_definition = define_table_schema()
     send_dataframe_to_bigquery(teams_dataframe, schema_definition)
