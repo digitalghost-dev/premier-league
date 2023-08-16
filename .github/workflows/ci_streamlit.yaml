@@ -30,12 +30,8 @@ on:
 env:
   GAR_LOCATION: us-central1
   VERSION_NUMBER: '2.8.0'
-  CLOUD_BUCKET: ${{ secrets.CLOUD_BUCKET }}
-  CLOUD_SQL_INSTANCE: ${{ secrets.CLOUD_SQL_INSTANCE }}
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-  EMAIL: ${{ secrets.EMAIL }}
-  NAME: ${{ secrets.NAME }}
   PROJECT_ID: ${{ secrets.PROJECT_ID }}
   REGISTRY_REPO: ${{ secrets.REGISTRY_REPO }}
   REGISTRY_IMAGE: digitalghostdev/premier-league
