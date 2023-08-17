@@ -26,7 +26,9 @@ def gcp_secret_rapid_api() -> str:
     return rapid_api_key
 
 
-def call_api():
+def call_api() -> (
+    tuple[list[str], list[int], list[str], list[int], list[str], list[str]]
+):
     """This function calls the API then filling in the empty lists"""
 
     rapid_api_key = gcp_secret_rapid_api()
@@ -87,9 +89,9 @@ def call_api():
             if assists is not None:
                 assists_list.append(int(assists))
             else:
-                assists_list.append(None)
-        except ValueError:
-            assists_list.append(None)
+                assists_list.append(0)
+        except (ValueError, TypeError):
+            assists_list.append(0)
 
         # Retrieving player's team name.
         team_list.append(
