@@ -9,7 +9,7 @@ streamlit==1.25.0
 # Data and databases
 pandas==1.4.2
 pyarrow==12.0.1
-prefect==2.11.0
+prefect==2.11.4
 SQLAlchemy==1.4.45
 pandas-gbq==0.19.2
 psycopg2-binary==2.9.6
