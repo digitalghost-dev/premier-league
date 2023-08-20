@@ -29,7 +29,7 @@ on:
         
 env:
   GAR_LOCATION: us-central1
-  VERSION_NUMBER: '2.8.0'
+  VERSION_NUMBER: '2.9.0'
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   PROJECT_ID: ${{ secrets.PROJECT_ID }}
@@ -344,6 +344,7 @@ jobs:
     if: |
       always() &&
       (needs.syft.result == 'success')
+      
     steps:
     
       - name: Download SBOM
