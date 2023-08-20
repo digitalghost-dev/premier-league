@@ -9,6 +9,12 @@ tests/
 testing/
 test*
 
+# Cache files and directories
+**.*cache
+
+# YAML files
+premier_league_flow-deployment.yaml
+
 # Terraform secrets and state files
 terraform/.terraform*
 terraform/terraform*
