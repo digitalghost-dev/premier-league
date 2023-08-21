@@ -10,7 +10,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * **MINOR:** Any changes to the Streamlit dashboard that adds a new interaction/feature or removal of one.
 * **PATCH:** Any changes that fix bugs.
 
-## [2.8.0] | 2023-08-12
+## [2.9.0] | 2023-08-XX
+
+### Added
+* Added Docker logo to social media section with link to Docker Hub repository.
+* Added `st.toast` to display a more subtle message to the user that the page is loading and when the data has loaded.
+* Added a new `st.dataframe` table to display current total metrcis for the league (Goals Scored, Penalties Scored, and Clean Sheets).
+
+### Changed
+* Changed page title to **"Streamlit: Premier League"**.
+* Changed tab names from **Standings** to **Standings & Overview** and **Statistics** to **Top Teams & Scorers**.
+* Changed `st.data_editor` to `st.dataframe` for displaying the statistic tables.
+
+### Fixed
+* Fixed the `st.dataframe` tables under the **Top Teams Movement** section to display the correct data by sorting columns in descending order.
+
+### Removed
+* Removed `st.spinner`.
+
+---
+
+## [2.8.0][2.8.0] | 2023-08-12
 
 ### Added
 * Added `st.spinner` to run when page loads to allow all tabs and data to load before a user can start navigating.
@@ -243,6 +263,8 @@ Top Teams Tab
 
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
+
+[2.8.0]: https://github.com/digitalghost-dev/premier-league/commit/ffc31af3ca6bc58294ab6c8c6daba105d9e7c1a5#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
 [2.7.1]: https://github.com/digitalghost-dev/premier-league/commit/a18341f802c46043fa8122c517e479103c067870#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
