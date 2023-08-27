@@ -1,16 +1,23 @@
 # Change Log
 This change log provides version history for the Streamlit Dashboard.
 
-View the Streamlit dasboard: https://premierleague.streamlit.app
+View the Streamlit dasboard: https://streamlit.digitalghost.dev/
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 * **MAJOR:** Any changes to the backend infrastructure that requires new methods of moving data that won't work with the previous architecture.
 * **MINOR:** Any changes to the Streamlit dashboard that adds a new interaction/feature or removal of one.
-* **PATCH:** Any changes that fix bugs.
+* **PATCH:** Any changes that fix bugs, typos or small edits.
 
-## [2.9.0] | 2023-08-XX
+## 2.9.1 | 2023-08-27
+
+### Fixed
+* Fixed the Standings column headers in the `st.dataframe` element to display proper column names instead of the SQL column names.
+
+---
+
+## [2.9.0] | 2023-08-20
 
 ### Added
 * Added Docker logo to social media section with link to Docker Hub repository.
@@ -263,6 +270,8 @@ Top Teams Tab
 
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
+
+[2.9.0]: https://github.com/digitalghost-dev/premier-league/commit/d905a2a26b38200a519c78fa4e3847b598dc3d8f#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
 [2.8.0]: https://github.com/digitalghost-dev/premier-league/commit/ffc31af3ca6bc58294ab6c8c6daba105d9e7c1a5#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 

@@ -6,9 +6,11 @@
 
 <p align="center">
     <img src="https://img.shields.io/github/actions/workflow/status/digitalghost-dev/premier-league/ci_streamlit.yaml?style=flat-square&logo=github&label=CI%2FCD"/>
-    <img src="https://img.shields.io/badge/Streamlit_App_Version-2.9.0-FF4B4B?style=flat-square&logo=streamlit"/>
+    <a href="https://github.com/digitalghost-dev/premier-league/blob/main/CHANGELOG.md">
+        <img src="https://img.shields.io/badge/Streamlit_App_Version-2.9.1-FF4B4B?style=flat-square&logo=streamlit"/>
+    </a>
     <a href="https://hub.docker.com/repository/docker/digitalghostdev/premier-league/general"> 
-        <img src="https://img.shields.io/docker/image-size/digitalghostdev/premier-league/2.9.0?style=flat-square&logo=docker&label=Image%20Size&color=0DB7ED"/>
+        <img src="https://img.shields.io/docker/image-size/digitalghostdev/premier-league/2.9.1?style=flat-square&logo=docker&label=Image%20Size&color=0DB7ED"/>
     </a>
     <img src="https://img.shields.io/github/repo-size/digitalghost-dev/premier-league?style=flat-square&label=Repo%20Size&color=DEA584">
 </p>
@@ -78,5 +80,4 @@ The CI/CD pipeline is focused on the `streamlit_app.py` file and the Docker imag
 ![prefect](https://img.shields.io/badge/Orchestration-Prefect-024DFD?style=flat-square&logo=prefect)
 
 ### Databases
-![postgres](https://img.shields.io/badge/RDMS-PostgreSQL-336791?style=flat-square&labelColor=white&logo=postgresql)
 ![firestore](https://img.shields.io/badge/NoSQL-Firestore-FFA611?style=flat-square&logo=firebase)

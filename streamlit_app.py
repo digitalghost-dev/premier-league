@@ -399,7 +399,20 @@ def streamlit_app():
             st.subheader("Current Standings")
 
             standings_table = st.dataframe(
-                standings_df, hide_index=True, use_container_width=True
+                standings_df,
+                column_config={
+                    "rank": "Rank",
+                    "team": "Club",
+                    "points": "Points",
+                    "wins": "Wins",
+                    "draws": "Draws",
+                    "loses": "Loses",
+                    "goals_for": "Goals For",
+                    "goals_against": "Goals Against",
+                    "goal_difference": "Goal Difference",
+                },
+                hide_index=True,
+                use_container_width=True,
             )
 
             return standings_table
