@@ -7,11 +7,3 @@ updates:
     open-pull-requests-limit: 15
     ignore:
       - dependency-name: "pandas"
-      - dependency-name: "sqlalchemy"
-      - dependency-name: "bandit"
-      - dependency-name: "black"
-      - dependency-name: "isort"
-      - dependency-name: "mypy"
-      - dependency-name: "ruff"
-      - dependency-name: "pandas-stubs"
-      - dependency-name: "prefect"
