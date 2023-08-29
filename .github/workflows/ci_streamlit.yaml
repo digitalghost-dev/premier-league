@@ -24,6 +24,7 @@ on:
       - '.pre-commit-config.yaml'
       - 'pyproject.toml'
       - 'README.md'
+      - 'requirements_all.txt'
     branches:
       - "main"
         
