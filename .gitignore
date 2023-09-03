@@ -13,6 +13,7 @@ test*
 **.*cache
 
 # YAML files
+news_flow-deployment.yaml
 premier_league_flow-deployment.yaml
 
 # Terraform secrets and state files
