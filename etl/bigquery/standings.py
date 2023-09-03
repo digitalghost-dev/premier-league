@@ -1,15 +1,14 @@
 """
-This file pulls data from an API relating to the English Premier League
+This file pulls data from the Football API relating to the English Premier League
 standings data and loads it into a BigQuery table.
 """
 
+# Importing needed libraries.
 import json
 import os
 
 import pandas as pd
 import requests  # type: ignore
-
-# Importing needed libraries.
 from google.cloud import secretmanager
 from pandas import DataFrame
 
@@ -42,9 +41,10 @@ def call_api() -> (
         list[int],
         list[int],
         list[str],
+        list[str],
     ]
 ):
-    """This function calls the API then filling in the empty lists"""
+    """This function calls the API then fills in the empty lists"""
 
     payload = gcp_secret_rapid_api()
     # Headers used for RapidAPI.
@@ -74,6 +74,7 @@ def call_api() -> (
     goals_against = []
     goals_diff = []
     status_list = []
+    logo_list = []
 
     # Filling in empty lists.
     count = 0
@@ -156,6 +157,13 @@ def call_api() -> (
             str(json_res["response"][0]["league"]["standings"][0][count]["status"])
         )
 
+        # Team's logo.
+        logo_list.append(
+            str(
+                json_res["response"][0]["league"]["standings"][0][count]["team"]["logo"]
+            )
+        )
+
         count += 1
 
     return (
@@ -171,6 +179,7 @@ def call_api() -> (
         goals_against,
         goals_diff,
         status_list,
+        logo_list,
     )
 
 
@@ -190,6 +199,7 @@ def create_dataframe() -> DataFrame:
         goals_against,
         goals_diff,
         status_list,
+        logo_list,
     ) = call_api()
 
     # Setting the headers then zipping the lists to create a dataframe.
@@ -206,6 +216,7 @@ def create_dataframe() -> DataFrame:
         "goals_against",
         "goal_difference",
         "position_status",
+        "logo",
     ]
     zipped = list(
         zip(
@@ -221,6 +232,7 @@ def create_dataframe() -> DataFrame:
             goals_against,
             goals_diff,
             status_list,
+            logo_list,
         )
     )
 
@@ -245,6 +257,7 @@ def define_table_schema() -> list[dict[str, str]]:
         {"name": "goals_against", "type": "INTEGER"},
         {"name": "goal_difference", "type": "INTEGER"},
         {"name": "position_status", "type": "STRING"},
+        {"name": "logo", "type": "STRING"},
     ]
 
     return schema_definition
@@ -264,7 +277,7 @@ def send_dataframe_to_bigquery(
     print("Standings table loaded!")
 
 
-if __name__ != "__main__":
+if __name__ == "__main__":
     standings_dataframe = create_dataframe()
     schema_definition = define_table_schema()
     send_dataframe_to_bigquery(standings_dataframe, schema_definition)
