@@ -1,19 +1,12 @@
-# System libraries
 import time
 from datetime import datetime
 
 import firebase_admin  # type: ignore
-
-# Data libraries
 import pandas as pd
 import plotly.express as px  # type: ignore
-
-# Visualization Libraries
 import streamlit as st
 import streamlit.components.v1 as components
 from firebase_admin import firestore  # type: ignore
-
-# Google Cloud Libraries
 from google.cloud import bigquery
 from google.oauth2 import service_account  # type: ignore
 from streamlit.delta_generator import DeltaGenerator
@@ -60,7 +53,7 @@ def bigquery_connection():
     # ---- Standings query and dataframe ----
     standings_data = run_query(
         """
-            SELECT rank, team, points, wins, draws, loses, goals_for, goals_against, goal_difference
+            SELECT rank, logo, team, points, wins, draws, loses, goals_for, goals_against, goal_difference
             FROM `premier_league_dataset.standings`;
         """
     )
@@ -81,7 +74,7 @@ def bigquery_connection():
     # ---- Teams query and dataframe ----
     teams_data = run_query(
         """
-            SELECT logo, form, t.team, clean_sheets, penalties_scored, penalties_missed, average_goals, win_streak
+            SELECT t.logo, form, t.team, clean_sheets, penalties_scored, penalties_missed, average_goals, win_streak
             FROM `premier_league_dataset.teams` AS t
             LEFT JOIN `premier_league_dataset.standings` AS s
             ON t.team = s.Team
@@ -101,6 +94,17 @@ def bigquery_connection():
     )
 
     top_scorers_df = pd.DataFrame(data=top_scorers_data)
+
+    # --- News query and dataframe ----
+    news_data = run_query(
+        """
+            SELECT *
+            FROM `premier_league_dataset.news`
+            ORDER BY published_at DESC;
+        """
+    )
+
+    news_df = pd.DataFrame(data=news_data)
 
     # Fetching the minimun round number from the 'rounds' table.
     min_round_row = run_query(
@@ -142,6 +146,7 @@ def bigquery_connection():
         status_df,
         teams_df,
         top_scorers_df,
+        news_df,
         min_round,
         max_round,
         league_statistics_df,
@@ -156,6 +161,7 @@ def streamlit_app():
         status_df,
         teams_df,
         top_scorers_df,
+        news_df,
         min_round,
         max_round,
         league_statistics_df,
@@ -192,6 +198,8 @@ def streamlit_app():
     with st.container():
         col1.title("Premier League Statistics / 2023-24")
 
+        st.subheader(f"Current Round: {max_round}")
+
         # Get the current date
         def get_suffix(day):
             if 10 < day % 100 < 20:
@@ -221,8 +229,8 @@ def streamlit_app():
     toast()
 
     # Tab menu.
-    tab1, tab2, tab3 = st.tabs(
-        ["Standings & Overview", "Top Teams & Scorers", "Fixtures"]
+    tab1, tab2, tab3, tab4 = st.tabs(
+        ["Standings & Overview", "Top Teams & Scorers", "Fixtures", "News"]
     )
 
     # --------- Overview Tab ---------
@@ -399,8 +407,11 @@ def streamlit_app():
             st.subheader("Current Standings")
 
             standings_table = st.dataframe(
-                standings_df,
+                standings_df.style.set_table_styles(
+                    [{"selector": "th", "props": [("background-color", "yellow")]}]
+                ),
                 column_config={
+                    "logo": st.column_config.ImageColumn("Icon", width="small"),
                     "rank": "Rank",
                     "team": "Club",
                     "points": "Points",
@@ -547,12 +558,13 @@ def streamlit_app():
 
             count += 1
 
+        # Legend for line chart.
         headers = [
-            str(standings_df.iloc[0][1]),
-            str(standings_df.iloc[1][1]),
-            str(standings_df.iloc[2][1]),
-            str(standings_df.iloc[3][1]),
-            str(standings_df.iloc[4][1]),
+            str(standings_df.iloc[0][2]),
+            str(standings_df.iloc[1][2]),
+            str(standings_df.iloc[2][2]),
+            str(standings_df.iloc[3][2]),
+            str(standings_df.iloc[4][2]),
         ]
 
         zipped = list(
@@ -886,6 +898,54 @@ def streamlit_app():
                     st.divider()
 
             round_count -= 1
+
+        # Social media icons section.
+        social_media()
+
+    # --------- About Tab ---------
+    with tab4:
+        st.header("Recent News")
+        col1, col2, col3, col4 = st.columns(4)
+
+        with col1:
+            with st.container():
+                st.image(news_df.iloc[0][2], use_column_width=True)
+                st.subheader(news_df.iloc[0][0])
+                st.write(f"Publish time: {news_df.iloc[0][3]}")
+                st.markdown(
+                    f"<a href={(news_df.iloc[0][1])}>Read More</a>",
+                    unsafe_allow_html=True,
+                )
+
+        with col2:
+            with st.container():
+                st.image(news_df.iloc[1][2], use_column_width=True)
+                st.subheader(news_df.iloc[1][0])
+                st.write(f"Publish time: {news_df.iloc[1][3]}")
+                st.markdown(
+                    f"<a href={(news_df.iloc[1][1])}>Read More</a>",
+                    unsafe_allow_html=True,
+                )
+
+        with col3:
+            with st.container():
+                st.image(news_df.iloc[2][2], use_column_width=True)
+                st.subheader(news_df.iloc[2][0])
+                st.write(f"Publish time: {news_df.iloc[2][3]}")
+                st.markdown(
+                    f"<a href={(news_df.iloc[2][1])}>Read More</a>",
+                    unsafe_allow_html=True,
+                )
+
+        with col4:
+            with st.container():
+                st.image(news_df.iloc[3][2], use_column_width=True)
+                st.subheader(news_df.iloc[3][0])
+                st.write(f"Publish time: {news_df.iloc[3][3]}")
+                st.markdown(
+                    f"<a href={(news_df.iloc[3][1])}>Read More</a>",
+                    unsafe_allow_html=True,
+                )
 
         # Social media icons section.
         social_media()
