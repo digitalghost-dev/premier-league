@@ -277,7 +277,7 @@ def send_dataframe_to_bigquery(
     print("Standings table loaded!")
 
 
-if __name__ == "__main__":
+if __name__ != "__main__":
     standings_dataframe = create_dataframe()
     schema_definition = define_table_schema()
     send_dataframe_to_bigquery(standings_dataframe, schema_definition)
