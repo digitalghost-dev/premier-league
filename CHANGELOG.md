@@ -10,7 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * **MINOR:** Any changes to the Streamlit dashboard that adds a new interaction/feature or removal of one.
 * **PATCH:** Any changes that fix bugs, typos or small edits.
 
-## 2.10.0 | 2023-09-04
+## 2.10.1 | 2023-09-10
+
+### Fixed
+* Fixed the **News** tab to not error out when the table does not have at least 4 rows of data by implementing a `try/except` block.
+
+---
+
+## [2.10.0] | 2023-09-04
 
 ### Added
 * Added club logo to the Standings `st.dataframe`.
@@ -279,6 +286,8 @@ Top Teams Tab
 
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
+
+[2.10.0]: https://github.com/digitalghost-dev/premier-league/commit/483e68208487c1632d2aa93ac098683a6c3515cc#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
 [2.9.1]: https://github.com/digitalghost-dev/premier-league/commit/a726d8fbf9f99bddc03a7fbf465ddba14ed97aee#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 

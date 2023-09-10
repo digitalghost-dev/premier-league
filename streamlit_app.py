@@ -909,43 +909,55 @@ def streamlit_app():
 
         with col1:
             with st.container():
-                st.image(news_df.iloc[0][2], use_column_width=True)
-                st.subheader(news_df.iloc[0][0])
-                st.write(f"Publish time: {news_df.iloc[0][3]}")
-                st.markdown(
-                    f"<a href={(news_df.iloc[0][1])}>Read More</a>",
-                    unsafe_allow_html=True,
-                )
+                try:
+                    st.image(news_df.iloc[0][2], use_column_width=True)
+                    st.subheader(news_df.iloc[0][0])
+                    st.write(f"Publish time: {news_df.iloc[0][3]}")
+                    st.markdown(
+                        f"<a href={(news_df.iloc[0][1])}>Read More</a>",
+                        unsafe_allow_html=True,
+                    )
+                except IndexError:
+                    pass
 
         with col2:
             with st.container():
-                st.image(news_df.iloc[1][2], use_column_width=True)
-                st.subheader(news_df.iloc[1][0])
-                st.write(f"Publish time: {news_df.iloc[1][3]}")
-                st.markdown(
-                    f"<a href={(news_df.iloc[1][1])}>Read More</a>",
-                    unsafe_allow_html=True,
-                )
+                try:
+                    st.image(news_df.iloc[1][2], use_column_width=True)
+                    st.subheader(news_df.iloc[1][0])
+                    st.write(f"Publish time: {news_df.iloc[1][3]}")
+                    st.markdown(
+                        f"<a href={(news_df.iloc[1][1])}>Read More</a>",
+                        unsafe_allow_html=True,
+                    )
+                except IndexError:
+                    pass
 
         with col3:
             with st.container():
-                st.image(news_df.iloc[2][2], use_column_width=True)
-                st.subheader(news_df.iloc[2][0])
-                st.write(f"Publish time: {news_df.iloc[2][3]}")
-                st.markdown(
-                    f"<a href={(news_df.iloc[2][1])}>Read More</a>",
-                    unsafe_allow_html=True,
-                )
+                try:
+                    st.image(news_df.iloc[2][2], use_column_width=True)
+                    st.subheader(news_df.iloc[2][0])
+                    st.write(f"Publish time: {news_df.iloc[2][3]}")
+                    st.markdown(
+                        f"<a href={(news_df.iloc[2][1])}>Read More</a>",
+                        unsafe_allow_html=True,
+                    )
+                except IndexError:
+                    pass
 
         with col4:
             with st.container():
-                st.image(news_df.iloc[3][2], use_column_width=True)
-                st.subheader(news_df.iloc[3][0])
-                st.write(f"Publish time: {news_df.iloc[3][3]}")
-                st.markdown(
-                    f"<a href={(news_df.iloc[3][1])}>Read More</a>",
-                    unsafe_allow_html=True,
-                )
+                try:
+                    st.image(news_df.iloc[3][2], use_column_width=True)
+                    st.subheader(news_df.iloc[3][0])
+                    st.write(f"Publish time: {news_df.iloc[3][3]}")
+                    st.markdown(
+                        f"<a href={(news_df.iloc[3][1])}>Read More</a>",
+                        unsafe_allow_html=True,
+                    )
+                except IndexError:
+                    pass
 
         # Social media icons section.
         social_media()
