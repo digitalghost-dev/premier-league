@@ -17,7 +17,7 @@
 
 
 ## Overview
-* Prefect orchestrates Python scripts that extract data from two API sources, perfom transformations, then load processed data into a PostgreSQL database.
+* Prefect orchestrates Python scripts that extract data from two API sources, perfom transformations, then load processed data into BigQuery.
 * Cloud Scheduler triggers a Docker container to run using Cloud Run Jobs. This container also performs ETL but loads the data into Firestore.
 * The Streamlit App is containerized with Docker and hosted on Cloud Run as a Service.
 * CI/CD is implemented with GitHub Actions to push a new Streamlit App image to Artifact Registry abnd deploy to Cloud Run as a Service when `streamlit_app.py` and/or `Dockerfile` files are updated.
@@ -53,7 +53,7 @@
 1. Prefect and Cloud Scheduler are the orchestration tools that trigger the ETL scripts.
 2. Cloud Scheduler triggers the Cloud Run Job to execute.
 3. The ETL process starts.
-    * `ETL 1` calls the Football API `standings`, `teams`, and `top-scorers` endpoints and calls the `stadiums` endpoints from the Go API (`api/`); applies tranformations, creates dataframes, and defines schemas; then loads the dataframes into PostgreSQL. 
+    * `ETL 1` calls the Football API `standings`, `teams`, and `top-scorers` endpoints and calls the `stadiums` endpoints from the Go API (`api/`); applies tranformations, creates dataframes, and defines schemas; then loads the dataframes into BigQuery. 
     * `ETL 2` calls the Football API `fixtures` endpoint; applies transforms and creates dictionaries; then loads the data as documents into a Firestore collection.
 4. Data is then visualized on a dashboard using Streamlit.
 
