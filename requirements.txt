@@ -5,7 +5,7 @@
 # Numbers and graphs or visualizations.
 numpy==1.24.3
 plotly==5.16.1
-streamlit==1.26.0
+streamlit==1.27.1
 
 # Data and databases
 pandas==1.4.2
