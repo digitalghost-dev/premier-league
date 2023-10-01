@@ -3,6 +3,6 @@
 requests==2.29.0
 pandas==1.4.2
 pyarrow==12.0.1
-prefect==2.12.1
+prefect==2.13.4
 pandas-gbq==0.19.2
 google-cloud-secret-manager==2.16.3
