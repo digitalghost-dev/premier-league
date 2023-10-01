@@ -3,7 +3,7 @@
 # This is to make the Docker image as small as possible and reduce security issues.
 
 # Numbers and graphs or visualizations.
-numpy==1.24.3
+numpy==1.26.0
 plotly==5.16.1
 streamlit==1.26.0
 
