@@ -1,15 +1,14 @@
+import io
 import os
 
-import polars as pl
-import requests
-
+import requests  # type: ignore
 from google.cloud import secretmanager
-from io import BytesIO
-import io
 
+import polars as pl
 
 # Settings the project environment.
 os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
+
 
 def gcp_secret_stock_api() -> str:
     """This function retrieves the Rapid API key from GCP Secret Manager"""
@@ -21,6 +20,7 @@ def gcp_secret_stock_api() -> str:
 
     return stock_api_key
 
+
 def gcp_secret_postgresql_uri() -> str:
     """This function retrieves the Rapid API key from GCP Secret Manager"""
 
@@ -30,6 +30,7 @@ def gcp_secret_postgresql_uri() -> str:
     postgresql_uri = response.payload.data.decode("UTF-8")
 
     return postgresql_uri
+
 
 def send_dataframe_to_postgres() -> None:
     stock_api_key = gcp_secret_stock_api()
@@ -42,7 +43,10 @@ def send_dataframe_to_postgres() -> None:
     json_res = response.json()
     df = pl.DataFrame(json_res)
 
-    df.write_database(table_name="stock",  connection_uri=postgresql_uri, if_exists="append")
+    df.write_database(
+        table_name="stock", connection_uri=postgresql_uri, if_exists="append"
+    )
+
 
 if __name__ == "__main__":
     send_dataframe_to_postgres()
