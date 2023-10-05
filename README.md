@@ -42,7 +42,7 @@
 
 ## Important Links
 
-* [Documentation](https://docs.digitalghost.dev/)
+* [Documentation](https://docs.digitalghost.dev/) - currently under construction 🔨
 * [Visualization](https://streamlit.digitalghost.dev/)
 * [Version History](https://github.com/digitalghost-dev/premier-league/blob/main/CHANGELOG.md)
 
