@@ -25,7 +25,7 @@ def gcp_secret_postgresql_uri() -> str:
     """This function retrieves the Rapid API key from GCP Secret Manager"""
 
     client = secretmanager.SecretManagerServiceClient()
-    name = "projects/463690670206/secrets/postgresql-uri/versions/1"
+    name = "projects/463690670206/secrets/postgresql-uri/versions/3"
     response = client.access_secret_version(request={"name": name})
     postgresql_uri = response.payload.data.decode("UTF-8")
 
@@ -44,9 +44,9 @@ def send_dataframe_to_postgres() -> None:
     df = pl.DataFrame(json_res)
 
     df.write_database(
-        table_name="stock", connection_uri=postgresql_uri, if_exists="append"
+        table_name="stocks", connection=postgresql_uri, if_exists="append"
     )
 
 
-if __name__ == "__main__":
+if __name__ != "__main__":
     send_dataframe_to_postgres()
