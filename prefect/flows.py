@@ -16,6 +16,10 @@ def top_scorers():
 def news():
     from etl.bigquery.news import send_dataframe_to_bigquery
 
+@task
+def stocks():
+    from etl.postgres.stock import send_dataframe_to_postgres
+
 @flow
 def premier_league_flow():
     a = standings()
@@ -25,3 +29,7 @@ def premier_league_flow():
 @flow
 def news_flow():
     a = news()
+
+@flow
+def stocks_flow():
+    a = stocks()
