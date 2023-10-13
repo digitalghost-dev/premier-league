@@ -1,8 +1,10 @@
 # This requirements file holds the libraries used by the ETL pipeline.
 
 requests==2.29.0
-pandas==1.4.2
+pandas==1.5.0
 pyarrow==12.0.1
-prefect==2.12.1
+prefect==2.12.0
 pandas-gbq==0.19.2
 google-cloud-secret-manager==2.16.3
+polars==0.19.6
+psycopg2-binary==2.9.8
