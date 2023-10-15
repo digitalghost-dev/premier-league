@@ -17,28 +17,7 @@
 
 
 ## Overview
-* Prefect orchestrates Python scripts that extract data from two API sources, perfom transformations, then load processed data into BigQuery.
-* Cloud Scheduler triggers a Docker container to run using Cloud Run Jobs. This container also performs ETL but loads the data into Firestore.
-* The Streamlit App is containerized with Docker and hosted on Cloud Run as a Service.
-* CI/CD is implemented with GitHub Actions to push a new Streamlit App image to Artifact Registry abnd deploy to Cloud Run as a Service when `streamlit_app.py` and/or `Dockerfile` files are updated.
-    * Security scanning also takes place with Snyk, Syft, and Grype.
-
-## Tests
-
-### Checks
-[![pre-commit](https://img.shields.io/badge/validation-pre--commit-FAB040?style=flat-square&logo=pre-commit)](https://pre-commit.com)
-
-[![bandit](https://img.shields.io/badge/security-bandit-yellow?style=flat-square)](https://github.com/PyCQA/bandit)
-[![black](https://img.shields.io/badge/style-black-black?style=flat-square)](https://github.com/psf/Black)
-[![mypy](https://img.shields.io/badge/type_checking%20-mypy-0096c7?style=flat-square)](https://github.com/python/mypy)
-[![Imports: isort](https://img.shields.io/badge/sorting-isort-ef8336?style=flat-square)](https://pycqa.github.io/isort/)
-[![ruff](https://img.shields.io/badge/linter-ruff-FCC21B?style=flat-square&)](https://github.com/astral-sh/Ruff)
-
-### Image Scanning
-[![syft](https://img.shields.io/badge/SBOM-Syft-D939AB?style=flat-square)](https://github.com/anchore/syft)
-[![grype](https://img.shields.io/badge/Image_Scanning-Grype-4A8CFF?style=flat-square)](https://github.com/anchore/grype)
-[![snyk](https://img.shields.io/badge/Dependency_Security-Snyk-E5E4E2?style=flat-square)](https://snyk.io)
-
+> This repository holds the code for a personnal project that I use to learn and experiment with different technologies cenetered around Data Engineering. The goal of this project is to create a data pipelines that extracts data from multiple sources, transforms the data, and loads the data into different database types and then creating visualizations with Streamlit.
 
 ## Important Links
 
@@ -46,38 +25,58 @@
 * [Visualization](https://streamlit.digitalghost.dev/)
 * [Version History](https://github.com/digitalghost-dev/premier-league/blob/main/CHANGELOG.md)
 
+## Infrastructure
+### Tools & Services
+![cloud](https://img.shields.io/badge/Google_Cloud-4285F4?style=flat-square&logo=googlecloud&logoColor=white) ![terraform](https://img.shields.io/badge/Terraform-844FBA?style=flat-square&logo=terraform&logoColor=white) ![docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white) ![prefect](https://img.shields.io/badge/-Prefect-070E10?style=flat-square&logo=prefect)
+
+### Databases
+![firestore](https://img.shields.io/badge/Firestore-FFCA28?style=flat-square&logo=firebase&logoColor=white) ![postgres](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white) ![bigquery](https://img.shields.io/badge/BigQuery-669DF6?style=flat-square&logo=googlebigquery&logoColor=white)
+
+### Code Quality
+![pre-commit](https://img.shields.io/badge/pre--commit-FAB040?style=flat-square&logo=pre-commit&logoColor=white)
+
+| Security Linter | Code Formatting | Import Sorting | Type Checking | Code Linting |
+| --- | --- | --- | --- | --- |
+| [bandit](https://github.com/PyCQA/bandit) | [black](https://github.com/psf/black) | [isort](https://github.com/PyCQA/isort) | [mypy](https://github.com/python/mypy) | [ruff](https://github.com/astral-sh/ruff) |
+
+
+
 ---
 
 ## Data and CI/CD Pipelines
-### Data Pipeline
-1. Prefect and Cloud Scheduler are the orchestration tools that trigger the ETL scripts.
-2. Cloud Scheduler triggers the Cloud Run Job to execute.
-3. The ETL process starts.
-    * `ETL 1` calls the Football API `standings`, `teams`, and `top-scorers` endpoints and calls the `stadiums` endpoints from the Go API (`api/`); applies tranformations, creates dataframes, and defines schemas; then loads the dataframes into BigQuery. 
-    * `ETL 2` calls the Football API `fixtures` endpoint; applies transforms and creates dictionaries; then loads the data as documents into a Firestore collection.
-4. Data is then visualized on a dashboard using Streamlit.
+### Data Pipelines
+
+#### Data Pipeline 1
+1. Data from the [Financial Modeling Prep API](https://site.financialmodelingprep.com) is extracted with Python using the `/quote` endpoint.
+2. The data is loaded directly into a PostgreSQL database hosted on [Cloud SQL](https://cloud.google.com/sql?hl=en) with no transformations.
+3. The prior steps are orchestrated with [Prefect](https://www.prefect.io).
+4. Once the data is loaded into PostgreSQL, Datastream replicates the data into BigQuery. Datastream checks for staleness every 15 minutes.
+5. [dbt](https://getdbt.com) is used to transform the data in BigQuery and create a view with transformed data.
+
+#### Data Pipeline 2
+1. Data is extracted from multiple API sources with Python:
+    * Data from the [Football Data API](https://www.football-data.org/) is extracted with Python using the `/standings`, `/teams`, and `top_scorers` endpoints.
+    * Data from the [NewsAPI](https://newsapi.org) is extracted with Python using the `/everything` endpoint with parameters set to search for the Premier League.
+    * Data from the Go & Gin API is extracted with Python using the `/stadiums` endpoint.
+2. Python performs any necessary transformations and loads the data into BigQuery.
+3. The prior steps are orchestrated with [Prefect](https://www.prefect.io).
+
+#### Data Pipeline 3
+1. Data from the [Football Data API](https://www.football-data.org/) is extracted with Python using the `/fixtures` endpoint.
+2. Python creates dictionaries from the data and loads the data into Firestore
+3. The prior steps are orchestrated with Cloud Scheduler as a Docker container hosted on Cloud Run as a Job.
+
+![data-pipeline](https://storage.googleapis.com/pipeline-flowcharts/data_pipelines.png)
 
 ### CI/CD Pipeline
-The CI/CD pipeline is focused on the `streamlit_app.py` file and the Docker image that is built from it.
+The CI/CD pipeline is focuses on building the Streamlit app into a Docker container that is then pushed to Artifact Registry and deployed to Cloud Run as a Service. Different architecutres are buit for different machine types and pushed to Docker Hub.
 
-#### Building, Pushing, Deploying
 1. The repository code is checked out and a Docker image containing the updated `streamlit_app.py` file will build.
 2. The newly built Docker image will be pushed to [Artifact Registry](https://cloud.google.com/artifact-registry).
 3. The Docker image is then deployed to [Cloud Run](https://cloud.google.com/run/docs/overview/what-is-cloud-run) as a Service.
 
-#### Security
-1. An [`SBOM`](https://www.linuxfoundation.org/blog/blog/what-is-an-sbom) is created with [Syft](https://github.com/anchore/syft).
-2. The `SBOM` is then scanned with [Grype](https://github.com/anchore/grype).
-3. The repository's dependencies are scanned with [Snyk](https://github.com/snyk/actions/tree/master/python-3.10).
+![cicd_pipeline](https://storage.googleapis.com/pipeline-flowcharts/cicd_pipeline.png)
 
-### Pipeline Flowchart
-![football-data-flowchart](https://storage.googleapis.com/pipeline-flowcharts/football-data-pipeline-flowchart.png)
-
-### Infrastructure
-![cloud](https://img.shields.io/badge/Cloud-GCP-4285F4?style=flat-square&logo=google-cloud)
-![terraform](https://img.shields.io/badge/IaC-Terraform-5C4EE5?style=flat-square&logo=terraform)
-![docker](https://img.shields.io/badge/Containers-Docker-2496ED?style=flat-square&logo=docker)
-![prefect](https://img.shields.io/badge/Orchestration-Prefect-024DFD?style=flat-square&logo=prefect)
-
-### Databases
-![firestore](https://img.shields.io/badge/NoSQL-Firestore-FFA611?style=flat-square&logo=firebase)
+## Security
+* [Syft](https://github.com/anchore/syft) and [Grype](https://github.com/anchore/grype) work together to scan the Streamlit Docker image. Syft creates an [`SBOM`](https://www.linuxfoundation.org/blog/blog/what-is-an-sbom) and Grype scans the `SBOM` for vulnerabilities. The results are sent to the repository's Security tab.
+* [Snyk](https://github.com/snyk/actions/tree/master/python-3.10) is also used to scan the repository for vulnerabilities in the Python packages.
