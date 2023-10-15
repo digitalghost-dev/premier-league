@@ -1,6 +1,6 @@
 # HTTP libraries
 requests==2.31.0
-prefect==2.13.4
+prefect==2.13.7
 
 # pre-commit hooks
 bandit==1.7.5
