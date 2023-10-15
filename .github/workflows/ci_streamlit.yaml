@@ -16,6 +16,8 @@ on:
       - '.github/**'
       - 'api/**'
       - 'etl/**'
+      - 'cli/**'
+      - 'dependencies/**'
       - 'prefect/**'
       - 'terraform/**'
       - 'CHANGELOG.md'
