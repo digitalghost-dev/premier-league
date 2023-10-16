@@ -4,7 +4,7 @@
 
 # Numbers and graphs or visualizations.
 numpy==1.24.3
-plotly==5.16.1
+plotly==5.17.0
 streamlit==1.27.2
 
 # Data and databases
