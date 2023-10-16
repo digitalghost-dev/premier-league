@@ -19,9 +19,6 @@
 ## Overview
 > This repository holds the code for a personnal project that I use to learn and experiment with different technologies cenetered around Data Engineering. The goal of this project is to create a data pipelines that extracts data from multiple sources, transforms the data, and loads the data into different database types and then creating visualizations with Streamlit.
 
-## Demo
-![streamlit](https://storage.googleapis.com/premier-league/streamlit_demo_2.10.1.gif)
-
 ## Important Links
 
 * [Documentation](https://docs.digitalghost.dev/) - currently under construction 🔨
