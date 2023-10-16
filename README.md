@@ -19,10 +19,13 @@
 ## Overview
 > This repository holds the code for a personnal project that I use to learn and experiment with different technologies cenetered around Data Engineering. The goal of this project is to create a data pipelines that extracts data from multiple sources, transforms the data, and loads the data into different database types and then creating visualizations with Streamlit.
 
+## Demo
+![streamlit](https://storage.googleapis.com/premier-league/streamlit_demo_2.10.1.gif)
+
 ## Important Links
 
 * [Documentation](https://docs.digitalghost.dev/) - currently under construction 🔨
-* [Visualization](https://streamlit.digitalghost.dev/)
+* [Streamlit App](https://streamlit.digitalghost.dev/)
 * [Version History](https://github.com/digitalghost-dev/premier-league/blob/main/CHANGELOG.md)
 
 ## Infrastructure
@@ -66,7 +69,7 @@
 2. Python creates dictionaries from the data and loads the data into Firestore
 3. The prior steps are orchestrated with Cloud Scheduler as a Docker container hosted on Cloud Run as a Job.
 
-![data-pipeline](https://storage.googleapis.com/pipeline-flowcharts/data_pipelines.png)
+![data-pipeline](https://storage.googleapis.com/premier-league/data_pipelines.png)
 
 ### CI/CD Pipeline
 The CI/CD pipeline is focuses on building the Streamlit app into a Docker container that is then pushed to Artifact Registry and deployed to Cloud Run as a Service. Different architecutres are buit for different machine types and pushed to Docker Hub.
@@ -75,7 +78,7 @@ The CI/CD pipeline is focuses on building the Streamlit app into a Docker contai
 2. The newly built Docker image will be pushed to [Artifact Registry](https://cloud.google.com/artifact-registry).
 3. The Docker image is then deployed to [Cloud Run](https://cloud.google.com/run/docs/overview/what-is-cloud-run) as a Service.
 
-![cicd_pipeline](https://storage.googleapis.com/pipeline-flowcharts/cicd_pipeline.png)
+![cicd_pipeline](https://storage.googleapis.com/premier-league/cicd_pipeline.png)
 
 ## Security
 * [Syft](https://github.com/anchore/syft) and [Grype](https://github.com/anchore/grype) work together to scan the Streamlit Docker image. Syft creates an [`SBOM`](https://www.linuxfoundation.org/blog/blog/what-is-an-sbom) and Grype scans the `SBOM` for vulnerabilities. The results are sent to the repository's Security tab.
