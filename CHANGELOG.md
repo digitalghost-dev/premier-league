@@ -10,12 +10,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * **MINOR:** Any changes to the Streamlit dashboard that adds a new interaction/feature or removal of one.
 * **PATCH:** Any changes that fix bugs, typos or small edits.
 
-## 2.10.1 | 2023-09-10
+## 2.10.2 | 2023-10-20
+
+### Changed
+* Changed social media icons into static `.svg` files instead of using Font Awesome links.
+
+
+## [2.10.1] | 2023-09-10
 
 ### Fixed
 * Fixed the **News** tab to not error out when the table does not have at least 4 rows of data by implementing a `try/except` block.
 
----
 
 ## [2.10.0] | 2023-09-04
 
@@ -24,14 +29,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added `st.subheader` under main header to display current round.
 * Added **News** tab to display the latest news from the Premier League using the [News API](https://newsapi.org/).
 
----
 
 ## [2.9.1] | 2023-08-27
 
 ### Fixed
 * Fixed the Standings column headers in the `st.dataframe` element to display proper column names instead of the SQL column names.
 
----
 
 ## [2.9.0] | 2023-08-20
 
@@ -51,7 +54,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 * Removed `st.spinner`.
 
----
 
 ## [2.8.0] | 2023-08-12
 
@@ -81,14 +83,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `st.bar_chart` has also been removed due to this bug.
 * Removed `import os`, `import psycopg2`, `import plotly.graph_objects as go` as they are no longer needed.
 
----
 
 ## [2.7.1] | 2023-07-13
 
 ### Fixed
 * **Main Page**, *Standings Tab*: Fixed `iloc[X][X]` values to match the correct column to pull in correct data for the Top 5 Teams section.
 
----
 
 ## [2.7.0] | 2023-07-12
 
@@ -98,7 +98,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### **Changed** 
 * **Main Pages**, *Standings Tab*: Changed the data values for `label` and `value` for the `st.metric` card.
 
----
 
 ## [2.6.0] | 2023-06-28
 
@@ -114,7 +113,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### **Removed**
 * **Main Page**, *Fixtures Tab*: Removed extra comma from `fixtures` date.
 
----
 
 ## [2.5.0] | 2023-06-19
 
@@ -130,7 +128,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### **Removed**
 * Removed map of stadium locations from **Main** page; moved it to the new **Playground** page.
 
----
 
 ## [2.4.0] | 2023-05-26
 
@@ -144,14 +141,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### **Fixed**
 * Added `target="_blank" rel="noopener noreferrer"` to anchor elements to allow linked icons to open properly.
 
----
 
 ## [2.3.1] | 2023-05-25
 
 ### **Fixed**
 * Fixed broken link for GitHub Icon on all tabs.
 
----
 
 ## [2.3.0] | 2023-05-24
 
@@ -162,14 +157,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### **Changed**
 * Changed tab title from **Top Teams & Top Scorers** to **Statistics**.
 
----
 
 ## [2.2.1] | 2023-05-19
 
 ### **Fixed**
 * Fixed promotion/demotion legend by displaying items as a column instead of in a row.
 
----
 
 ## [2.2.0] | 2023-05-17
 
@@ -182,7 +175,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added solid border element to `standings` table to better denote promotion/demotion status.
 * Added text under table to explain which color denotes which promotion/demotion status.
 
----
 
 ## [2.1.0] | 2023-05-10
 
@@ -191,21 +183,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     * This allows the stadium points to be hoverable which enables a tooltip that provides more information about the venue.
 * Changed title to display ***Premier League Statistics / 2022-23*** instead of ***Premier League Statistics / '22-'23***.
 
----
 
 ## [2.0.2] | 2023-05-08
 
 ### **Fixed**
 * Fixed the sorting of `rounds` to appear in decending order on the `fixtures` tab.
 
----
 
 ## [2.0.1] | 2023-05-05
 
 ### **Fixed**
 * Adding '`<=`' to `while` loop to get the current round. Previously, the Streamlit app would only select rounds that were *less* than the `MAX` round which would omit the final round.
 
----
 
 ## [2.0.0] | 2023-05-02
 Now using [Firestore](https://firebase.google.com/docs/firestore/) to store fixture data in a document format.
@@ -213,7 +202,6 @@ Now using [Firestore](https://firebase.google.com/docs/firestore/) to store fixt
 ### **Added**
 * Added `Fixtures` tab for all rounds in the current season. Updates 3 times a day and will add new rounds as they start.
 
----
 
 ## [1.3.0] | 2023-04-17
 
@@ -230,7 +218,6 @@ Now using [Firestore](https://firebase.google.com/docs/firestore/) to store fixt
 
 * Removed Emojis from tab titles.
 
----
 
 ## [1.2.0] | 2023-04-16
 
@@ -245,8 +232,6 @@ Top Teams Tab
 
 Top Players Tab
 * Removed this tab, combined with top teams tab.
-
----
 
 ## [1.1.0] | 2023-04-07
 
@@ -268,8 +253,6 @@ Top Players Tab
 ### **Removed**
 * Removed `LIMIT 5` from SQL query to pull all teams.
 
----
-
 ## [1.0.0] | 2023-04-05
 
 ### **Added**
@@ -286,6 +269,8 @@ Top Teams Tab
 
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
+
+[2.10.1]: https://github.com/digitalghost-dev/premier-league/commit/c2a0d39eb7cab1b7ed3013bb5811490f70bd256e#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
 [2.10.0]: https://github.com/digitalghost-dev/premier-league/commit/483e68208487c1632d2aa93ac098683a6c3515cc#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 

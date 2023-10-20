@@ -177,13 +177,13 @@ def streamlit_app():
 
         components.html(
             """
-            <script src="https://kit.fontawesome.com/84587c6ecd.js" crossorigin="anonymous"></script>
             <div style="display: flex; flex-direction: row;">
-                <a target="_blank" rel="noopener noreferrer" href="https://github.com/digitalghost-dev/"><i class='fa-brands fa-github fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
-                <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/christian-sanchez-nv/"><i class='fa-brands fa-linkedin fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
-                <a target="_blank" rel="noopener noreferrer" href="https://medium.com/@digitialghost-dev"><i class='fa-brands fa-medium fa-2x fa-fade' style='color: #000000; padding-right: 1rem'></i></a>
-                <a target="_blank" rel="noopener noreferrer" href="https://hub.docker.com/r/digitalghostdev/premier-league/tags"><i class='fa-brands fa-docker fa-2x fa-fade' style='color: #000000;'></i></a>
-                
+                <a target="_blank" rel="noopener noreferrer" href="https://hub.docker.com/r/digitalghostdev/premier-league/tags">
+                    <img src="https://storage.googleapis.com/premier-league/docker.svg" alt="Image description" width="40" height="40" style='padding-right: 1rem'>
+                </a>
+                <a target="_blank" rel="noopener noreferrer" href="https://github.com/digitalghost-dev/">
+                    <img src="https://storage.googleapis.com/premier-league/github.svg" alt="Image description" width="40" height="40">
+                </a>        
             </div>
             """
         )
