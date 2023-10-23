@@ -1,10 +1,8 @@
-import io
 import os
 
+import polars as pl
 import requests  # type: ignore
 from google.cloud import secretmanager
-
-import polars as pl
 
 # Settings the project environment.
 os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
@@ -25,7 +23,7 @@ def gcp_secret_postgresql_uri() -> str:
     """This function retrieves the Rapid API key from GCP Secret Manager"""
 
     client = secretmanager.SecretManagerServiceClient()
-    name = "projects/463690670206/secrets/postgresql-uri/versions/3"
+    name = "projects/463690670206/secrets/postgresql-uri/versions/1"
     response = client.access_secret_version(request={"name": name})
     postgresql_uri = response.payload.data.decode("UTF-8")
 
