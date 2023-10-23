@@ -1,14 +1,13 @@
 """
-This file pulls data from an API relating to the English Premier League
+This file pulls data from the Football API relating to the English Premier League
 teams data and loads it into a PostgreSQL database.
 """
 
+# Importing needed libraries.
 import os
 
 import pandas as pd
 import requests  # type: ignore
-
-# Importing needed libraries.
 from google.cloud import bigquery, secretmanager
 from pandas import DataFrame
 
@@ -20,7 +19,7 @@ STANDINGS_TABLE = "premier_league_dataset.standings"
 TEAMS_TABLE = "premier_league_dataset.teams"
 
 
-def gcp_secret_rapid_api():
+def gcp_secret_rapid_api() -> str:
     """This function retrieves the Rapid API key from GCP Secret Manager"""
 
     client = secretmanager.SecretManagerServiceClient()
@@ -32,7 +31,7 @@ def gcp_secret_rapid_api():
 
 
 # Function to call the Teams table in BigQuery.
-def bigquery_call():
+def bigquery_call() -> DataFrame:
     """This function calls the Teams table in BigQuery"""
 
     bqclient = bigquery.Client()
@@ -44,15 +43,13 @@ def bigquery_call():
         ORDER BY Rank
     """
 
-    pd.dataframe = (
+    bigquery_dataframe = (
         bqclient.query(query_string)
         .result()
         .to_dataframe(
             create_bqstorage_client=True,
         )
     )
-
-    bigquery_dataframe = pd.dataframe
 
     return bigquery_dataframe
 
