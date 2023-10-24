@@ -1,5 +1,5 @@
 """
-This file pulls data from an API relating to the English Premier League 
+This file pulls data from the Football API relating to the English Premier League 
 top scoring players data and loads it into a PostgreSQL database.
 """
 
