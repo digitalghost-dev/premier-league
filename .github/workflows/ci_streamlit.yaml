@@ -17,6 +17,7 @@ on:
       - 'api/**'
       - 'etl/**'
       - 'cli/**'
+      - 'components/**'
       - 'dependencies/**'
       - 'prefect/**'
       - 'terraform/**'
@@ -32,7 +33,7 @@ on:
         
 env:
   GAR_LOCATION: us-central1
-  VERSION_NUMBER: '2.10.2'
+  VERSION_NUMBER: '2.10.3'
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   PROJECT_ID: ${{ secrets.PROJECT_ID }}
@@ -91,9 +92,10 @@ jobs:
           mkdir docker-context/.streamlit
           cp ./.dockerignore docker-context
           cp ./Dockerfile docker-context
+          cp -r ./components docker-context/components
           cp ./streamlit_app.py docker-context
           cp ./requirements.txt docker-context
-          cp -r ./.streamlit/config.toml docker-context/.streamlit
+          cp ./.streamlit/config.toml docker-context/.streamlit/
         
       - name: Build and Export
         uses: docker/build-push-action@v4
