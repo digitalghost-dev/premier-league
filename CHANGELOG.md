@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * **MINOR:** Any changes to the Streamlit dashboard that adds a new interaction/feature or removal of one.
 * **PATCH:** Any changes that fix bugs, typos or small edits.
 
+## 2.10.3 | 2023-10-26
+
+### Changed 
+* Changed the `social_media()` function into an importable `Class` from the newly created `components/` directory. Importing as:
+
+ `from components.social_media import SocialMediaSection`
+
 ## 2.10.2 | 2023-10-20
 
 ### Changed
