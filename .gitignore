@@ -4,17 +4,11 @@
 .streamlit/secrets.toml
 
 # Testing files and directories
-test/
-tests/
 testing/
-test*
+test.py
 
 # Cache files and directories
 **.*cache
-
-# YAML files
-news_flow-deployment.yaml
-premier_league_flow-deployment.yaml
 
 # Terraform secrets and state files
 terraform/.terraform*
