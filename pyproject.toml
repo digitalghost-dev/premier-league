@@ -1,13 +1,13 @@
 [tool.bandit]
-
 skips = ["B608"] # Never enforce `B608` (hardcoded credentials).
 
 [tool.coverage.report]
 show_missing = true
 
-[tool.isort]
-profile = "black"
-
 [tool.ruff]
-
 ignore = ["E501"] # Never enforce `E501` (line length violations).
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "tab"
+line-ending = "auto"
