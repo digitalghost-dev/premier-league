@@ -10,14 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * **MINOR:** Any changes to the Streamlit dashboard that adds a new interaction/feature or removal of one.
 * **PATCH:** Any changes that fix bugs, typos or small edits.
 
-## 2.10.3 | 2023-10-26
+## [2.10.3] | 2023-10-26
 
 ### Changed 
 * Changed the `social_media()` function into an importable `Class` from the newly created `components/` directory. Importing as:
 
  `from components.social_media import SocialMediaSection`
 
-## 2.10.2 | 2023-10-20
+## [2.10.2] | 2023-10-20
 
 ### Changed
 * Changed social media icons into static `.svg` files instead of using Font Awesome links.
@@ -276,6 +276,10 @@ Top Teams Tab
 
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
+
+[2.10.3]: https://github.com/digitalghost-dev/premier-league/commit/c18d9bfaf762ba7c4c2714150c1f6cd0f722b9e8#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
+
+[2.10.2]: https://github.com/digitalghost-dev/premier-league/commit/53218cf868e3bc8128327932512f5ac1d28e6740#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
 [2.10.1]: https://github.com/digitalghost-dev/premier-league/commit/c2a0d39eb7cab1b7ed3013bb5811490f70bd256e#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
