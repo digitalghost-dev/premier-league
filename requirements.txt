@@ -15,4 +15,4 @@ pandas==1.4.2
 # Google Cloud
 firebase-admin==6.2.0
 google-cloud-core==2.3.3
-google-cloud-bigquery==3.11.4
+google-cloud-bigquery==3.13.0
