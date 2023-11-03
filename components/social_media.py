@@ -32,8 +32,3 @@ class SocialMediaSection:
 		st.subheader("Social")
 		social_html = self.generate_html()
 		components.html(social_html)
-
-
-# Create an instance of the SocialMediaSection class and display the social media links
-# social_media_section = SocialMediaSection()
-# social_media_section.display()

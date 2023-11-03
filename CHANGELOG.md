@@ -6,9 +6,23 @@ View the Streamlit dasboard: https://streamlit.digitalghost.dev/
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-* **MAJOR:** Any changes to the backend infrastructure that requires new methods of moving data that won't work with the previous architecture.
+* **MAJOR:** Any changes to the backend infrastructure that requires new methods of moving data that won't work with the previous architecture, mainly with the addition of new databases or data sources.
 * **MINOR:** Any changes to the Streamlit dashboard that adds a new interaction/feature or removal of one.
 * **PATCH:** Any changes that fix bugs, typos or small edits.
+
+## 2.11.0 | 2023-11-03
+
+### Added
+* Added an **About** tab to display information about the project and the author.
+
+### Changed
+* Changed the `stadiums_map()` function into an importable `Class`.
+
+### Fixed
+* Fixed the SQL responsible for populating the `st.dataframe` for **Standings** to order rows by `rank`.
+
+### Removed
+* Removed **Top Teams Movement** section from **Standings & Overview** tab.
 
 ## [2.10.3] | 2023-10-26
 
@@ -20,7 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.10.2] | 2023-10-20
 
 ### Changed
-* Changed social media icons into static `.svg` files instead of using Font Awesome links.
+* Changed social media icons into static `.svg` files instead of using Font Awesome icons.
 
 
 ## [2.10.1] | 2023-09-10

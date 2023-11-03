@@ -7,10 +7,10 @@
 <p align="center">
     <img src="https://img.shields.io/github/actions/workflow/status/digitalghost-dev/premier-league/ci_streamlit.yaml?style=flat-square&logo=github&label=CI%2FCD"/>
     <a href="https://github.com/digitalghost-dev/premier-league/blob/main/CHANGELOG.md">
-        <img src="https://img.shields.io/badge/Streamlit_App_Version-2.10.3-FF4B4B?style=flat-square&logo=streamlit"/>
+        <img src="https://img.shields.io/badge/Streamlit_App_Version-2.11.0-FF4B4B?style=flat-square&logo=streamlit"/>
     </a>
     <a href="https://hub.docker.com/repository/docker/digitalghostdev/premier-league/general"> 
-        <img src="https://img.shields.io/docker/image-size/digitalghostdev/premier-league/2.10.3?style=flat-square&logo=docker&label=Image%20Size&color=0DB7ED"/>
+        <img src="https://img.shields.io/docker/image-size/digitalghostdev/premier-league/2.11.0?style=flat-square&logo=docker&label=Image%20Size&color=0DB7ED"/>
     </a>
     <img src="https://img.shields.io/github/repo-size/digitalghost-dev/premier-league?style=flat-square&label=Repo%20Size&color=DEA584">
 </p>
@@ -18,6 +18,9 @@
 
 ## Overview
 > This repository holds the code for a personnal project that I use to learn and experiment with different technologies cenetered around Data Engineering. The goal of this project is to create a data pipelines that extracts data from multiple sources, transforms the data, and loads the data into different database types and then creating visualizations with Streamlit.
+
+> **Note**  
+> Many items in this project do not make efficent sense on purpose for the sake of practicing and learning.
 
 ## Important Links
 
@@ -27,7 +30,7 @@
 
 ## Infrastructure
 ### Tools & Services
-![cloud](https://img.shields.io/badge/Google_Cloud-4285F4?style=flat-square&logo=googlecloud&logoColor=white) ![terraform](https://img.shields.io/badge/Terraform-844FBA?style=flat-square&logo=terraform&logoColor=white) ![docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white) ![prefect](https://img.shields.io/badge/-Prefect-070E10?style=flat-square&logo=prefect)
+![cloud](https://img.shields.io/badge/Google_Cloud-4285F4?style=flat-square&logo=googlecloud&logoColor=white) ![terraform](https://img.shields.io/badge/Terraform-844FBA?style=flat-square&logo=terraform&logoColor=white) ![docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white) ![prefect](https://img.shields.io/badge/-Prefect-070E10?style=flat-square&logo=prefect) ![dbt](https://img.shields.io/badge/dbt-FF694B?style=flat-square&logo=dbt&logoColor=white)
 
 ### Databases
 ![firestore](https://img.shields.io/badge/Firestore-FFCA28?style=flat-square&logo=firebase&logoColor=white) ![postgres](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white) ![bigquery](https://img.shields.io/badge/BigQuery-669DF6?style=flat-square&logo=googlebigquery&logoColor=white)
@@ -35,11 +38,9 @@
 ### Code Quality
 ![pre-commit](https://img.shields.io/badge/pre--commit-FAB040?style=flat-square&logo=pre-commit&logoColor=white)
 
-| Security Linter | Code Formatting | Import Sorting | Type Checking | Code Linting |
-| --- | --- | --- | --- | --- |
-| [bandit](https://github.com/PyCQA/bandit) | [black](https://github.com/psf/black) | [isort](https://github.com/PyCQA/isort) | [mypy](https://github.com/python/mypy) | [ruff](https://github.com/astral-sh/ruff) |
-
-
+| Security Linter | Code Formatting | Type Checking | Code Linting |
+| --- | --- | --- | --- |
+| [`bandit`](https://github.com/PyCQA/bandit) | [`ruff-format`](https://github.com/astral-sh/ruff) | [`mypy`](https://github.com/python/mypy) | [`ruff`](https://github.com/astral-sh/ruff) |
 
 ---
 
@@ -69,7 +70,7 @@
 ![data-pipeline](https://storage.googleapis.com/premier-league/data_pipelines.png)
 
 ### CI/CD Pipeline
-The CI/CD pipeline is focuses on building the Streamlit app into a Docker container that is then pushed to Artifact Registry and deployed to Cloud Run as a Service. Different architecutres are buit for different machine types and pushed to Docker Hub.
+The CI/CD pipeline is focused on building the Streamlit app into a Docker container that is then pushed to Artifact Registry and deployed to Cloud Run as a Service. Different architecutres are buit for different machine types and pushed to Docker Hub.
 
 1. The repository code is checked out and a Docker image containing the updated `streamlit_app.py` file will build.
 2. The newly built Docker image will be pushed to [Artifact Registry](https://cloud.google.com/artifact-registry).

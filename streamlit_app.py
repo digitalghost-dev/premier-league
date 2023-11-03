@@ -3,7 +3,6 @@ from datetime import datetime
 
 import firebase_admin  # type: ignore
 import pandas as pd
-import plotly.express as px  # type: ignore
 import streamlit as st
 from firebase_admin import firestore  # type: ignore
 from google.cloud import bigquery
@@ -12,8 +11,12 @@ from streamlit.delta_generator import DeltaGenerator
 
 # Importing classes from components/ directory.
 from components.social_media import SocialMediaSection
+from components.stadiums_map import StadiumMapSection
+from components.about import AboutSection
 
 social_media_section = SocialMediaSection()
+stadium_map_instance = StadiumMapSection()
+about_section = AboutSection()
 
 st.set_page_config(page_title="Streamlit: Premier League", layout="wide")
 
@@ -58,7 +61,8 @@ def bigquery_connection():
 	standings_data = run_query(
 		"""
             SELECT rank, logo, team, points, wins, draws, loses, goals_for, goals_against, goal_difference
-            FROM `premier_league_dataset.standings`;
+            FROM `premier_league_dataset.standings`
+			ORDER BY rank ASC;
         """
 	)
 
@@ -69,7 +73,7 @@ def bigquery_connection():
 		"""
             SELECT rank, team, points, position_status
             FROM `premier_league_dataset.standings`
-            ORDER BY Rank;
+            ORDER BY rank ASC;
         """
 	)
 
@@ -82,7 +86,7 @@ def bigquery_connection():
             FROM `premier_league_dataset.teams` AS t
             LEFT JOIN `premier_league_dataset.standings` AS s
             ON t.team = s.Team
-            ORDER BY s.Rank;
+            ORDER BY s.rank;
         """
 	)
 
@@ -215,30 +219,13 @@ def streamlit_app():
 	toast()
 
 	# Tab menu.
-	tab1, tab2, tab3, tab4 = st.tabs(
-		["Standings & Overview", "Top Teams & Scorers", "Fixtures", "News"]
+	tab1, tab2, tab3, tab4, tab5 = st.tabs(
+		["Standings & Overview", "Top Teams & Scorers", "Fixtures", "News", "About"]
 	)
 
 	# --------- Overview Tab ---------
 	with tab1:
-		st.subheader("Top Teams Movement")
-		col1, col2, col3, col4, col5 = st.columns(5)
-
-		for col, index in zip([col1, col2, col3, col4, col5], range(5)):
-			with col:
-				if status_df.iloc[index][3] == "same":
-					status = None
-				elif status_df.iloc[index][3] == "down":
-					status = "-down"
-				else:
-					status = "up"
-
-				st.metric(
-					label=f"{status_df.iloc[index][1]}",  # Teams
-					value=f"Pts: {status_df.iloc[index][2]}",  # Points
-					delta=status,
-				)
-
+		st.subheader("League Statistics")
 		col1, col2, col3, col4 = st.columns(4)
 
 		# Average goals scored column.
@@ -416,39 +403,7 @@ def streamlit_app():
 
 		standings_table()
 
-		# Function to create the map of stadiums.
-		def stadiums_map() -> DeltaGenerator:
-			st.subheader("Location of Stadiums")
-
-			mapbox_access_token = st.secrets["mapbox"]["mapbox_key"]
-
-			px.set_mapbox_access_token(mapbox_access_token)
-
-			stadium_map = px.scatter_mapbox(
-				stadiums_df,
-				lat="latitude",
-				lon="longitude",
-				hover_name="stadium",
-				hover_data="team",
-			)
-
-			stadium_map.update_layout(
-				mapbox_style="light",
-				margin={"r": 0, "t": 0, "l": 0, "b": 0},
-				mapbox_bounds={"west": -17, "east": 17, "south": 45, "north": 60},
-			)
-
-			stadium_map.update_traces(marker=dict(size=8), marker_color="indigo")
-
-			stadium_map.update_mapboxes(zoom=4)
-
-			map_plotly_chart = st.plotly_chart(
-				stadium_map, height=1000, use_container_width=True
-			)
-
-			return map_plotly_chart
-
-		stadiums_map()
+		stadium_map_instance.create_stadium_map(stadiums_df)
 
 		social_media_section.display()
 
@@ -944,6 +899,13 @@ def streamlit_app():
 					)
 				except IndexError:
 					pass
+
+		# Social media icons section.
+		social_media_section.display()
+
+	with tab5:
+		# About section.
+		about_section.display()
 
 		# Social media icons section.
 		social_media_section.display()
