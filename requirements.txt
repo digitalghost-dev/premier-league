@@ -7,7 +7,7 @@ pillow==10.0.1
 # Numbers and graphs or visualizations.
 numpy==1.24.3
 plotly==5.17.0
-streamlit==1.27.2
+streamlit==1.28.0
 
 # Data and databases
 pandas==1.4.2
