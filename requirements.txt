@@ -2,7 +2,7 @@
 # The 'project_requirements.txt' file contains ALL the libraries used for the entire project (Streamlit app, ETL scripts, etc.)
 # This is to make the Docker image as small as possible and reduce security issues.
 
-pillow==10.0.1
+pillow==10.1.0
 
 # Numbers and graphs or visualizations.
 numpy==1.24.3
