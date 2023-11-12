@@ -7,7 +7,7 @@
 <p align="center">
     <img src="https://img.shields.io/github/actions/workflow/status/digitalghost-dev/premier-league/ci_streamlit.yaml?style=flat-square&logo=github&label=CI%2FCD"/>
     <a href="https://github.com/digitalghost-dev/premier-league/blob/main/CHANGELOG.md">
-        <img src="https://img.shields.io/badge/Streamlit_App_Version-2.11.0-FF4B4B?style=flat-square&logo=streamlit"/>
+        <img src="https://img.shields.io/badge/Dashboard_Version-2.11.0-FF4B4B?style=flat-square&logo=streamlit"/>
     </a>
     <a href="https://hub.docker.com/repository/docker/digitalghostdev/premier-league/general"> 
         <img src="https://img.shields.io/docker/image-size/digitalghostdev/premier-league/2.11.0?style=flat-square&logo=docker&label=Image%20Size&color=0DB7ED"/>
@@ -30,7 +30,7 @@
 
 ## Infrastructure
 ### Tools & Services
-![cloud](https://img.shields.io/badge/Google_Cloud-4285F4?style=flat-square&logo=googlecloud&logoColor=white) ![terraform](https://img.shields.io/badge/Terraform-844FBA?style=flat-square&logo=terraform&logoColor=white) ![docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white) ![prefect](https://img.shields.io/badge/-Prefect-070E10?style=flat-square&logo=prefect) ![dbt](https://img.shields.io/badge/dbt-FF694B?style=flat-square&logo=dbt&logoColor=white)
+![cloud](https://img.shields.io/badge/Google_Cloud-4285F4?style=flat-square&logo=googlecloud&logoColor=white) ![streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=flat-square&logo=streamlit&logoColor=white) ![terraform](https://img.shields.io/badge/Terraform-844FBA?style=flat-square&logo=terraform&logoColor=white) ![docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white) ![prefect](https://img.shields.io/badge/-Prefect-070E10?style=flat-square&logo=prefect) ![dbt](https://img.shields.io/badge/dbt-FF694B?style=flat-square&logo=dbt&logoColor=white)
 
 ### Databases
 ![firestore](https://img.shields.io/badge/Firestore-FFCA28?style=flat-square&logo=firebase&logoColor=white) ![postgres](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white) ![bigquery](https://img.shields.io/badge/BigQuery-669DF6?style=flat-square&logo=googlebigquery&logoColor=white)
