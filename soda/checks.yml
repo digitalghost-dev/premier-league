@@ -1,0 +1,4 @@
+# Check that a dataset contains rows
+checks for standings:
+  - row_count = 20
+  - duplicate_count(team) = 0
