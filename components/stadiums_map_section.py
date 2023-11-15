@@ -8,8 +8,6 @@ class StadiumMapSection:
 		px.set_mapbox_access_token(self.mapbox_access_token)
 
 	def create_stadium_map(self, stadiums_df):
-		st.subheader("Location of Stadiums")
-
 		stadium_map = px.scatter_mapbox(
 			stadiums_df,
 			lat="latitude",
@@ -32,4 +30,9 @@ class StadiumMapSection:
 			stadium_map, height=1000, use_container_width=True
 		)
 
+		return map_plotly_chart
+
+	def display(self, stadiums_df):
+		st.subheader("Location of Stadiums")
+		map_plotly_chart = self.create_stadium_map(stadiums_df)
 		return map_plotly_chart
