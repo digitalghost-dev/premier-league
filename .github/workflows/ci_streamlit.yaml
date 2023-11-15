@@ -34,7 +34,7 @@ on:
         
 env:
   GAR_LOCATION: us-central1
-  VERSION_NUMBER: '2.11.0'
+  VERSION_NUMBER: '2.11.1'
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   PROJECT_ID: ${{ secrets.PROJECT_ID }}
