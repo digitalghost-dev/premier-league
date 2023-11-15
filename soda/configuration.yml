@@ -1,0 +1,9 @@
+data_source bigquery_connection:
+  type: bigquery
+  account_info_json_path: ./keys.json
+  auth_scopes:
+  - https://www.googleapis.com/auth/bigquery
+  - https://www.googleapis.com/auth/cloud-platform
+  - https://www.googleapis.com/auth/drive
+  project_id: "cloud-data-infrastructure"
+  dataset: premier_league_dataset
