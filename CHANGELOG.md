@@ -10,13 +10,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * **MINOR:** Any changes to the Streamlit dashboard that adds a new interaction/feature or removal of one.
 * **PATCH:** Any changes that fix bugs, typos or small edits.
 
-## 2.11.0 | 2023-11-03
+## 2.11.1 | 2023-11-15
+
+### Changed
+* Changed file names under `components/` to end with `_section.py` for better clarity.
+* Changed import names in `streamlit_app.py` to match new naming standard.
+* Changed the `firestore_pull()` function into an importable `class`.
+
+### Removed
+* Removed the `toast()` function. 
+
+## [2.11.0] | 2023-11-03
 
 ### Added
 * Added an **About** tab to display information about the project and the author.
 
 ### Changed
-* Changed the `stadiums_map()` function into an importable `Class`.
+* Changed the `stadiums_map()` function into an importable `class`.
 
 ### Fixed
 * Fixed the SQL responsible for populating the `st.dataframe` for **Standings** to order rows by `rank`.
@@ -27,9 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.10.3] | 2023-10-26
 
 ### Changed 
-* Changed the `social_media()` function into an importable `Class` from the newly created `components/` directory. Importing as:
-
- `from components.social_media import SocialMediaSection`
+* Changed the `social_media()` function into an importable `class` from the newly created `components/` directory.
 
 ## [2.10.2] | 2023-10-20
 
@@ -290,6 +298,8 @@ Top Teams Tab
 
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
+
+[2.11.0]: https://github.com/digitalghost-dev/premier-league/commit/4436a5387a3c9969236af2ec83fb0f7bef03ef7e#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
 [2.10.3]: https://github.com/digitalghost-dev/premier-league/commit/c18d9bfaf762ba7c4c2714150c1f6cd0f722b9e8#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 

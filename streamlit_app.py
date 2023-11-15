@@ -1,4 +1,3 @@
-import time
 from datetime import datetime
 
 import firebase_admin  # type: ignore
@@ -10,12 +9,13 @@ from google.oauth2 import service_account  # type: ignore
 from streamlit.delta_generator import DeltaGenerator
 
 # Importing classes from components/ directory.
-from components.social_media import SocialMediaSection
-from components.stadiums_map import StadiumMapSection
-from components.about import AboutSection
+from components.social_media_section import SocialMediaSection
+from components.stadiums_map_section import StadiumMapSection
+from components.about_section import AboutSection
+from components.fixtures_section import FixturesSection
 
 social_media_section = SocialMediaSection()
-stadium_map_instance = StadiumMapSection()
+stadium_map_section = StadiumMapSection()
 about_section = AboutSection()
 
 st.set_page_config(page_title="Streamlit: Premier League", layout="wide")
@@ -25,25 +25,21 @@ credentials = service_account.Credentials.from_service_account_info(
 	st.secrets["gcp_service_account"]
 )
 
-# Authenticating with Google Cloud.
-firestore_database = firestore.Client(credentials=credentials)
-client = bigquery.Client(credentials=credentials)
 
-
+@st.cache_resource
 def firestore_connection():
-	# Check to see if firebase app has been initialized.
 	if not firebase_admin._apps:
 		firebase_admin.initialize_app()
 
-	return firestore_database
+	return firestore.Client(credentials=credentials)
 
 
+@st.cache_resource
 def bigquery_connection():
 	@st.cache_data(ttl=600)
 	def run_query(query):
-		query_job = client.query(query)
+		query_job = bigquery.Client(credentials=credentials).query(query)
 		raw_data = query_job.result()
-		# Convert to list of dicts. Required for st.experimental_memo to hash the return value.
 		data = [dict(data) for data in raw_data]
 		return data
 
@@ -175,6 +171,7 @@ def streamlit_app():
 		league_statistics_df,
 	) = bigquery_connection()
 	firestore_database = firestore_connection()
+	fixtures_section = FixturesSection(firestore_database, max_round, min_round)
 
 	logo = st.secrets["elements"]["logo_image"]
 
@@ -210,13 +207,6 @@ def streamlit_app():
 		)
 
 		st.write(f"{formatted_date}")
-
-	def toast():
-		msg = st.toast("Loading Data...", icon="⏳")
-		time.sleep(3)
-		msg.toast(":green[Data Loaded!]", icon="✅")
-
-	toast()
 
 	# Tab menu.
 	tab1, tab2, tab3, tab4, tab5 = st.tabs(
@@ -403,7 +393,7 @@ def streamlit_app():
 
 		standings_table()
 
-		stadium_map_instance.create_stadium_map(stadiums_df)
+		stadium_map_section.display(stadiums_df)
 
 		social_media_section.display()
 
@@ -676,169 +666,7 @@ def streamlit_app():
 
 	# --------- Fixtures Tab ---------
 	with tab3:
-		st.subheader("Fixtures per Round")
-
-		# Looping through each collection to get each round.
-		round_count = int(max_round)
-		while round_count >= int(min_round):
-			# Function to pull collection and documents.
-			def firestore_pull():
-				# Calling each document in the collection in ascending order by date.
-				collection_ref = firestore_database.collection(
-					f"Regular Season - {round_count}"
-				)
-				query = collection_ref.order_by(
-					"date", direction=firestore.Query.ASCENDING
-				)
-				results = query.stream()
-
-				# Setting an empty list. This list will contain each fixtures' details that can later be called by referecing its index.
-				documents = []
-
-				# Iterating through the query results to get the document ID (ex: 'Manchester City vs Burnley') and its data.
-				for doc in results:
-					document_dict = {"id": doc.id, "data": doc.to_dict()}
-					documents.append(document_dict)
-
-				# Retrieving and formatting match date.
-				match_date = [
-					datetime.strptime(
-						documents[count]["data"]["date"], "%Y-%m-%dT%H:%M:%S+00:00"
-					)
-					.strftime("%B %d{}, %Y - %H:%M")
-					.format(
-						"th"
-						if 4
-						<= int(
-							datetime.strptime(
-								documents[count]["data"]["date"],
-								"%Y-%m-%dT%H:%M:%S+00:00",
-							).strftime("%d")
-						)
-						<= 20
-						else {1: "st", 2: "nd", 3: "rd"}.get(
-							int(
-								datetime.strptime(
-									documents[count]["data"]["date"],
-									"%Y-%m-%dT%H:%M:%S+00:00",
-								).strftime("%d")
-							)
-							% 10,
-							"th",
-						)
-					)
-					for count in range(10)
-				]
-
-				# Retrieving away and home goals for each match.
-				away_goals = [
-					documents[count]["data"]["goals"]["away"] for count in range(10)
-				]
-				home_goals = [
-					documents[count]["data"]["goals"]["home"] for count in range(10)
-				]
-
-				# Retrieving away and home team for each match.
-				away_team = [
-					documents[count]["data"]["teams"]["away"]["name"]
-					for count in range(10)
-				]
-				home_team = [
-					documents[count]["data"]["teams"]["home"]["name"]
-					for count in range(10)
-				]
-
-				# Retrieving away and home logo for each team.
-				away_logo = [
-					documents[count]["data"]["teams"]["away"]["logo"]
-					for count in range(10)
-				]
-				home_logo = [
-					documents[count]["data"]["teams"]["home"]["logo"]
-					for count in range(10)
-				]
-
-				return (
-					match_date,
-					away_goals,
-					home_goals,
-					away_team,
-					home_team,
-					away_logo,
-					home_logo,
-				)
-
-			# Placing data in an expander.
-			with st.expander(f"Round {round_count}"):
-				(
-					match_date,
-					away_goals,
-					home_goals,
-					away_team,
-					home_team,
-					away_logo,
-					home_logo,
-				) = firestore_pull()
-
-				count = 0
-				while count < 10:
-					# Creating a container for each match.
-					with st.container():
-						col1, col2, col3, col4, col5 = st.columns(5)
-
-						with col1:
-							st.write("")
-
-						# Home teams
-						with col2:
-							st.markdown(
-								f"<h3 style='text-align: center;'>{home_goals[count]}</h3>",
-								unsafe_allow_html=True,
-							)
-							st.markdown(
-								f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{home_logo[count]}'/>",
-								unsafe_allow_html=True,
-							)
-							st.write("")
-							st.write("")
-
-						# Match date
-						with col3:
-							st.write("")
-							st.markdown(
-								"<p style='text-align: center;'><b>Match Date & Time</b></p>",
-								unsafe_allow_html=True,
-							)
-							st.markdown(
-								f"<p style='text-align: center;'>{match_date[count]}</p>",
-								unsafe_allow_html=True,
-							)
-							st.markdown(
-								f"<p style='text-align: center;'>{home_team[count]} vs. {away_team[count]}</p>",
-								unsafe_allow_html=True,
-							)
-
-						# Away teams
-						with col4:
-							st.markdown(
-								f"<h3 style='text-align: center;'>{away_goals[count]}</h3>",
-								unsafe_allow_html=True,
-							)
-							st.markdown(
-								f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{away_logo[count]}'/>",
-								unsafe_allow_html=True,
-							)
-							st.write("")
-							st.write("")
-
-						with col5:
-							st.write("")
-
-					count += 1
-
-					st.divider()
-
-			round_count -= 1
+		fixtures_section.display()
 
 		# Social media icons section.
 		social_media_section.display()

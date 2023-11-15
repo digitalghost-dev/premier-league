@@ -7,10 +7,10 @@
 <p align="center">
     <img src="https://img.shields.io/github/actions/workflow/status/digitalghost-dev/premier-league/ci_streamlit.yaml?style=flat-square&logo=github&label=CI%2FCD"/>
     <a href="https://github.com/digitalghost-dev/premier-league/blob/main/CHANGELOG.md">
-        <img src="https://img.shields.io/badge/Dashboard_Version-2.11.0-FF4B4B?style=flat-square&logo=streamlit"/>
+        <img src="https://img.shields.io/badge/Dashboard_Version-2.11.1-FF4B4B?style=flat-square&logo=streamlit"/>
     </a>
     <a href="https://hub.docker.com/repository/docker/digitalghostdev/premier-league/general"> 
-        <img src="https://img.shields.io/docker/image-size/digitalghostdev/premier-league/2.11.0?style=flat-square&logo=docker&label=Image%20Size&color=0DB7ED"/>
+        <img src="https://img.shields.io/docker/image-size/digitalghostdev/premier-league/2.11.1?style=flat-square&logo=docker&label=Image%20Size&color=0DB7ED"/>
     </a>
     <img src="https://img.shields.io/github/repo-size/digitalghost-dev/premier-league?style=flat-square&label=Repo%20Size&color=DEA584">
 </p>
@@ -67,6 +67,7 @@
 2. Python creates dictionaries from the data and loads the data into Firestore
 3. The prior steps are orchestrated with Cloud Scheduler as a Docker container hosted on Cloud Run as a Job.
 
+#### Pipeline Diagram
 ![data-pipeline](https://storage.googleapis.com/premier-league/data_pipelines.png)
 
 ### CI/CD Pipeline
@@ -76,7 +77,10 @@ The CI/CD pipeline is focused on building the Streamlit app into a Docker contai
 2. The newly built Docker image will be pushed to [Artifact Registry](https://cloud.google.com/artifact-registry).
 3. The Docker image is then deployed to [Cloud Run](https://cloud.google.com/run/docs/overview/what-is-cloud-run) as a Service.
 
+#### Pipeline Diagram
 ![cicd_pipeline](https://storage.googleapis.com/premier-league/cicd_pipeline.png)
+
+---
 
 ## Security
 * [Syft](https://github.com/anchore/syft) and [Grype](https://github.com/anchore/grype) work together to scan the Streamlit Docker image. Syft creates an [`SBOM`](https://www.linuxfoundation.org/blog/blog/what-is-an-sbom) and Grype scans the `SBOM` for vulnerabilities. The results are sent to the repository's Security tab.
