@@ -14,6 +14,14 @@ test.py
 terraform/.terraform*
 terraform/terraform*
 
+# Soda configuration files
+soda/configuration.yaml
+
+# dbt configuration files
+dbt_production/target/
+dbt_production/dbt_packages/
+dbt_production/logs/
+
 # Byte-compiled / optimized / DLL files
 **/__pycache__
 *.py[cod]
