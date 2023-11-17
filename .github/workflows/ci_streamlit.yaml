@@ -23,9 +23,11 @@ on:
       - 'soda/**'
       - 'terraform/**'
       - 'CHANGELOG.md'
+      - '.dockerignore'
       - '.gitignore'
       - '.prefectignore'
       - '.pre-commit-config.yaml'
+      - '.streamlit'
       - 'pyproject.toml'
       - 'README.md'
       - 'requirements_all.txt'
@@ -34,7 +36,7 @@ on:
         
 env:
   GAR_LOCATION: us-central1
-  VERSION_NUMBER: '2.11.1'
+  VERSION_NUMBER: '2.11.2'
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   PROJECT_ID: ${{ secrets.PROJECT_ID }}
@@ -90,13 +92,11 @@ jobs:
       - name: Prepare Docker Build Context
         run: |
           mkdir docker-context
-          mkdir docker-context/.streamlit
           cp ./.dockerignore docker-context
           cp ./Dockerfile docker-context
           cp -r ./components docker-context/components
           cp ./streamlit_app.py docker-context
           cp ./requirements.txt docker-context
-          cp ./.streamlit/config.toml docker-context/.streamlit/
         
       - name: Build and Export
         uses: docker/build-push-action@v4
