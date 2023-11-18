@@ -173,18 +173,14 @@ def streamlit_app():
 	firestore_database = firestore_connection()
 	fixtures_section = FixturesSection(firestore_database, max_round, min_round)
 
-	logo = st.secrets["elements"]["logo_image"]
-
-	col1, col = st.columns((2, 4))
-	# Premier League logo.
-	with st.container():
-		col1.image(logo)
-
 	# Title.
-	col1, col = st.columns((9, 1))
+	col1, col = st.columns((1, 1))
 	with st.container():
+		col1.markdown(
+			'<img height="140" width="140" src="https://cdn.simpleicons.org/premierleague/340040"/>',
+			unsafe_allow_html=True,
+		)
 		col1.title("Premier League Statistics / 2023-24")
-
 		st.subheader(f"Current Round: {max_round}")
 
 		# Get the current date

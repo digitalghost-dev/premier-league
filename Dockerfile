@@ -23,7 +23,7 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 COPY components components
 COPY streamlit_app.py .
-COPY .streamlit/config.toml ./.streamlit/config.toml
+COPY .streamlit .streamlit
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 
@@ -36,4 +36,4 @@ HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health
 # Switch to streamlit_user for execution
 USER streamlit_user
 
-ENTRYPOINT ["streamlit", "run", "streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+ENTRYPOINT ["streamlit", "run", "streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0", "--theme.primaryColor=indigo", "--theme.textColor=black", "--theme.backgroundColor=#FFF", "--theme.secondaryBackgroundColor=#FFF"]

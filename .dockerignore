@@ -1,7 +1,7 @@
 # Files
 **.json
-**.DS_store
-.streamlit/secrets.toml
+**.DS_Store
+.streamlit/
 .gitignore
 .pylintrc
 README.md

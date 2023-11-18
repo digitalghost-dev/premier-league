@@ -10,75 +10,82 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * **MINOR:** Any changes to the Streamlit dashboard that adds a new interaction/feature or removal of one.
 * **PATCH:** Any changes that fix bugs, typos or small edits.
 
-## 2.11.1 | 2023-11-15
+## 2.11.2 | 2023-11-17
 
 ### Changed
-* Changed file names under `components/` to end with `_section.py` for better clarity.
-* Changed import names in `streamlit_app.py` to match new naming standard.
-* Changed the `firestore_pull()` function into an importable `class`.
+* [#121](https://github.com/digitalghost-dev/premier-league/issues/121) - Changed the icon for the dashboard from an image hosted on GCP's Cloud Storage to using [SimpleIcon's Premier League icon](https://simpleicons.org/?q=premier+league).
+* [#122](https://github.com/digitalghost-dev/premier-league/issues/122) - Changed the `Dockerfile` to handle the theme configuration instead of using a `.streamlit/config.toml` file.
+
+
+## [2.11.1] | 2023-11-15
+
+### Changed
+* [#119](https://github.com/digitalghost-dev/premier-league/issues/119) - Changed import names in `streamlit_app.py` to match new naming standard.
+* [#118](https://github.com/digitalghost-dev/premier-league/issues/118) - Changed file names under `components/` to end with `_section.py` for better clarity.
+* [#117](https://github.com/digitalghost-dev/premier-league/issues/117) - Changed the `firestore_pull()` function into an importable `class`.
 
 ### Removed
-* Removed the `toast()` function. 
+* [#120](https://github.com/digitalghost-dev/premier-league/issues/120) - Removed the `toast()` function. 
 
 ## [2.11.0] | 2023-11-03
 
 ### Added
-* Added an **About** tab to display information about the project and the author.
+* [#112](https://github.com/digitalghost-dev/premier-league/issues/112) - Added an **About** tab to display information about the project and the author.
 
 ### Changed
-* Changed the `stadiums_map()` function into an importable `class`.
+* [#114](https://github.com/digitalghost-dev/premier-league/issues/114) - Changed the `stadiums_map()` function into an importable `class`.
 
 ### Fixed
-* Fixed the SQL responsible for populating the `st.dataframe` for **Standings** to order rows by `rank`.
+* [#115](https://github.com/digitalghost-dev/premier-league/issues/115) - Fixed the SQL responsible for populating the `st.dataframe` for **Standings** to order rows by `rank`.
 
 ### Removed
-* Removed **Top Teams Movement** section from **Standings & Overview** tab.
+* [#113](https://github.com/digitalghost-dev/premier-league/issues/113) - Removed **Top Teams Movement** section from **Standings & Overview** tab.
 
 ## [2.10.3] | 2023-10-26
 
 ### Changed 
-* Changed the `social_media()` function into an importable `class` from the newly created `components/` directory.
+* [#104](https://github.com/digitalghost-dev/premier-league/issues/104) - Changed the `social_media()` function into an importable `class` from the newly created `components/` directory.
 
 ## [2.10.2] | 2023-10-20
 
 ### Changed
-* Changed social media icons into static `.svg` files instead of using Font Awesome icons.
+* [#103](https://github.com/digitalghost-dev/premier-league/issues/103) - Changed social media icons into static `.svg` files instead of using Font Awesome icons.
 
 
 ## [2.10.1] | 2023-09-10
 
 ### Fixed
-* Fixed the **News** tab to not error out when the table does not have at least 4 rows of data by implementing a `try/except` block.
+* [#91](https://github.com/digitalghost-dev/premier-league/issues/91) - Fixed the **News** tab to not error out when the table does not have at least 4 rows of data by implementing a `try/except` block.
 
 
 ## [2.10.0] | 2023-09-04
 
 ### Added
-* Added club logo to the Standings `st.dataframe`.
-* Added `st.subheader` under main header to display current round.
-* Added **News** tab to display the latest news from the Premier League using the [News API](https://newsapi.org/).
+* [#90](https://github.com/digitalghost-dev/premier-league/issues/90) - Added `st.subheader` under main header to display current round.
+* [#89](https://github.com/digitalghost-dev/premier-league/issues/89) - Added **News** tab to display the latest news from the Premier League using the [News API](https://newsapi.org/).
+* [#88](https://github.com/digitalghost-dev/premier-league/issues/88) - Added club logo to the Standings `st.dataframe`.
 
 
 ## [2.9.1] | 2023-08-27
 
 ### Fixed
-* Fixed the Standings column headers in the `st.dataframe` element to display proper column names instead of the SQL column names.
+* [#87](https://github.com/digitalghost-dev/premier-league/issues/87) - Fixed the Standings column headers in the `st.dataframe` element to display proper column names instead of the SQL column names.
 
 
 ## [2.9.0] | 2023-08-20
 
 ### Added
-* Added Docker logo to social media section with link to Docker Hub repository.
-* Added `st.toast` to display a more subtle message to the user that the page is loading and when the data has loaded.
-* Added a new `st.dataframe` table to display current total metrcis for the league (Goals Scored, Penalties Scored, and Clean Sheets).
+* [#75](https://github.com/digitalghost-dev/premier-league/issues/75) - Added Docker logo to social media section with link to Docker Hub repository.
+* [#72](https://github.com/digitalghost-dev/premier-league/issues/72) - Added `st.toast` to display a more subtle message to the user that the page is loading and when the data has loaded.
+* [#78](https://github.com/digitalghost-dev/premier-league/issues/78) Added a new `st.dataframe` table to display current total metrics for the league (Goals Scored, Penalties Scored, and Clean Sheets).
 
 ### Changed
-* Changed page title to **"Streamlit: Premier League"**.
-* Changed tab names from **Standings** to **Standings & Overview** and **Statistics** to **Top Teams & Scorers**.
-* Changed `st.data_editor` to `st.dataframe` for displaying the statistic tables.
+* [#74](https://github.com/digitalghost-dev/premier-league/issues/74) - Changed page title to **"Streamlit: Premier League"**.
+* [#73](https://github.com/digitalghost-dev/premier-league/issues/73) - Changed tab names from **Standings** to **Standings & Overview** and **Statistics** to **Top Teams & Scorers**.
+* [#76](https://github.com/digitalghost-dev/premier-league/issues/76) - Changed `st.data_editor` to `st.dataframe` for displaying the statistic tables.
 
 ### Fixed
-* Fixed the `st.dataframe` tables under the **Top Teams Movement** section to display the correct data by sorting columns in descending order.
+* [#79](https://github.com/digitalghost-dev/premier-league/issues/79) - Fixed the `st.dataframe` tables under the **Top Teams Movement** section to display the correct data by sorting columns in descending order.
 
 ### Removed
 * Removed `st.spinner`.
@@ -298,6 +305,8 @@ Top Teams Tab
 
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
+
+[2.11.1]: https://github.com/digitalghost-dev/premier-league/commit/fad6ab3060540f7034435971e9d38c125af1ff06#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
 [2.11.0]: https://github.com/digitalghost-dev/premier-league/commit/4436a5387a3c9969236af2ec83fb0f7bef03ef7e#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
