@@ -1,5 +1,6 @@
 from prefect import task, flow
 
+# Defining tasks.
 @task
 def standings():
     from etl.bigquery.standings import send_dataframe_to_bigquery
@@ -20,6 +21,7 @@ def news():
 def stocks():
     from etl.postgres.stock import send_dataframe_to_postgres
 
+# Defining flows.
 @flow
 def premier_league_flow():
     a = standings()
