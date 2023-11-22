@@ -1,4 +1,5 @@
 [tool.bandit]
+exclude_dirs = ["tests"]
 skips = ["B608"] # Never enforce `B608` (hardcoded credentials).
 
 [tool.coverage.report]
@@ -11,3 +12,9 @@ ignore = ["E501"] # Never enforce `E501` (line length violations).
 quote-style = "double"
 indent-style = "tab"
 line-ending = "auto"
+
+[tool.pytest.ini_options]
+pythonpath = [
+    ".", "components", "tests"
+]
+testpaths = "tests"
