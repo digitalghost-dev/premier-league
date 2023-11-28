@@ -1,11 +1,7 @@
 from datetime import datetime
 
-import firebase_admin  # type: ignore
 import pandas as pd
 import streamlit as st
-from firebase_admin import firestore  # type: ignore
-from google.cloud import bigquery
-from google.oauth2 import service_account  # type: ignore
 from streamlit.delta_generator import DeltaGenerator
 
 # Importing classes from components/ directory.
@@ -13,6 +9,17 @@ from components.social_media_section import SocialMediaSection
 from components.stadiums_map_section import StadiumMapSection
 from components.about_section import AboutSection
 from components.fixtures_section import FixturesSection
+from components.connections import (
+	firestore_connection,
+	get_standings,
+	get_stadiums,
+	get_teams,
+	get_top_scorers,
+	get_news,
+	get_league_statistics,
+	get_min_round,
+	get_max_round,
+)
 
 social_media_section = SocialMediaSection()
 stadium_map_section = StadiumMapSection()
@@ -21,166 +28,35 @@ about_section = AboutSection()
 st.set_page_config(page_title="Streamlit: Premier League", layout="wide")
 
 # Create API client.
-credentials = service_account.Credentials.from_service_account_info(
-	st.secrets["gcp_service_account"]
-)
+if "gcp_service_account" in st.secrets:
+	creds = st.secrets["gcp_service_account"]
+else:
+	import json
+	import os
 
-
-@st.cache_resource
-def firestore_connection():
-	if not firebase_admin._apps:
-		firebase_admin.initialize_app()
-
-	return firestore.Client(credentials=credentials)
-
-
-@st.cache_resource
-def bigquery_connection():
-	@st.cache_data(ttl=600)
-	def run_query(query):
-		query_job = bigquery.Client(credentials=credentials).query(query)
-		raw_data = query_job.result()
-		data = [dict(data) for data in raw_data]
-		return data
-
-	# ---- Stadium query and dataframe ----
-	stadiums_data = run_query(
-		"""
-            SELECT latitude, longitude, stadium, team
-            FROM `premier_league_dataset.stadiums`;
-        """
-	)
-
-	stadiums_df = pd.DataFrame(data=stadiums_data)
-
-	# ---- Standings query and dataframe ----
-	standings_data = run_query(
-		"""
-            SELECT rank, logo, team, points, wins, draws, loses, goals_for, goals_against, goal_difference
-            FROM `premier_league_dataset.standings`
-			ORDER BY rank ASC;
-        """
-	)
-
-	standings_df = pd.DataFrame(data=standings_data)
-
-	# Splitting Standings table to get values to build metric cards.
-	status_data = run_query(
-		"""
-            SELECT rank, team, points, position_status
-            FROM `premier_league_dataset.standings`
-            ORDER BY rank ASC;
-        """
-	)
-
-	status_df = pd.DataFrame(data=status_data)
-
-	# ---- Teams query and dataframe ----
-	teams_data = run_query(
-		"""
-            SELECT t.logo, form, t.team, clean_sheets, penalties_scored, penalties_missed, average_goals, win_streak
-            FROM `premier_league_dataset.teams` AS t
-            LEFT JOIN `premier_league_dataset.standings` AS s
-            ON t.team = s.Team
-            ORDER BY s.rank;
-        """
-	)
-
-	teams_df = pd.DataFrame(data=teams_data)
-
-	# --- Top Scorers query and dataframe ----
-	top_scorers_data = run_query(
-		"""
-            SELECT *
-            FROM `premier_league_dataset.top_scorers`
-            ORDER BY Goals DESC;
-        """
-	)
-
-	top_scorers_df = pd.DataFrame(data=top_scorers_data)
-
-	# --- News query and dataframe ----
-	news_data = run_query(
-		"""
-            SELECT *
-            FROM `premier_league_dataset.news`
-            ORDER BY published_at DESC;
-        """
-	)
-
-	news_df = pd.DataFrame(data=news_data)
-
-	# Fetching the minimun round number from the 'rounds' table.
-	min_round_row = run_query(
-		"""
-            SELECT MIN(round) AS round
-            FROM `premier_league_dataset.current_round`;
-        """
-	)
-	# Converting tuple to list.
-	min_round = min_round_row[0]["round"]
-
-	# Fetching the maximum round number from the 'rounds' table.
-	max_round_row = run_query(
-		"""
-            SELECT MAX(round) AS round 
-            FROM `cloud-data-infrastructure.premier_league_dataset.current_round`;
-        """
-	)
-	# Converting tuple to list.
-	max_round = max_round_row[0]["round"]
-
-	league_statistics = run_query(
-		"""
-            SELECT 
-                SUM(goals_for) AS league_goals_scored,
-                SUM(penalties_scored) AS league_penalties_scored,
-                SUM(clean_sheets) AS league_clean_sheets     
-            FROM premier_league_dataset.teams AS t
-            JOIN premier_league_dataset.standings AS s
-            ON t.team_id = s.team_id;
-        """
-	)
-
-	league_statistics_df = pd.DataFrame(data=league_statistics)
-
-	return (
-		stadiums_df,
-		standings_df,
-		status_df,
-		teams_df,
-		top_scorers_df,
-		news_df,
-		min_round,
-		max_round,
-		league_statistics_df,
-	)
+	creds = json.loads(os.environ["GCP_ACCOUNT_STRING"])
 
 
 def streamlit_app():
-	# Calling varibles from database connection functions.
-	(
-		stadiums_df,
-		standings_df,
-		status_df,
-		teams_df,
-		top_scorers_df,
-		news_df,
-		min_round,
-		max_round,
-		league_statistics_df,
-	) = bigquery_connection()
+	# Get the dataframes.
+	standings_df = get_standings()
+	stadiums_df = get_stadiums()
+	teams_df = get_teams()
+	top_scorers_df = get_top_scorers()
+	news_df = get_news()
+	league_statistics_df = get_league_statistics()
+	min_round = get_min_round()
+	max_round = get_max_round()
 	firestore_database = firestore_connection()
 	fixtures_section = FixturesSection(firestore_database, max_round, min_round)
 
-	# Title.
-	col1, col = st.columns((1, 1))
+	# Image, title, and subheader.
 	with st.container():
-		col1.markdown(
+		st.markdown(
 			'<img height="140" width="140" src="https://cdn.simpleicons.org/premierleague/340040"/>',
 			unsafe_allow_html=True,
 		)
-		col1.title("Premier League Statistics / 2023-24")
+		st.title("Premier League Statistics / 2023-24")
 		st.subheader(f"Current Round: {max_round}")
 
 		# Get the current date
@@ -247,7 +123,7 @@ def streamlit_app():
 						help="The Average Goals Scored by Each Team.",
 						format="%f",
 						min_value=0,
-						max_value=20,
+						max_value=8,
 					),
 				},
 				hide_index=True,
@@ -298,7 +174,7 @@ def streamlit_app():
 
 			win_streak_df = pd.DataFrame(
 				{
-					"Win Streak": [
+					"Biggest Win Streak": [
 						teams_df_win_streak.iloc[0][7],
 						teams_df_win_streak.iloc[1][7],
 						teams_df_win_streak.iloc[2][7],
@@ -318,12 +194,12 @@ def streamlit_app():
 			st.dataframe(
 				win_streak_df,
 				column_config={
-					"Win Streak": st.column_config.ProgressColumn(
-						"Win Streak",
-						help="The Win Streak by Each Team.",
+					"Biggest Win Streak": st.column_config.ProgressColumn(
+						"Biggest Win Streak",
+						help="The Biggest Win Streak by Each Team.",
 						format="%d",
 						min_value=0,
-						max_value=15,
+						max_value=10,
 					),
 				},
 				hide_index=True,
@@ -390,8 +266,6 @@ def streamlit_app():
 		standings_table()
 
 		stadium_map_section.display(stadiums_df)
-
-		social_media_section.display()
 
 	# --------- Statistics Tab ---------
 	with tab2:
@@ -657,15 +531,9 @@ def streamlit_app():
 				for item in markdown_list:
 					st.markdown(item, unsafe_allow_html=True)
 
-		# Social media icons section.
-		social_media_section.display()
-
 	# --------- Fixtures Tab ---------
 	with tab3:
 		fixtures_section.display()
-
-		# Social media icons section.
-		social_media_section.display()
 
 	# --------- About Tab ---------
 	with tab4:
@@ -724,15 +592,12 @@ def streamlit_app():
 				except IndexError:
 					pass
 
-		# Social media icons section.
-		social_media_section.display()
-
 	with tab5:
 		# About section.
 		about_section.display()
 
-		# Social media icons section.
-		social_media_section.display()
+	# Social media icons section.
+	social_media_section.display()
 
 
 if __name__ == "__main__":

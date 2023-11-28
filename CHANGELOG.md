@@ -10,11 +10,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * **MINOR:** Any changes to the Streamlit dashboard that adds a new interaction/feature or removal of one.
 * **PATCH:** Any changes that fix bugs, typos or small edits.
 
-## 2.11.2 | 2023-11-17
+## 2.11.3 | 2023-11-27
 
 ### Changed
-* [#121](https://github.com/digitalghost-dev/premier-league/issues/121) - Changed the icon for the dashboard from an image hosted on GCP's Cloud Storage to using [SimpleIcon's Premier League icon](https://simpleicons.org/?q=premier+league).
+* [#127](https://github.com/digitalghost-dev/premier-league/issues/126) - Changed the maximum value for the `average_goals_df` `st.dataframe` and for the `win_streak_df` `st.dataframe`.
+* [#126](https://github.com/digitalghost-dev/premier-league/issues/126) - Changed the text for the win streak `st.dataframe()` to display *Biggest Win Streak* instead of *Current Win Streak*.
+* [#124](https://github.com/digitalghost-dev/premier-league/issues/124) - Changed the `social_media_section.display()` function to be called only once at the end of the `streamlit_app()` function instead of in each tab.
+* [#123](https://github.com/digitalghost-dev/premier-league/issues/123) - Changed the data connection functions into importable functions where all queries are now cached.
+
+## [2.11.2] | 2023-11-17
+
+### Changed
 * [#122](https://github.com/digitalghost-dev/premier-league/issues/122) - Changed the `Dockerfile` to handle the theme configuration instead of using a `.streamlit/config.toml` file.
+* [#121](https://github.com/digitalghost-dev/premier-league/issues/121) - Changed the icon for the dashboard from an image hosted on GCP's Cloud Storage to using [SimpleIcon's Premier League icon](https://simpleicons.org/?q=premier+league).
 
 
 ## [2.11.1] | 2023-11-15
@@ -305,6 +313,8 @@ Top Teams Tab
 
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
+
+[2.11.2]: https://github.com/digitalghost-dev/premier-league/commit/25bfb7f76f46a0f8badce8a896937ddf12690332#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
 [2.11.1]: https://github.com/digitalghost-dev/premier-league/commit/fad6ab3060540f7034435971e9d38c125af1ff06#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
