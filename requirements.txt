@@ -2,7 +2,7 @@
 # This is to make the Docker image as small as possible and reduce security issues.
 
 pandas==1.5.0
-plotly==5.17.0
+plotly==5.18.0
 streamlit==1.28.2
 
 # Google Cloud
