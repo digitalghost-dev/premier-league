@@ -27,15 +27,6 @@ about_section = AboutSection()
 
 st.set_page_config(page_title="Streamlit: Premier League", layout="wide")
 
-# Create API client.
-if "gcp_service_account" in st.secrets:
-	creds = st.secrets["gcp_service_account"]
-else:
-	import json
-	import os
-
-	creds = json.loads(os.environ["GCP_ACCOUNT_STRING"])
-
 
 def streamlit_app():
 	# Get the dataframes.
@@ -99,18 +90,18 @@ def streamlit_app():
 			average_goals_df = pd.DataFrame(
 				{
 					"Average Goals": [
-						teams_df_average_goals.iloc[0][6],
-						teams_df_average_goals.iloc[1][6],
-						teams_df_average_goals.iloc[2][6],
-						teams_df_average_goals.iloc[3][6],
-						teams_df_average_goals.iloc[4][6],
+						teams_df_average_goals.iloc[0, 6],
+						teams_df_average_goals.iloc[1, 6],
+						teams_df_average_goals.iloc[2, 6],
+						teams_df_average_goals.iloc[3, 6],
+						teams_df_average_goals.iloc[4, 6],
 					],
 					"Team": [
-						teams_df_average_goals.iloc[0][2],
-						teams_df_average_goals.iloc[1][2],
-						teams_df_average_goals.iloc[2][2],
-						teams_df_average_goals.iloc[3][2],
-						teams_df_average_goals.iloc[4][2],
+						teams_df_average_goals.iloc[0, 2],
+						teams_df_average_goals.iloc[1, 2],
+						teams_df_average_goals.iloc[2, 2],
+						teams_df_average_goals.iloc[3, 2],
+						teams_df_average_goals.iloc[4, 2],
 					],
 				}
 			)
@@ -137,18 +128,18 @@ def streamlit_app():
 			penalties_scored_df = pd.DataFrame(
 				{
 					"Penalties Scored": [
-						teams_df_penalties_scored.iloc[0][4],
-						teams_df_penalties_scored.iloc[1][4],
-						teams_df_penalties_scored.iloc[2][4],
-						teams_df_penalties_scored.iloc[3][4],
-						teams_df_penalties_scored.iloc[4][4],
+						teams_df_penalties_scored.iloc[0, 4],
+						teams_df_penalties_scored.iloc[1, 4],
+						teams_df_penalties_scored.iloc[2, 4],
+						teams_df_penalties_scored.iloc[3, 4],
+						teams_df_penalties_scored.iloc[4, 4],
 					],
 					"Team": [
-						teams_df_penalties_scored.iloc[0][2],
-						teams_df_penalties_scored.iloc[1][2],
-						teams_df_penalties_scored.iloc[2][2],
-						teams_df_penalties_scored.iloc[3][2],
-						teams_df_penalties_scored.iloc[4][2],
+						teams_df_penalties_scored.iloc[0, 2],
+						teams_df_penalties_scored.iloc[1, 2],
+						teams_df_penalties_scored.iloc[2, 2],
+						teams_df_penalties_scored.iloc[3, 2],
+						teams_df_penalties_scored.iloc[4, 2],
 					],
 				}
 			)
@@ -175,18 +166,18 @@ def streamlit_app():
 			win_streak_df = pd.DataFrame(
 				{
 					"Biggest Win Streak": [
-						teams_df_win_streak.iloc[0][7],
-						teams_df_win_streak.iloc[1][7],
-						teams_df_win_streak.iloc[2][7],
-						teams_df_win_streak.iloc[3][7],
-						teams_df_win_streak.iloc[4][7],
+						teams_df_win_streak.iloc[0, 7],
+						teams_df_win_streak.iloc[1, 7],
+						teams_df_win_streak.iloc[2, 7],
+						teams_df_win_streak.iloc[3, 7],
+						teams_df_win_streak.iloc[4, 7],
 					],
 					"Team": [
-						teams_df_win_streak.iloc[0][2],
-						teams_df_win_streak.iloc[1][2],
-						teams_df_win_streak.iloc[2][2],
-						teams_df_win_streak.iloc[3][2],
-						teams_df_win_streak.iloc[4][2],
+						teams_df_win_streak.iloc[0, 2],
+						teams_df_win_streak.iloc[1, 2],
+						teams_df_win_streak.iloc[2, 2],
+						teams_df_win_streak.iloc[3, 2],
+						teams_df_win_streak.iloc[4, 2],
 					],
 				}
 			)
@@ -213,9 +204,9 @@ def streamlit_app():
 					{
 						"labels": ["Goals Scored", "Penalties Scored", "Clean Sheets"],
 						"metrics": [
-							league_statistics_df.iloc[0][0],
-							league_statistics_df.iloc[0][1],
-							league_statistics_df.iloc[0][2],
+							league_statistics_df.iloc[0, 0],
+							league_statistics_df.iloc[0, 1],
+							league_statistics_df.iloc[0, 2],
 						],
 					}
 				)
@@ -276,11 +267,11 @@ def streamlit_app():
 		# First top team.
 		with col1:
 			markdown_list = [
-				f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(teams_df.iloc[0][0])}'/>",
-				f"<p style='text-align: center; padding-top: 0.8rem;'><b>1st / Form (Last 5):</b> {((teams_df.iloc[0][1])[-5:])}</p>",
-				f"<p style='text-align: center;'><b>Clean Sheets:</b> {(teams_df.iloc[0][3])}</p>",
-				f"<p style='text-align: center;'><b>Penalties Scored:</b> {(teams_df.iloc[0][4])}</p>",
-				f"<p style='text-align: center;'><b>Penalties Missed:</b> {(teams_df.iloc[0][5])}</p>",
+				f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(teams_df.iloc[0, 0])}'/>",
+				f"<p style='text-align: center; padding-top: 0.8rem;'><b>1st / Form (Last 5):</b> {((teams_df.iloc[0, 1])[-5:])}</p>",
+				f"<p style='text-align: center;'><b>Clean Sheets:</b> {(teams_df.iloc[0, 3])}</p>",
+				f"<p style='text-align: center;'><b>Penalties Scored:</b> {(teams_df.iloc[0, 4])}</p>",
+				f"<p style='text-align: center;'><b>Penalties Missed:</b> {(teams_df.iloc[0, 5])}</p>",
 			]
 
 			for item in markdown_list:
@@ -288,11 +279,11 @@ def streamlit_app():
 
 		with col2:
 			markdown_list = [
-				f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(teams_df.iloc[1][0])}'/>",
-				f"<p style='text-align: center; padding-top: 0.8rem;'><b>1st / Form (Last 5):</b> {((teams_df.iloc[1][1])[-5:])}</p>",
-				f"<p style='text-align: center;'><b>Clean Sheets:</b> {(teams_df.iloc[1][3])}</p>",
-				f"<p style='text-align: center;'><b>Penalties Scored:</b> {(teams_df.iloc[1][4])}</p>",
-				f"<p style='text-align: center;'><b>Penalties Missed:</b> {(teams_df.iloc[1][5])}</p>",
+				f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(teams_df.iloc[1, 0])}'/>",
+				f"<p style='text-align: center; padding-top: 0.8rem;'><b>1st / Form (Last 5):</b> {((teams_df.iloc[1, 1])[-5:])}</p>",
+				f"<p style='text-align: center;'><b>Clean Sheets:</b> {(teams_df.iloc[1, 3])}</p>",
+				f"<p style='text-align: center;'><b>Penalties Scored:</b> {(teams_df.iloc[1, 4])}</p>",
+				f"<p style='text-align: center;'><b>Penalties Missed:</b> {(teams_df.iloc[1, 5])}</p>",
 			]
 
 			for item in markdown_list:
@@ -300,11 +291,11 @@ def streamlit_app():
 
 		with col3:
 			markdown_list = [
-				f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(teams_df.iloc[2][0])}'/>",
-				f"<p style='text-align: center; padding-top: 0.8rem;'><b>1st / Form (Last 5):</b> {((teams_df.iloc[2][1])[-5:])}</p>",
-				f"<p style='text-align: center;'><b>Clean Sheets:</b> {(teams_df.iloc[2][3])}</p>",
-				f"<p style='text-align: center;'><b>Penalties Scored:</b> {(teams_df.iloc[2][4])}</p>",
-				f"<p style='text-align: center;'><b>Penalties Missed:</b> {(teams_df.iloc[2][5])}</p>",
+				f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(teams_df.iloc[2, 0])}'/>",
+				f"<p style='text-align: center; padding-top: 0.8rem;'><b>1st / Form (Last 5):</b> {((teams_df.iloc[2, 1])[-5:])}</p>",
+				f"<p style='text-align: center;'><b>Clean Sheets:</b> {(teams_df.iloc[2, 3])}</p>",
+				f"<p style='text-align: center;'><b>Penalties Scored:</b> {(teams_df.iloc[2, 4])}</p>",
+				f"<p style='text-align: center;'><b>Penalties Missed:</b> {(teams_df.iloc[2, 5])}</p>",
 			]
 
 			for item in markdown_list:
@@ -312,11 +303,11 @@ def streamlit_app():
 
 		with col4:
 			markdown_list = [
-				f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(teams_df.iloc[3][0])}'/>",
-				f"<p style='text-align: center; padding-top: 0.8rem;'><b>1st / Form (Last 5):</b> {((teams_df.iloc[3][1])[-5:])}</p>",
-				f"<p style='text-align: center;'><b>Clean Sheets:</b> {(teams_df.iloc[3][3])}</p>",
-				f"<p style='text-align: center;'><b>Penalties Scored:</b> {(teams_df.iloc[3][4])}</p>",
-				f"<p style='text-align: center;'><b>Penalties Missed:</b> {(teams_df.iloc[3][5])}</p>",
+				f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(teams_df.iloc[3, 0])}'/>",
+				f"<p style='text-align: center; padding-top: 0.8rem;'><b>1st / Form (Last 5):</b> {((teams_df.iloc[3, 1])[-5:])}</p>",
+				f"<p style='text-align: center;'><b>Clean Sheets:</b> {(teams_df.iloc[3, 3])}</p>",
+				f"<p style='text-align: center;'><b>Penalties Scored:</b> {(teams_df.iloc[3, 4])}</p>",
+				f"<p style='text-align: center;'><b>Penalties Missed:</b> {(teams_df.iloc[3, 5])}</p>",
 			]
 
 			for item in markdown_list:
@@ -324,11 +315,11 @@ def streamlit_app():
 
 		with col5:
 			markdown_list = [
-				f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(teams_df.iloc[4][0])}'/>",
-				f"<p style='text-align: center; padding-top: 0.8rem;'><b>1st / Form (Last 5):</b> {((teams_df.iloc[4][1])[-5:])}</p>",
-				f"<p style='text-align: center;'><b>Clean Sheets:</b> {(teams_df.iloc[4][3])}</p>",
-				f"<p style='text-align: center;'><b>Penalties Scored:</b> {(teams_df.iloc[4][4])}</p>",
-				f"<p style='text-align: center;'><b>Penalties Missed:</b> {(teams_df.iloc[4][5])}</p>",
+				f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(teams_df.iloc[4, 0])}'/>",
+				f"<p style='text-align: center; padding-top: 0.8rem;'><b>1st / Form (Last 5):</b> {((teams_df.iloc[4, 1])[-5:])}</p>",
+				f"<p style='text-align: center;'><b>Clean Sheets:</b> {(teams_df.iloc[4, 3])}</p>",
+				f"<p style='text-align: center;'><b>Penalties Scored:</b> {(teams_df.iloc[4, 4])}</p>",
+				f"<p style='text-align: center;'><b>Penalties Missed:</b> {(teams_df.iloc[4, 5])}</p>",
 			]
 
 			for item in markdown_list:
@@ -337,11 +328,11 @@ def streamlit_app():
 		team_forms = [[], [], [], [], []]
 
 		forms = [
-			teams_df.iloc[0][1],
-			teams_df.iloc[1][1],
-			teams_df.iloc[2][1],
-			teams_df.iloc[3][1],
-			teams_df.iloc[4][1],
+			teams_df.iloc[0, 1],
+			teams_df.iloc[1, 1],
+			teams_df.iloc[2, 1],
+			teams_df.iloc[3, 1],
+			teams_df.iloc[4, 1],
 		]
 
 		count = 0
@@ -361,11 +352,11 @@ def streamlit_app():
 
 		# Legend for line chart.
 		headers = [
-			str(standings_df.iloc[0][2]),
-			str(standings_df.iloc[1][2]),
-			str(standings_df.iloc[2][2]),
-			str(standings_df.iloc[3][2]),
-			str(standings_df.iloc[4][2]),
+			str(standings_df.iloc[0, 2]),
+			str(standings_df.iloc[1, 2]),
+			str(standings_df.iloc[2, 2]),
+			str(standings_df.iloc[3, 2]),
+			str(standings_df.iloc[4, 2]),
 		]
 
 		zipped = list(
@@ -393,12 +384,12 @@ def streamlit_app():
 		with col1:
 			# First top scorer.
 			markdown_list = [
-				f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(top_scorers_df.iloc[0][5])}'/>",
-				f"<p style='text-align: center; padding-top: 0.8rem;'><b>{(top_scorers_df.iloc[0][0])}</b></p>",
-				f"<p style='text-align: center;'><b>Goals:</b> {(top_scorers_df.iloc[0][1])}</p>",
-				f"<p style='text-align: center;'><b>Assists:</b> {(top_scorers_df.iloc[0][3])}</p>",
-				f"<p style='text-align: center;'><b>Team:</b> {(top_scorers_df.iloc[0][2])}</p>",
-				f"<p style='text-align: center;'><b>Nationality:</b> {(top_scorers_df.iloc[0][4])}</p>",
+				f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(top_scorers_df.iloc[0, 5])}'/>",
+				f"<p style='text-align: center; padding-top: 0.8rem;'><b>{(top_scorers_df.iloc[0, 0])}</b></p>",
+				f"<p style='text-align: center;'><b>Goals:</b> {(top_scorers_df.iloc[0, 1])}</p>",
+				f"<p style='text-align: center;'><b>Assists:</b> {(top_scorers_df.iloc[0, 3])}</p>",
+				f"<p style='text-align: center;'><b>Team:</b> {(top_scorers_df.iloc[0, 2])}</p>",
+				f"<p style='text-align: center;'><b>Nationality:</b> {(top_scorers_df.iloc[0, 4])}</p>",
 			]
 
 			for item in markdown_list:
@@ -407,12 +398,12 @@ def streamlit_app():
 		with col2:
 			# Second top scorer.
 			markdown_list = [
-				f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(top_scorers_df.iloc[1][5])}'/>",
-				f"<p style='text-align: center; padding-top: 0.8rem;'><b>{(top_scorers_df.iloc[1][0])}</b></p>",
-				f"<p style='text-align: center;'><b>Goals:</b> {(top_scorers_df.iloc[1][1])}</p>",
-				f"<p style='text-align: center;'><b>Assists:</b> {(top_scorers_df.iloc[1][3])}</p>",
-				f"<p style='text-align: center;'><b>Team:</b> {(top_scorers_df.iloc[1][2])}</p>",
-				f"<p style='text-align: center;'><b>Nationality:</b> {(top_scorers_df.iloc[1][4])}</p>",
+				f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(top_scorers_df.iloc[1, 5])}'/>",
+				f"<p style='text-align: center; padding-top: 0.8rem;'><b>{(top_scorers_df.iloc[1, 0])}</b></p>",
+				f"<p style='text-align: center;'><b>Goals:</b> {(top_scorers_df.iloc[1, 1])}</p>",
+				f"<p style='text-align: center;'><b>Assists:</b> {(top_scorers_df.iloc[1, 3])}</p>",
+				f"<p style='text-align: center;'><b>Team:</b> {(top_scorers_df.iloc[1, 2])}</p>",
+				f"<p style='text-align: center;'><b>Nationality:</b> {(top_scorers_df.iloc[1, 4])}</p>",
 			]
 
 			for item in markdown_list:
@@ -421,12 +412,12 @@ def streamlit_app():
 		with col3:
 			# Third top scorer.
 			markdown_list = [
-				f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(top_scorers_df.iloc[2][5])}'/>",
-				f"<p style='text-align: center; padding-top: 0.8rem;'><b>{(top_scorers_df.iloc[2][0])}</b></p>",
-				f"<p style='text-align: center;'><b>Goals:</b> {(top_scorers_df.iloc[2][1])}</p>",
-				f"<p style='text-align: center;'><b>Assists:</b> {(top_scorers_df.iloc[2][3])}</p>",
-				f"<p style='text-align: center;'><b>Team:</b> {(top_scorers_df.iloc[2][2])}</p>",
-				f"<p style='text-align: center;'><b>Nationality:</b> {(top_scorers_df.iloc[2][4])}</p>",
+				f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(top_scorers_df.iloc[2, 5])}'/>",
+				f"<p style='text-align: center; padding-top: 0.8rem;'><b>{(top_scorers_df.iloc[2, 0])}</b></p>",
+				f"<p style='text-align: center;'><b>Goals:</b> {(top_scorers_df.iloc[2, 1])}</p>",
+				f"<p style='text-align: center;'><b>Assists:</b> {(top_scorers_df.iloc[2, 3])}</p>",
+				f"<p style='text-align: center;'><b>Team:</b> {(top_scorers_df.iloc[2, 2])}</p>",
+				f"<p style='text-align: center;'><b>Nationality:</b> {(top_scorers_df.iloc[2, 4])}</p>",
 			]
 
 			for item in markdown_list:
@@ -435,12 +426,12 @@ def streamlit_app():
 		with col4:
 			# Fourth top scorer.
 			markdown_list = [
-				f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(top_scorers_df.iloc[3][5])}'/>",
-				f"<p style='text-align: center; padding-top: 0.8rem;'><b>{(top_scorers_df.iloc[3][0])}</b></p>",
-				f"<p style='text-align: center;'><b>Goals:</b> {(top_scorers_df.iloc[3][1])}</p>",
-				f"<p style='text-align: center;'><b>Assists:</b> {(top_scorers_df.iloc[3][3])}</p>",
-				f"<p style='text-align: center;'><b>Team:</b> {(top_scorers_df.iloc[3][2])}</p>",
-				f"<p style='text-align: center;'><b>Nationality:</b> {(top_scorers_df.iloc[3][4])}</p>",
+				f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(top_scorers_df.iloc[3, 5])}'/>",
+				f"<p style='text-align: center; padding-top: 0.8rem;'><b>{(top_scorers_df.iloc[3, 0])}</b></p>",
+				f"<p style='text-align: center;'><b>Goals:</b> {(top_scorers_df.iloc[3, 1])}</p>",
+				f"<p style='text-align: center;'><b>Assists:</b> {(top_scorers_df.iloc[3, 3])}</p>",
+				f"<p style='text-align: center;'><b>Team:</b> {(top_scorers_df.iloc[3, 2])}</p>",
+				f"<p style='text-align: center;'><b>Nationality:</b> {(top_scorers_df.iloc[3, 4])}</p>",
 			]
 
 			for item in markdown_list:
@@ -449,12 +440,12 @@ def streamlit_app():
 		with col5:
 			# Fifth top scorer.
 			markdown_list = [
-				f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(top_scorers_df.iloc[4][5])}'/>",
-				f"<p style='text-align: center; padding-top: 0.8rem;'><b>{(top_scorers_df.iloc[4][0])}</b></p>",
-				f"<p style='text-align: center;'><b>Goals:</b> {(top_scorers_df.iloc[4][1])}</p>",
-				f"<p style='text-align: center;'><b>Assists:</b> {(top_scorers_df.iloc[4][3])}</p>",
-				f"<p style='text-align: center;'><b>Team:</b> {(top_scorers_df.iloc[4][2])}</p>",
-				f"<p style='text-align: center;'><b>Nationality:</b> {(top_scorers_df.iloc[4][4])}</p>",
+				f"<img style='display: block; margin-left: auto; margin-right: auto; width: 150px;' src='{(top_scorers_df.iloc[4, 5])}'/>",
+				f"<p style='text-align: center; padding-top: 0.8rem;'><b>{(top_scorers_df.iloc[4, 0])}</b></p>",
+				f"<p style='text-align: center;'><b>Goals:</b> {(top_scorers_df.iloc[4, 1])}</p>",
+				f"<p style='text-align: center;'><b>Assists:</b> {(top_scorers_df.iloc[4, 3])}</p>",
+				f"<p style='text-align: center;'><b>Team:</b> {(top_scorers_df.iloc[4, 2])}</p>",
+				f"<p style='text-align: center;'><b>Nationality:</b> {(top_scorers_df.iloc[4, 4])}</p>",
 			]
 
 			for item in markdown_list:
@@ -468,12 +459,12 @@ def streamlit_app():
 
 			with col1:
 				markdown_list = [
-					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[5][0])}'/>",
-					f"<p style='text-align: center; padding-top: 0.8rem;'>6th / {((teams_df.iloc[5][1])[-5:])}</p>",
-					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[10][0])}'/>",
-					f"<p style='text-align: center; padding-top: 0.8rem;'>11th / {((teams_df.iloc[10][1])[-5:])}</p>",
-					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[15][0])}'/>",
-					f"<p style='text-align: center; padding-top: 0.8rem;'>16th / {((teams_df.iloc[15][1])[-5:])}</p>",
+					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[5, 0])}'/>",
+					f"<p style='text-align: center; padding-top: 0.8rem;'>6th / {((teams_df.iloc[5, 1])[-5:])}</p>",
+					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[10, 0])}'/>",
+					f"<p style='text-align: center; padding-top: 0.8rem;'>11th / {((teams_df.iloc[10, 1])[-5:])}</p>",
+					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[15, 0])}'/>",
+					f"<p style='text-align: center; padding-top: 0.8rem;'>16th / {((teams_df.iloc[15, 1])[-5:])}</p>",
 				]
 
 				for item in markdown_list:
@@ -481,12 +472,12 @@ def streamlit_app():
 
 			with col2:
 				markdown_list = [
-					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[6][0])}'/>",
-					f"<p style='text-align: center; padding-top: 0.8rem;'>7th / {((teams_df.iloc[6][1])[-5:])}</p>",
-					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[11][0])}'/>",
-					f"<p style='text-align: center; padding-top: 0.8rem;'>12th / {((teams_df.iloc[11][1])[-5:])}</p>",
-					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[16][0])}'/>",
-					f"<p style='text-align: center; padding-top: 0.8rem;'>17th / {((teams_df.iloc[16][1])[-5:])}</p>",
+					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[6, 0])}'/>",
+					f"<p style='text-align: center; padding-top: 0.8rem;'>7th / {((teams_df.iloc[6, 1])[-5:])}</p>",
+					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[11, 0])}'/>",
+					f"<p style='text-align: center; padding-top: 0.8rem;'>12th / {((teams_df.iloc[11, 1])[-5:])}</p>",
+					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[16, 0])}'/>",
+					f"<p style='text-align: center; padding-top: 0.8rem;'>17th / {((teams_df.iloc[16, 1])[-5:])}</p>",
 				]
 
 				for item in markdown_list:
@@ -494,12 +485,12 @@ def streamlit_app():
 
 			with col3:
 				markdown_list = [
-					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[7][0])}'/>",
-					f"<p style='text-align: center; padding-top: 0.8rem;'>8th / {((teams_df.iloc[7][1])[-5:])}</p>",
-					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[12][0])}'/>",
-					f"<p style='text-align: center; padding-top: 0.8rem;'>13th / {((teams_df.iloc[12][1])[-5:])}</p>",
-					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[17][0])}'/>",
-					f"<p style='text-align: center; padding-top: 0.8rem;'>18th / {((teams_df.iloc[17][1])[-5:])}</p>",
+					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[7, 0])}'/>",
+					f"<p style='text-align: center; padding-top: 0.8rem;'>8th / {((teams_df.iloc[7, 1])[-5:])}</p>",
+					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[12, 0])}'/>",
+					f"<p style='text-align: center; padding-top: 0.8rem;'>13th / {((teams_df.iloc[12, 1])[-5:])}</p>",
+					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[17, 0])}'/>",
+					f"<p style='text-align: center; padding-top: 0.8rem;'>18th / {((teams_df.iloc[17, 1])[-5:])}</p>",
 				]
 
 				for item in markdown_list:
@@ -507,12 +498,12 @@ def streamlit_app():
 
 			with col4:
 				markdown_list = [
-					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[8][0])}'/>",
-					f"<p style='text-align: center; padding-top: 0.8rem;'>9th / {((teams_df.iloc[8][1])[-5:])}</p>",
-					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[13][0])}'/>",
-					f"<p style='text-align: center; padding-top: 0.8rem;'>14th / {((teams_df.iloc[13][1])[-5:])}</p>",
-					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[18][0])}'/>",
-					f"<p style='text-align: center; padding-top: 0.8rem;'>19th / {((teams_df.iloc[18][1])[-5:])}</p>",
+					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[8, 0])}'/>",
+					f"<p style='text-align: center; padding-top: 0.8rem;'>9th / {((teams_df.iloc[8, 1])[-5:])}</p>",
+					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[13, 0])}'/>",
+					f"<p style='text-align: center; padding-top: 0.8rem;'>14th / {((teams_df.iloc[13, 1])[-5:])}</p>",
+					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[18, 0])}'/>",
+					f"<p style='text-align: center; padding-top: 0.8rem;'>19th / {((teams_df.iloc[18, 1])[-5:])}</p>",
 				]
 
 				for item in markdown_list:
@@ -520,12 +511,12 @@ def streamlit_app():
 
 			with col5:
 				markdown_list = [
-					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[9][0])}'/>",
-					f"<p style='text-align: center; padding-top: 0.8rem;'>10th / {((teams_df.iloc[9][1])[-5:])}</p>",
-					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[14][0])}'/>",
-					f"<p style='text-align: center; padding-top: 0.8rem;'>15th / {((teams_df.iloc[14][1])[-5:])}</p>",
-					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[19][0])}'/>",
-					f"<p style='text-align: center; padding-top: 0.8rem;'>20th / {((teams_df.iloc[19][1])[-5:])}</p>",
+					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[9, 0])}'/>",
+					f"<p style='text-align: center; padding-top: 0.8rem;'>10th / {((teams_df.iloc[9, 1])[-5:])}</p>",
+					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[14, 0])}'/>",
+					f"<p style='text-align: center; padding-top: 0.8rem;'>15th / {((teams_df.iloc[14, 1])[-5:])}</p>",
+					f"<img style='display: block; margin-left: auto; margin-right: auto; width: 75px;' src='{(teams_df.iloc[19, 0])}'/>",
+					f"<p style='text-align: center; padding-top: 0.8rem;'>20th / {((teams_df.iloc[19, 1])[-5:])}</p>",
 				]
 
 				for item in markdown_list:
@@ -543,11 +534,11 @@ def streamlit_app():
 		with col1:
 			with st.container():
 				try:
-					st.image(news_df.iloc[0][2], use_column_width=True)
-					st.subheader(news_df.iloc[0][0])
-					st.write(f"Publish time: {news_df.iloc[0][3]}")
+					st.image(news_df.iloc[0, 2], use_column_width=True)
+					st.subheader(news_df.iloc[0, 0])
+					st.write(f"Publish time: {news_df.iloc[0, 3]}")
 					st.markdown(
-						f"<a href={(news_df.iloc[0][1])}>Read More</a>",
+						f"<a href={(news_df.iloc[0, 1])}>Read More</a>",
 						unsafe_allow_html=True,
 					)
 				except IndexError:
@@ -556,11 +547,11 @@ def streamlit_app():
 		with col2:
 			with st.container():
 				try:
-					st.image(news_df.iloc[1][2], use_column_width=True)
-					st.subheader(news_df.iloc[1][0])
-					st.write(f"Publish time: {news_df.iloc[1][3]}")
+					st.image(news_df.iloc[1, 2], use_column_width=True)
+					st.subheader(news_df.iloc[1, 0])
+					st.write(f"Publish time: {news_df.iloc[1, 3]}")
 					st.markdown(
-						f"<a href={(news_df.iloc[1][1])}>Read More</a>",
+						f"<a href={(news_df.iloc[1, 1])}>Read More</a>",
 						unsafe_allow_html=True,
 					)
 				except IndexError:
@@ -569,11 +560,11 @@ def streamlit_app():
 		with col3:
 			with st.container():
 				try:
-					st.image(news_df.iloc[2][2], use_column_width=True)
-					st.subheader(news_df.iloc[2][0])
-					st.write(f"Publish time: {news_df.iloc[2][3]}")
+					st.image(news_df.iloc[2, 2], use_column_width=True)
+					st.subheader(news_df.iloc[2, 0])
+					st.write(f"Publish time: {news_df.iloc[2, 3]}")
 					st.markdown(
-						f"<a href={(news_df.iloc[2][1])}>Read More</a>",
+						f"<a href={(news_df.iloc[2, 1])}>Read More</a>",
 						unsafe_allow_html=True,
 					)
 				except IndexError:
@@ -582,11 +573,11 @@ def streamlit_app():
 		with col4:
 			with st.container():
 				try:
-					st.image(news_df.iloc[3][2], use_column_width=True)
-					st.subheader(news_df.iloc[3][0])
-					st.write(f"Publish time: {news_df.iloc[3][3]}")
+					st.image(news_df.iloc[3, 2], use_column_width=True)
+					st.subheader(news_df.iloc[3, 0])
+					st.write(f"Publish time: {news_df.iloc[3, 3]}")
 					st.markdown(
-						f"<a href={(news_df.iloc[3][1])}>Read More</a>",
+						f"<a href={(news_df.iloc[3, 1])}>Read More</a>",
 						unsafe_allow_html=True,
 					)
 				except IndexError:

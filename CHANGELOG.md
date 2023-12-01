@@ -10,7 +10,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * **MINOR:** Any changes to the Streamlit dashboard that adds a new interaction/feature or removal of one.
 * **PATCH:** Any changes that fix bugs, typos or small edits.
 
-## 2.11.3 | 2023-11-27
+## 2.11.4 | 2023-12-01
+
+### Fixed
+* [#128](https://github.com/digitalghost-dev/premier-league/issues/128) - Fixed the method of retrieving an item from a pandas DataFrame since the previous method will be deprecated.
+
+### Removed
+* [#133](https://github.com/digitalghost-dev/premier-league/issues/133) - Removed dependency on a `.streamlit/secrets.toml` file for authentication.
+
+---
+
+## [2.11.3] | 2023-11-27
 
 ### Changed
 * [#127](https://github.com/digitalghost-dev/premier-league/issues/126) - Changed the maximum value for the `average_goals_df` `st.dataframe` and for the `win_streak_df` `st.dataframe`.
@@ -18,12 +28,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * [#124](https://github.com/digitalghost-dev/premier-league/issues/124) - Changed the `social_media_section.display()` function to be called only once at the end of the `streamlit_app()` function instead of in each tab.
 * [#123](https://github.com/digitalghost-dev/premier-league/issues/123) - Changed the data connection functions into importable functions where all queries are now cached.
 
+---
+
 ## [2.11.2] | 2023-11-17
 
 ### Changed
 * [#122](https://github.com/digitalghost-dev/premier-league/issues/122) - Changed the `Dockerfile` to handle the theme configuration instead of using a `.streamlit/config.toml` file.
 * [#121](https://github.com/digitalghost-dev/premier-league/issues/121) - Changed the icon for the dashboard from an image hosted on GCP's Cloud Storage to using [SimpleIcon's Premier League icon](https://simpleicons.org/?q=premier+league).
 
+---
 
 ## [2.11.1] | 2023-11-15
 
@@ -34,6 +47,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 * [#120](https://github.com/digitalghost-dev/premier-league/issues/120) - Removed the `toast()` function. 
+
+---
 
 ## [2.11.0] | 2023-11-03
 
@@ -49,22 +64,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 * [#113](https://github.com/digitalghost-dev/premier-league/issues/113) - Removed **Top Teams Movement** section from **Standings & Overview** tab.
 
+---
+
 ## [2.10.3] | 2023-10-26
 
 ### Changed 
 * [#104](https://github.com/digitalghost-dev/premier-league/issues/104) - Changed the `social_media()` function into an importable `class` from the newly created `components/` directory.
+
+---
 
 ## [2.10.2] | 2023-10-20
 
 ### Changed
 * [#103](https://github.com/digitalghost-dev/premier-league/issues/103) - Changed social media icons into static `.svg` files instead of using Font Awesome icons.
 
+---
 
 ## [2.10.1] | 2023-09-10
 
 ### Fixed
 * [#91](https://github.com/digitalghost-dev/premier-league/issues/91) - Fixed the **News** tab to not error out when the table does not have at least 4 rows of data by implementing a `try/except` block.
 
+---
 
 ## [2.10.0] | 2023-09-04
 
@@ -73,12 +94,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * [#89](https://github.com/digitalghost-dev/premier-league/issues/89) - Added **News** tab to display the latest news from the Premier League using the [News API](https://newsapi.org/).
 * [#88](https://github.com/digitalghost-dev/premier-league/issues/88) - Added club logo to the Standings `st.dataframe`.
 
+---
 
 ## [2.9.1] | 2023-08-27
 
 ### Fixed
 * [#87](https://github.com/digitalghost-dev/premier-league/issues/87) - Fixed the Standings column headers in the `st.dataframe` element to display proper column names instead of the SQL column names.
 
+---
 
 ## [2.9.0] | 2023-08-20
 
@@ -98,6 +121,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 * Removed `st.spinner`.
 
+---
 
 ## [2.8.0] | 2023-08-12
 
@@ -127,12 +151,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `st.bar_chart` has also been removed due to this bug.
 * Removed `import os`, `import psycopg2`, `import plotly.graph_objects as go` as they are no longer needed.
 
+---
 
 ## [2.7.1] | 2023-07-13
 
 ### Fixed
 * **Main Page**, *Standings Tab*: Fixed `iloc[X][X]` values to match the correct column to pull in correct data for the Top 5 Teams section.
 
+---
 
 ## [2.7.0] | 2023-07-12
 
@@ -142,6 +168,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### **Changed** 
 * **Main Pages**, *Standings Tab*: Changed the data values for `label` and `value` for the `st.metric` card.
 
+---
 
 ## [2.6.0] | 2023-06-28
 
@@ -157,6 +184,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### **Removed**
 * **Main Page**, *Fixtures Tab*: Removed extra comma from `fixtures` date.
 
+---
 
 ## [2.5.0] | 2023-06-19
 
@@ -172,6 +200,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### **Removed**
 * Removed map of stadium locations from **Main** page; moved it to the new **Playground** page.
 
+---
 
 ## [2.4.0] | 2023-05-26
 
@@ -185,12 +214,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### **Fixed**
 * Added `target="_blank" rel="noopener noreferrer"` to anchor elements to allow linked icons to open properly.
 
+---
 
 ## [2.3.1] | 2023-05-25
 
 ### **Fixed**
 * Fixed broken link for GitHub Icon on all tabs.
 
+---
 
 ## [2.3.0] | 2023-05-24
 
@@ -201,12 +232,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### **Changed**
 * Changed tab title from **Top Teams & Top Scorers** to **Statistics**.
 
+---
 
 ## [2.2.1] | 2023-05-19
 
 ### **Fixed**
 * Fixed promotion/demotion legend by displaying items as a column instead of in a row.
 
+---
 
 ## [2.2.0] | 2023-05-17
 
@@ -219,6 +252,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added solid border element to `standings` table to better denote promotion/demotion status.
 * Added text under table to explain which color denotes which promotion/demotion status.
 
+---
 
 ## [2.1.0] | 2023-05-10
 
@@ -227,18 +261,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     * This allows the stadium points to be hoverable which enables a tooltip that provides more information about the venue.
 * Changed title to display ***Premier League Statistics / 2022-23*** instead of ***Premier League Statistics / '22-'23***.
 
+---
 
 ## [2.0.2] | 2023-05-08
 
 ### **Fixed**
 * Fixed the sorting of `rounds` to appear in decending order on the `fixtures` tab.
 
+---
 
 ## [2.0.1] | 2023-05-05
 
 ### **Fixed**
 * Adding '`<=`' to `while` loop to get the current round. Previously, the Streamlit app would only select rounds that were *less* than the `MAX` round which would omit the final round.
 
+---
 
 ## [2.0.0] | 2023-05-02
 Now using [Firestore](https://firebase.google.com/docs/firestore/) to store fixture data in a document format.
@@ -246,6 +283,7 @@ Now using [Firestore](https://firebase.google.com/docs/firestore/) to store fixt
 ### **Added**
 * Added `Fixtures` tab for all rounds in the current season. Updates 3 times a day and will add new rounds as they start.
 
+---
 
 ## [1.3.0] | 2023-04-17
 
@@ -262,6 +300,7 @@ Now using [Firestore](https://firebase.google.com/docs/firestore/) to store fixt
 
 * Removed Emojis from tab titles.
 
+---
 
 ## [1.2.0] | 2023-04-16
 
@@ -276,6 +315,8 @@ Top Teams Tab
 
 Top Players Tab
 * Removed this tab, combined with top teams tab.
+
+---
 
 ## [1.1.0] | 2023-04-07
 
@@ -297,6 +338,8 @@ Top Players Tab
 ### **Removed**
 * Removed `LIMIT 5` from SQL query to pull all teams.
 
+---
+
 ## [1.0.0] | 2023-04-05
 
 ### **Added**
@@ -313,6 +356,8 @@ Top Teams Tab
 
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
+
+[2.11.3]: https://github.com/digitalghost-dev/premier-league/commit/b13541d5a64ea67e42c1b10e87dd2a7e32798463#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
 [2.11.2]: https://github.com/digitalghost-dev/premier-league/commit/25bfb7f76f46a0f8badce8a896937ddf12690332#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 

@@ -3,25 +3,23 @@ import pandas as pd
 import streamlit as st
 from firebase_admin import firestore  # type: ignore
 from google.cloud import bigquery
-from google.oauth2 import service_account  # type: ignore
+import google.auth
 
 
+# Firestore Connection
 @st.cache_resource
 def firestore_connection() -> firestore.Client:
-	credentials = service_account.Credentials.from_service_account_info(
-		st.secrets["gcp_service_account"]
-	)
+	credentials, project = google.auth.default()
 	if not firebase_admin._apps:
 		firebase_admin.initialize_app()
 
 	return firestore.Client(credentials=credentials)
 
 
+# BigQuery Connection
 @st.cache_data(ttl=600)
 def run_query(query):
-	credentials = service_account.Credentials.from_service_account_info(
-		st.secrets["gcp_service_account"]
-	)
+	credentials, project = google.auth.default()
 	query_job = bigquery.Client(credentials=credentials).query(query)
 	raw_data = query_job.result()
 	data = [dict(data) for data in raw_data]
