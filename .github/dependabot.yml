@@ -3,7 +3,13 @@ updates:
   - package-ecosystem: "pip"
     directory: "."
     schedule:
-      interval: "monthly"
+      interval: "weekly"
     open-pull-requests-limit: 15
     ignore:
       - dependency-name: "pandas"
+      - dependency-name: "pandas-gbq"
+      - dependency-name: "polars"
+      - dependency-name: "prefect"
+      - dependency-name: "psycopg2-binary"
+      - dependency-name: "pyarrow"
+      - dependency-name: "requests"
