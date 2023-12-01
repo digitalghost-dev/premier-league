@@ -6,5 +6,5 @@ pyarrow==12.0.1
 prefect==2.12.0
 pandas-gbq==0.19.2
 google-cloud-secret-manager==2.16.3
-polars==0.19.6
+polars==0.19.18
 psycopg2-binary==2.9.8
