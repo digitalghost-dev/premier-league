@@ -45,7 +45,7 @@ jobs:
             - name: Checkout 
               uses: actions/checkout@v4
 
-            - name: Set up Python 3.8
+            - name: Set up Python
               uses: actions/setup-python@v4
               with:
                 python-version: 3.11.6
@@ -54,6 +54,7 @@ jobs:
               run: |
                 python -m pip install --upgrade pip
                 pip install google-cloud-bigquery
+                pip install google-cloud-secret-manager
                 pip install firebase-admin
                 pip install plotly
                 pip install streamlit
