@@ -232,7 +232,7 @@ jobs:
         with: 
           service: streamlit
           image: "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.PROJECT_ID }}/${{ secrets.REGISTRY_REPO }}/streamlit:${{ env.VERSION_NUMBER }}"
-          flags: "--service-account=${{ secrets.WIF_SERVICE_ACCOUNT_CLOUD_RUN }} --max-instances=25 --cpu-boost"
+          flags: "--service-account=${{ secrets.WIF_SERVICE_ACCOUNT_CLOUD_RUN }} --max-instances=25 --cpu-boost && gcloud run services update-traffic streamlit --to-latest"
 
   architecture-build:
     runs-on: ubuntu-22.04
