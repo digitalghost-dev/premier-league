@@ -10,6 +10,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * **MINOR:** Any changes to the Streamlit dashboard that adds a new interaction/feature or removal of one.
 * **PATCH:** Any changes that fix bugs, typos or small edits.
 
+## 2.11.5 | 2023-12-02
+
+### Changed
+* [#137](https://github.com/digitalghost-dev/premier-league/issues/137) - Changed the Points Progression section into an importable `class`.
+* [#136](https://github.com/digitalghost-dev/premier-league/issues/136) - Changed the Top Teams section into an importable `class`.
+* [#135](https://github.com/digitalghost-dev/premier-league/issues/135) - Changed the League Forms section into an importable `class`.
+* [#134](https://github.com/digitalghost-dev/premier-league/issues/134) - Changed the Top Scorers section into an importable `class`.
+
+### Fixed
+* [#139](https://github.com/digitalghost-dev/premier-league/issues/139) - Fixed the `st.subheader` typo in "Points Progression" section.
+
+---
+
 ## 2.11.4 | 2023-12-01
 
 ### Fixed
@@ -356,6 +369,8 @@ Top Teams Tab
 
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
+
+[2.11.4]: https://github.com/digitalghost-dev/premier-league/commit/71f0424ff0c1b14571390ee6fe0775dd8da6d7ae#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
 [2.11.3]: https://github.com/digitalghost-dev/premier-league/commit/b13541d5a64ea67e42c1b10e87dd2a7e32798463#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
