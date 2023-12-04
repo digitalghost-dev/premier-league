@@ -1,7 +1,6 @@
 from streamlit.testing.v1 import AppTest
 
 at = AppTest.from_file("streamlit_app.py", default_timeout=1000)
-at.secrets["mapbox"] = {"mapbox_key": "<test api key>"}
 at.run()
 
 
@@ -18,4 +17,4 @@ def test_tab_one():
 
 def test_tab_two():
 	assert at.tabs[1].subheader[0].value == "Top 5 Teams"
-	assert at.tabs[1].subheader[2].value == "Point Progression thoughout the Season"
+	assert at.tabs[1].subheader[2].value == "Point Progression throughout the Season"
