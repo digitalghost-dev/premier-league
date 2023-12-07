@@ -29,7 +29,7 @@ jobs:
         with:
           token_format: 'access_token'
           workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
-          service_account: '${{ secrets.WIF_SERVICE_ACCOUNT_ARTIFACT_REGISTRY }}'
+          service_account: '${{ secrets.WIF_SERVICE_ACCOUNT_DATABASE }}'
           project_id: '${{ secrets.PROJECT_ID }}'
     
       - name: Perform Soda Scan
