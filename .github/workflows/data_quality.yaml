@@ -40,5 +40,5 @@ jobs:
         with:
           soda_library_version: v1.0.4
           data_source: bigquery_connection
-          configuration: .soda/configuration.yaml
-          checks: .soda/checks.yaml
+          configuration: soda/configuration.yaml
+          checks: soda/checks.yaml
