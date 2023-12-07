@@ -33,7 +33,7 @@ jobs:
           project_id: '${{ secrets.PROJECT_ID }}'
     
       - name: Perform Soda Scan
-        uses: sodadata/soda-github-action@v1
+        uses: 'sodadata/soda-github-action@v1.0.2'
         env:
           SODA_CLOUD_API_KEY: ${{ secrets.SODA_CLOUD_API_KEY }}
           SODA_CLOUD_API_SECRET: ${{ secrets.SODA_CLOUD_API_SECRET }}
