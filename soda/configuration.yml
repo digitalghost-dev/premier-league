@@ -7,3 +7,8 @@ data_source bigquery_connection:
   - https://www.googleapis.com/auth/drive
   project_id: "cloud-data-infrastructure"
   dataset: premier_league_dataset
+
+soda_cloud:
+  host: cloud.us.soda.io
+  api_key_id: ${SODA_CLOUD_API_KEY}
+  api_key_secret: ${SODA_CLOUD_API_KEY}
