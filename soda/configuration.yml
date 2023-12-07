@@ -1,6 +1,6 @@
 data_source bigquery_connection:
   type: bigquery
-  account_info_json_path: ./keys.json
+  use_context_auth: true
   auth_scopes:
   - https://www.googleapis.com/auth/bigquery
   - https://www.googleapis.com/auth/cloud-platform

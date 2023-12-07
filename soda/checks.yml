@@ -1,4 +1,20 @@
-# Check that a dataset contains rows
+checks for news:
+  - row_count > 1
+  - invalid_count(url) = 0:
+      valid regex: ^https://
+
+checks for stadiums:
+  - row_count = 20
+
 checks for standings:
   - row_count = 20
   - duplicate_count(team) = 0
+  - max(points) < 114
+  - min(points) > 0
+
+checks for teams:
+  - row_count = 20
+  - duplicate_count(team) = 0
+
+checks for top_scorers:
+  - row_count = 5
