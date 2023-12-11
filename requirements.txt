@@ -5,7 +5,7 @@ plotly==5.17.0
 streamlit==1.29.0
 
 # Google Cloud
-firebase-admin==6.2.0
+firebase-admin==6.3.0
 google-cloud-core==2.3.3
 google-cloud-bigquery==3.11.4
 google-cloud-secret-manager==2.16.4
