@@ -16,11 +16,12 @@ class TopTeamsSection:
 		]
 
 	def display(self):
-		st.subheader("Top 5 Teams")
-		columns = st.columns(5)
+		with st.container(border=True):
+			st.subheader("Top 5 Teams")
+			columns = st.columns(5)
 
-		for i, col in enumerate(columns):
-			with col:
-				markdown_list = self.generate_team_html(i)
-				for item in markdown_list:
-					st.markdown(item, unsafe_allow_html=True)
+			for i, col in enumerate(columns):
+				with col:
+					markdown_list = self.generate_team_html(i)
+					for item in markdown_list:
+						st.markdown(item, unsafe_allow_html=True)

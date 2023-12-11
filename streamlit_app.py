@@ -240,8 +240,9 @@ def streamlit_app():
 				column_config={
 					"logo": st.column_config.ImageColumn("Icon", width="small"),
 					"rank": "Rank",
-					"team": "Club",
 					"points": "Points",
+					"team": "Club",
+					"games_played": "Games Played",
 					"wins": "Wins",
 					"draws": "Draws",
 					"loses": "Loses",

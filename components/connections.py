@@ -30,7 +30,7 @@ def run_query(query):
 def get_standings() -> pd.DataFrame:
 	standings_data = run_query(
 		"""
-            SELECT rank, logo, team, points, wins, draws, loses, goals_for, goals_against, goal_difference
+            SELECT rank, points, logo, team, games_played, wins, draws, loses, goals_for, goals_against, goal_difference
             FROM `premier_league_dataset.standings`
 			ORDER BY rank ASC;
         """
