@@ -6,6 +6,6 @@ streamlit==1.28.2
 
 # Google Cloud
 firebase-admin==6.2.0
-google-cloud-core==2.3.3
+google-cloud-core==2.4.1
 google-cloud-bigquery==3.11.4
 google-cloud-secret-manager==2.16.4
