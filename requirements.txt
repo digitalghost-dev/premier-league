@@ -1,6 +1,8 @@
 # These libraries are used ONLY for the Streamlit app.
 # This is to make the Docker image as small as possible and reduce security issues.
 
+# Streamlit
+pandas==2.1.4
 plotly==5.17.0
 streamlit==1.29.0
 

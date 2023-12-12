@@ -26,7 +26,7 @@ class PointProgressionSection:
 		return team_forms
 
 	def create_dataframe(self, team_forms):
-		headers = [str(self.standings_df.iloc[i, 2]) for i in range(5)]
+		headers = [str(self.standings_df.iloc[i, 3]) for i in range(5)]
 		zipped = list(zip(*team_forms))  # Transpose the list of lists
 		return pd.DataFrame(zipped, columns=headers)
 
