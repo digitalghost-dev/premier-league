@@ -36,7 +36,7 @@ on:
         
 env:
   GAR_LOCATION: us-central1
-  VERSION_NUMBER: '2.12.0'
+  VERSION_NUMBER: '2.12.1'
   REGISTRY_IMAGE: digitalghostdev/premier-league
   
 jobs:
@@ -233,6 +233,7 @@ jobs:
           service: streamlit
           image: "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.PROJECT_ID }}/${{ secrets.REGISTRY_REPO }}/streamlit:${{ env.VERSION_NUMBER }}"
           flags: "--service-account=${{ secrets.WIF_SERVICE_ACCOUNT_CLOUD_RUN }} --max-instances=25 --cpu-boost"
+          no_traffic: false
 
   architecture-build:
     runs-on: ubuntu-22.04
