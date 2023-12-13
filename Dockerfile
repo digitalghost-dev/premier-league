@@ -1,6 +1,6 @@
 # Dockerfile to build the Streamlit app.
 
-FROM python:3.10.12-slim-buster
+FROM python:3.12-slim-bookworm
 
 RUN groupadd -r streamlit_group
 
