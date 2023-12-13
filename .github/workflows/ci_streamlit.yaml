@@ -228,7 +228,7 @@ jobs:
           
       - name: Deploy Image
         id: 'deploy'
-        uses: 'google-github-actions/deploy-cloudrun@v1'
+        uses: 'google-github-actions/deploy-cloudrun@v2'
         with: 
           service: streamlit
           image: "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.PROJECT_ID }}/${{ secrets.REGISTRY_REPO }}/streamlit:${{ env.VERSION_NUMBER }}"
