@@ -36,7 +36,7 @@ on:
         
 env:
   GAR_LOCATION: us-central1
-  VERSION_NUMBER: '2.12.1'
+  VERSION_NUMBER: '2.13.0'
   REGISTRY_IMAGE: digitalghostdev/premier-league
   
 jobs:
