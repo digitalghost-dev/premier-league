@@ -12,7 +12,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 # Update History
 
-## 2.12.1 | 2023-12-12
+## 2.13.0 | 2023-12-19
+
+### Added
+* [#148](https://github.com/digitalghost-dev/premier-league/issues/148) - Added a `st.header` titled **Fixtures** to the fixtures tab.
+* [#146](https://github.com/digitalghost-dev/premier-league/issues/147) - Added a new section that shows highlights using the YouTube API under the **News & Highlights** tab.
+
+### Changed
+* [#149](https://github.com/digitalghost-dev/premier-league/issues/149) - Changed the current `st.subheader` to `st.header` on the **About** tab.
+* [#147](https://github.com/digitalghost-dev/premier-league/issues/147) - Changed the **News** tab to **News & Highlights** to reflect the new section that was added.
+
+---
+
+## [2.12.1] | 2023-12-12
 
 ### Fixed
 * [#144](https://github.com/digitalghost-dev/premier-league/issues/144) - Fixed the `st.line_chart` **Point Progression** section to display the correct column for the legend.
@@ -43,7 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## 2.11.4 | 2023-12-01
+## [2.11.4] | 2023-12-01
 
 ### Fixed
 * [#128](https://github.com/digitalghost-dev/premier-league/issues/128) - Fixed the method of retrieving an item from a pandas DataFrame since the previous method will be deprecated.
@@ -389,6 +401,8 @@ Top Teams Tab
 
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
+
+[2.12.1]: https://github.com/digitalghost-dev/premier-league/commit/11e04f7aa42e607d65300600aef7b6743c520542
 
 [2.12.0]: https://github.com/digitalghost-dev/premier-league/commit/3df7c162a9d1deb587fe6f9681e3c8e028d2e094#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 

@@ -88,6 +88,18 @@ def get_news() -> pd.DataFrame:
 
 
 @st.cache_resource
+def get_highlights() -> pd.DataFrame:
+	highlights_data = run_query(
+		"""
+			SELECT *
+			FROM `premier_league_dataset.highlights`
+			ORDER BY publish_time DESC;
+		"""
+	)
+	return pd.DataFrame(data=highlights_data)
+
+
+@st.cache_resource
 def get_league_statistics() -> pd.DataFrame:
 	league_statistics = run_query(
 		"""

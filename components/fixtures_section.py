@@ -92,6 +92,7 @@ class FixturesSection:
 
 	def display(self):
 		round_count = self.max_round
+		st.header("Fixtures")
 
 		while round_count >= self.min_round:
 			with st.expander(f"Round {round_count}"):

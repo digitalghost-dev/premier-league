@@ -7,6 +7,7 @@ from streamlit.delta_generator import DeltaGenerator
 # Importing classes from components/ directory.
 from components.about_section import AboutSection
 from components.fixtures_section import FixturesSection
+from components.highlights_section import HighlightsSection
 from components.league_form_section import LeagueFormsSection
 from components.point_progression_section import PointProgressionSection
 from components.stadiums_map_section import StadiumMapSection
@@ -20,6 +21,7 @@ from components.connections import (
 	get_teams,
 	get_top_scorers,
 	get_news,
+	get_highlights,
 	get_league_statistics,
 	get_min_round,
 	get_max_round,
@@ -35,6 +37,7 @@ def streamlit_app():
 	teams_df = get_teams()
 	top_scorers_df = get_top_scorers()
 	news_df = get_news()
+	highlights_df = get_highlights()
 	league_statistics_df = get_league_statistics()
 	min_round = get_min_round()
 	max_round = get_max_round()
@@ -73,7 +76,13 @@ def streamlit_app():
 
 	# Tab menu.
 	tab1, tab2, tab3, tab4, tab5 = st.tabs(
-		["Standings & Overview", "Top Teams & Scorers", "Fixtures", "News", "About"]
+		[
+			"Standings & Overview",
+			"Top Teams & Scorers",
+			"Fixtures",
+			"News & Hightlights",
+			"About",
+		]
 	)
 
 	# --------- Overview Tab ---------
@@ -349,6 +358,12 @@ def streamlit_app():
 					)
 				except IndexError:
 					pass
+
+		st.divider()
+
+		with st.container():
+			HighlightsSection(highlights_df).display_first_row()
+			HighlightsSection(highlights_df).display_second_row()
 
 	# --------- About Tab ---------
 	# Tab 5 holds the following sections: [About].

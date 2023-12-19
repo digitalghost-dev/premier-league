@@ -6,7 +6,7 @@ class AboutSection:
 		pass
 
 	def display(self):
-		st.subheader("About")
+		st.header("About")
 		st.write(
 			"""
             This project is created by maintained by [myself](https://github.com/digitalghost-dev) to practice my skills in Data Engineering to one day break into the field.
