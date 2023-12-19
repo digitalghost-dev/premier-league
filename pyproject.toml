@@ -18,3 +18,7 @@ pythonpath = [
     ".", "components", "tests"
 ]
 testpaths = "tests"
+filterwarnings = [
+    "ignore:Deprecated call to `pkg_resources\\.declare_namespace\\('.*'\\):DeprecationWarning",
+    "ignore::DeprecationWarning:google.rpc",
+]
