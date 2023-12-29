@@ -42,7 +42,7 @@ def send_dataframe_to_postgres() -> None:
 	df = pl.DataFrame(json_res)
 
 	df.write_database(
-		table_name="stocks", connection=postgresql_uri, if_exists="append"
+		table_name="stocks", connection=postgresql_uri, if_table_exists="append"
 	)
 
 
