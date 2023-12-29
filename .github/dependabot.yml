@@ -8,8 +8,5 @@ updates:
     ignore:
       - dependency-name: "pandas"
       - dependency-name: "pandas-gbq"
-      - dependency-name: "polars"
-      - dependency-name: "prefect"
       - dependency-name: "psycopg2-binary"
-      - dependency-name: "pyarrow"
       - dependency-name: "requests"
