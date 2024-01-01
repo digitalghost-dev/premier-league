@@ -9,7 +9,7 @@ polars==0.20.2
 psycopg2-binary==2.9.9
 sqlalchemy==2.0.0
 prefect-soda-core==0.1.7
-soda-core-bigquery==3.1.0
+soda-core-bigquery==3.1.2
 
 # Google Cloud
 firebase-admin==6.3.0
