@@ -234,7 +234,7 @@ def define_table_schema() -> list[dict[str, str]]:
 		{"name": "draws", "type": "INTEGER"},
 		{"name": "loses", "type": "INTEGER"},
 		{"name": "recent_form", "type": "STRING"},
-		{"name": "points", "type": "STRING"},
+		{"name": "points", "type": "INTEGER"},
 		{"name": "goals_for", "type": "INTEGER"},
 		{"name": "goals_against", "type": "INTEGER"},
 		{"name": "goal_difference", "type": "INTEGER"},

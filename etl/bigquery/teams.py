@@ -58,7 +58,7 @@ def call_api() -> (
 	bigquery_dataframe = bigquery_call()
 
 	# Iterate through bigquery_dataframe to get the team's id and create a list using list comprehension.
-	id_list = [bigquery_dataframe.iloc[i][0] for i in range(20)]
+	id_list = [bigquery_dataframe.iloc[i, 0] for i in range(20)]
 
 	headers = {
 		"X-RapidAPI-Key": rapid_api_key,
@@ -174,7 +174,7 @@ def define_table_schema() -> list[dict[str, str]]:
 		{"name": "clean_sheets", "type": "INTEGER"},
 		{"name": "penalties_scored", "type": "INTEGER"},
 		{"name": "penalties_missed", "type": "INTEGER"},
-		{"name": "average_goals", "type": "INTEGER"},
+		{"name": "average_goals", "type": "FLOAT"},
 		{"name": "win_streak", "type": "INTEGER"},
 	]
 
