@@ -56,6 +56,7 @@ rapid_api_current_round, bigquery_current_round = DataRetrieval(
 	PROJECT_ID
 ).retrieve_data()
 
+
 def load_current_round() -> None:
 	if rapid_api_current_round == bigquery_current_round:
 		print("Current round is already loaded!")
@@ -64,7 +65,6 @@ def load_current_round() -> None:
 		print("Current round is not loaded!")
 
 		def create_dataframe() -> DataFrame:
-
 			# Spliting a string that looks like: "Regular Season - 12"
 			regular_season = [rapid_api_current_round[:14]]
 			round_number = [rapid_api_current_round[17:]]
@@ -78,7 +78,6 @@ def load_current_round() -> None:
 			return df, round_number_int
 
 		def define_table_schema() -> list[dict[str, str]]:
-
 			schema_definition = [
 				{"name": "season", "type": "STRING"},
 				{"name": "round", "type": "INTEGER"},
@@ -120,6 +119,7 @@ def load_current_round() -> None:
 		schema_definition = define_table_schema()
 		send_dataframe_to_bigquery(current_round_dataframe, schema_definition)
 		sample_run_job()
+
 
 if __name__ == "__main__":
 	load_current_round()

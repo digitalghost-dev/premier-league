@@ -10,7 +10,6 @@ os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
 
 
 def gcp_secret_rapid_api() -> str:
-
 	client = secretmanager.SecretManagerServiceClient()
 	name = "projects/463690670206/secrets/rapid-api/versions/1"
 	response = client.access_secret_version(request={"name": name})
@@ -37,7 +36,6 @@ def call_api() -> (
 		list[str],
 	]
 ):
-
 	payload = gcp_secret_rapid_api()
 
 	headers = {
@@ -169,7 +167,6 @@ def call_api() -> (
 
 
 def create_dataframe() -> DataFrame:
-
 	(
 		team_id_list,
 		rank_list,
@@ -228,7 +225,6 @@ def create_dataframe() -> DataFrame:
 
 
 def define_table_schema() -> list[dict[str, str]]:
-
 	schema_definition = [
 		{"name": "team_id", "type": "INTEGER"},
 		{"name": "rank", "type": "INTEGER"},
@@ -252,7 +248,6 @@ def define_table_schema() -> list[dict[str, str]]:
 def send_dataframe_to_bigquery(
 	standings_dataframe: DataFrame, schema_definition: list[dict[str, str]]
 ) -> None:
-
 	standings_dataframe.to_gbq(
 		destination_table="premier_league_dataset.standings",
 		if_exists="replace",
