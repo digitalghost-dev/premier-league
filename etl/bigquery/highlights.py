@@ -1,3 +1,8 @@
+"""
+This file pulls data from the YouTube API relating to the English Premier League
+highlights and loads it into a BigQuery table.
+"""
+
 import googleapiclient.discovery
 from google.cloud import secretmanager
 from datetime import datetime, timedelta, timezone

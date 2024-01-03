@@ -1,9 +1,3 @@
-"""
-This file pulls data from the Football API relating to the English Premier League
-teams data and loads it into a PostgreSQL database.
-"""
-
-# Importing needed libraries.
 import os
 
 import pandas as pd
@@ -11,16 +5,13 @@ import requests  # type: ignore
 from google.cloud import bigquery, secretmanager
 from pandas import DataFrame
 
-# Settings the project environment.
 os.environ["GCLOUD_PROJECT"] = "cloud-data-infrastructure"
 
-# Setting table names.
 STANDINGS_TABLE = "premier_league_dataset.standings"
 TEAMS_TABLE = "premier_league_dataset.teams"
 
 
 def gcp_secret_rapid_api() -> str:
-    """This function retrieves the Rapid API key from GCP Secret Manager"""
 
     client = secretmanager.SecretManagerServiceClient()
     name = "projects/463690670206/secrets/rapid-api/versions/1"
@@ -30,13 +21,11 @@ def gcp_secret_rapid_api() -> str:
     return rapid_api_key
 
 
-# Function to call the Teams table in BigQuery.
+# Calling the Standings table from BigQuery to get each team's id.
 def bigquery_call() -> DataFrame:
-    """This function calls the Teams table in BigQuery"""
 
     bqclient = bigquery.Client()
 
-    # SQL query
     query_string = f"""
         SELECT *
         FROM {STANDINGS_TABLE}
@@ -67,7 +56,6 @@ def call_api() -> (
         list[int],
     ]
 ):
-    """This function calls the API then filling in the empty lists"""
 
     rapid_api_key = gcp_secret_rapid_api()
     bigquery_dataframe = bigquery_call()
@@ -75,16 +63,13 @@ def call_api() -> (
     # Iterate through bigquery_dataframe to get the team's id and create a list using list comprehension.
     id_list = [bigquery_dataframe.iloc[i][0] for i in range(20)]
 
-    # Headers used for RapidAPI.
     headers = {
         "X-RapidAPI-Key": rapid_api_key,
         "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com",
     }
 
-    # Standings endpoint from RapidAPI.
     url = "https://api-football-v1.p.rapidapi.com/v3/teams/statistics"
 
-    # Empty lists that will be filled and then used to create a dataframe.
     team_id_list = []
     team_list = []
     logo_list = []
@@ -97,42 +82,33 @@ def call_api() -> (
 
     count = 0
     while count < 20:
-        # Building GET request to retrieve data.
+        
         query = {"league": "39", "season": "2023", "team": id_list[count]}
         response = requests.get(url, headers=headers, params=query, timeout=10)
         json_res = response.json()
 
-        # Team ID.
         team_id_list.append(int(json_res["response"]["team"]["id"]))
 
-        # Team's name.
         team_list.append(str(json_res["response"]["team"]["name"]))
 
-        # Team's logo.
         logo_list.append(str(json_res["response"]["team"]["logo"]))
 
-        # Team's form.
         form_list.append(str(json_res["response"]["form"]))
 
-        # Team's total clean sheets.
         clean_sheets_list.append(int(json_res["response"]["clean_sheet"]["total"]))
 
-        # Team's total penalties scored.
         penalty_scored_list.append(
             int(json_res["response"]["penalty"]["scored"]["total"])
         )
 
-        # Team's total penalties missed.
         penalty_missed_list.append(
             int(json_res["response"]["penalty"]["missed"]["total"])
         )
 
-        # Team's average goals.
         average_goals_list.append(
             float(json_res["response"]["goals"]["for"]["average"]["total"])
         )
 
-        # Team's win streak.
         win_streak_list.append(int(json_res["response"]["biggest"]["streak"]["wins"]))
 
         count += 1
@@ -151,7 +127,6 @@ def call_api() -> (
 
 
 def create_dataframe() -> DataFrame:
-    """This function creates a datafreame from lists created in the last function: call_api()"""
 
     (
         team_id_list,
@@ -165,7 +140,6 @@ def create_dataframe() -> DataFrame:
         win_streak_list,
     ) = call_api()
 
-    # Setting the headers then zipping the lists to create a dataframe.
     headers = [
         "team_id",
         "team",
@@ -197,7 +171,6 @@ def create_dataframe() -> DataFrame:
 
 
 def define_table_schema() -> list[dict[str, str]]:
-    """This function defines the schema for the table in BigQuery"""
 
     schema_definition = [
         {"name": "team_id", "type": "INTEGER"},
@@ -217,7 +190,6 @@ def define_table_schema() -> list[dict[str, str]]:
 def send_dataframe_to_bigquery(
     standings_dataframe: DataFrame, schema_definition: list[dict[str, str]]
 ) -> None:
-    """This function sends the dataframe to BigQuery"""
 
     teams_dataframe.to_gbq(
         destination_table="premier_league_dataset.teams",
