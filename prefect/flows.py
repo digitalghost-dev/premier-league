@@ -26,7 +26,7 @@ def task_news():
 
 @flow
 def news():
-    a = news()
+    a = task_news()
 
 # --- Highlights ---
 @task
