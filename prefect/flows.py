@@ -45,3 +45,12 @@ def task_stocks():
 @flow
 def stocks():
     a = task_stocks()
+
+# --- Squads ---
+@task
+def task_squads():
+    from etl.bigquery.squads import call_api
+
+@flow
+def squads():
+    a = task_squads()
