@@ -10,8 +10,9 @@ from components.fixtures_section import FixturesSection
 from components.highlights_section import HighlightsSection
 from components.league_form_section import LeagueFormsSection
 from components.point_progression_section import PointProgressionSection
-from components.stadiums_map_section import StadiumMapSection
 from components.social_media_section import SocialMediaSection
+from components.squads_section import SquadSection
+from components.stadiums_map_section import StadiumMapSection
 from components.top_scorers_section import TopScorersSection
 from components.top_teams_section import TopTeamsSection
 from components.connections import (
@@ -25,6 +26,7 @@ from components.connections import (
 	get_league_statistics,
 	get_min_round,
 	get_max_round,
+	get_squads,
 )
 
 st.set_page_config(page_title="Streamlit: Premier League", layout="wide")
@@ -41,6 +43,7 @@ def streamlit_app():
 	league_statistics_df = get_league_statistics()
 	min_round = get_min_round()
 	max_round = get_max_round()
+	squads_df = get_squads()
 	firestore_database = firestore_connection()
 	fixtures_section = FixturesSection(firestore_database, max_round, min_round)
 
@@ -65,21 +68,17 @@ def streamlit_app():
 		day = current_date.day
 		suffix = get_suffix(day)
 		formatted_day = str(day).lstrip("0")
-		formatted_date = (
-			current_date.strftime("%B ")
-			+ formatted_day
-			+ suffix
-			+ current_date.strftime(", %Y")
-		)
+		formatted_date = current_date.strftime("%B ") + formatted_day + suffix + current_date.strftime(", %Y")
 
 		st.write(f"{formatted_date}")
 
 	# Tab menu.
-	tab1, tab2, tab3, tab4, tab5 = st.tabs(
+	tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(
 		[
 			"Standings & Overview",
 			"Top Teams & Scorers",
 			"Fixtures",
+			"Squads",
 			"News & Hightlights",
 			"About",
 		]
@@ -93,9 +92,7 @@ def streamlit_app():
 
 		# Average goals scored column.
 		with col1:
-			teams_df_average_goals = teams_df.sort_values(
-				by=["average_goals"], ascending=False
-			)
+			teams_df_average_goals = teams_df.sort_values(by=["average_goals"], ascending=False)
 
 			average_goals_df = pd.DataFrame(
 				{
@@ -131,9 +128,7 @@ def streamlit_app():
 			)
 
 		with col2:
-			teams_df_penalties_scored = teams_df.sort_values(
-				by=["penalties_scored"], ascending=False
-			)
+			teams_df_penalties_scored = teams_df.sort_values(by=["penalties_scored"], ascending=False)
 
 			penalties_scored_df = pd.DataFrame(
 				{
@@ -169,9 +164,7 @@ def streamlit_app():
 			)
 
 		with col3:
-			teams_df_win_streak = teams_df.sort_values(
-				by=["win_streak"], ascending=False
-			)
+			teams_df_win_streak = teams_df.sort_values(by=["win_streak"], ascending=False)
 
 			win_streak_df = pd.DataFrame(
 				{
@@ -243,9 +236,7 @@ def streamlit_app():
 			st.subheader("Current Standings")
 
 			standings_table = st.dataframe(
-				standings_df.style.set_table_styles(
-					[{"selector": "th", "props": [("background-color", "yellow")]}]
-				),
+				standings_df.style.set_table_styles([{"selector": "th", "props": [("background-color", "yellow")]}]),
 				column_config={
 					"logo": st.column_config.ImageColumn("Icon", width="small"),
 					"rank": "Rank",
@@ -301,9 +292,26 @@ def streamlit_app():
 		# Fixtures section.
 		fixtures_section.display()
 
-	# --------- News Tab ---------
-	# Tab 4 holds the following sections: [News].
+	# --------- Squads Tab ---------
+	# Tab 4 holds the following sections: [Squads].
 	with tab4:
+		st.subheader("Team Squads")
+		st.markdown("**Note:** Double click on the player's photo to expand it.")
+		squads = SquadSection(squads_df)
+
+		col1, _, _ = st.columns(3)
+		with col1:
+			option = st.selectbox(
+				label="**Select a team to view their squad:**",
+				options=squads.teams,
+				placeholder="Please select a team to view their squad.",
+			)
+		if option:
+			squads.display(option)
+
+	# --------- News Tab ---------
+	# Tab 5 holds the following sections: [News].
+	with tab5:
 		st.header("Recent News")
 		col1, col2, col3, col4 = st.columns(4)
 
@@ -366,8 +374,8 @@ def streamlit_app():
 			HighlightsSection(highlights_df).display_second_row()
 
 	# --------- About Tab ---------
-	# Tab 5 holds the following sections: [About].
-	with tab5:
+	# Tab 6 holds the following sections: [About].
+	with tab6:
 		# About
 		about_section = AboutSection()
 		about_section.display()

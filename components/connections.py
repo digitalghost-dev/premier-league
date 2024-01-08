@@ -139,3 +139,15 @@ def get_max_round() -> int:
 	max_round_row = pd.DataFrame(data=max_round_row)
 	max_round = max_round_row["round"][0]
 	return max_round
+
+
+@st.cache_resource
+def get_squads() -> pd.DataFrame:
+	squads_data = run_query(
+		"""
+			SELECT * 
+			FROM `premier_league_dataset.squads_view`
+			
+		"""
+	)
+	return pd.DataFrame(data=squads_data)

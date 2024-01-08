@@ -14,13 +14,9 @@ class FixturesSection:
 
 	def firestore_pull(
 		self, round_count
-	) -> Tuple[
-		List[str], List[int], List[int], List[str], List[str], List[str], List[str]
-	]:
+	) -> Tuple[List[str], List[int], List[int], List[str], List[str], List[str], List[str]]:
 		# Calling each document in the collection in ascending order by date.
-		collection_ref = self.firestore_database.collection(
-			f"Regular Season - {round_count}"
-		)
+		collection_ref = self.firestore_database.collection(f"Regular Season - {round_count}")
 		query = collection_ref.order_by("date", direction=firestore.Query.ASCENDING)
 		results = query.stream()
 
@@ -34,25 +30,15 @@ class FixturesSection:
 
 		# Retrieving and formatting match date.
 		match_date = [
-			datetime.strptime(
-				documents[count]["data"]["date"], "%Y-%m-%dT%H:%M:%S+00:00"
-			)
+			datetime.strptime(documents[count]["data"]["date"], "%Y-%m-%dT%H:%M:%S+00:00")
 			.strftime("%B %d{}, %Y - %H:%M")
 			.format(
 				"th"
 				if 4
-				<= int(
-					datetime.strptime(
-						documents[count]["data"]["date"], "%Y-%m-%dT%H:%M:%S+00:00"
-					).strftime("%d")
-				)
+				<= int(datetime.strptime(documents[count]["data"]["date"], "%Y-%m-%dT%H:%M:%S+00:00").strftime("%d"))
 				<= 20
 				else {1: "st", 2: "nd", 3: "rd"}.get(
-					int(
-						datetime.strptime(
-							documents[count]["data"]["date"], "%Y-%m-%dT%H:%M:%S+00:00"
-						).strftime("%d")
-					)
+					int(datetime.strptime(documents[count]["data"]["date"], "%Y-%m-%dT%H:%M:%S+00:00").strftime("%d"))
 					% 10,
 					"th",
 				)
@@ -65,20 +51,12 @@ class FixturesSection:
 		home_goals = [documents[count]["data"]["goals"]["home"] for count in range(10)]
 
 		# Retrieving away and home team for each match.
-		away_team = [
-			documents[count]["data"]["teams"]["away"]["name"] for count in range(10)
-		]
-		home_team = [
-			documents[count]["data"]["teams"]["home"]["name"] for count in range(10)
-		]
+		away_team = [documents[count]["data"]["teams"]["away"]["name"] for count in range(10)]
+		home_team = [documents[count]["data"]["teams"]["home"]["name"] for count in range(10)]
 
 		# Retrieving away and home logo for each team.
-		away_logo = [
-			documents[count]["data"]["teams"]["away"]["logo"] for count in range(10)
-		]
-		home_logo = [
-			documents[count]["data"]["teams"]["home"]["logo"] for count in range(10)
-		]
+		away_logo = [documents[count]["data"]["teams"]["away"]["logo"] for count in range(10)]
+		home_logo = [documents[count]["data"]["teams"]["home"]["logo"] for count in range(10)]
 
 		return (
 			match_date,
@@ -92,7 +70,7 @@ class FixturesSection:
 
 	def display(self):
 		round_count = self.max_round
-		st.header("Fixtures")
+		st.subheader("Fixtures")
 
 		while round_count >= self.min_round:
 			with st.expander(f"Round {round_count}"):

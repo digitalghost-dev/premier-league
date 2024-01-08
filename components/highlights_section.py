@@ -12,7 +12,7 @@ class HighlightsSection:
 		for i, col in enumerate(columns):
 			with col:
 				try:
-					st.image(self.highlights_df.iloc[i, 3], use_column_width=True)
+					st.image(self.highlights_df.iloc[i, 3], use_column_width="auto")
 					st.subheader(self.highlights_df.iloc[i, 2])
 					st.write(f"Publish time: {self.highlights_df.iloc[i, -1]}")
 					st.markdown(
@@ -28,7 +28,7 @@ class HighlightsSection:
 		for i, col in enumerate(columns):
 			with col:
 				try:
-					st.image(self.highlights_df.iloc[i + 3, 3], use_column_width=True)
+					st.image(self.highlights_df.iloc[i + 3, 3], use_column_width="auto")
 					st.subheader(self.highlights_df.iloc[i + 3, 2])
 					st.write(f"Publish time: {self.highlights_df.iloc[i + 3, -1]}")
 					st.markdown(
