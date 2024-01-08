@@ -7,7 +7,7 @@ pandas==2.1.0
 pandas-gbq==0.20.0
 polars==0.20.2
 psycopg2-binary==2.9.9
-sqlalchemy==2.0.0
+sqlalchemy==2.0.25
 prefect-soda-core==0.1.7
 soda-core-bigquery==3.1.0
 
