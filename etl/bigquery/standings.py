@@ -66,85 +66,35 @@ def call_api() -> (
 
 	count = 0
 	while count < 20:
-		team_id_list.append(
-			int(json_res["response"][0]["league"]["standings"][0][count]["team"]["id"])
-		)
+		team_id_list.append(int(json_res["response"][0]["league"]["standings"][0][count]["team"]["id"]))
 
-		rank_list.append(
-			int(json_res["response"][0]["league"]["standings"][0][count]["rank"])
-		)
+		rank_list.append(int(json_res["response"][0]["league"]["standings"][0][count]["rank"]))
 
 		team_list.append(
-			str(
-				json.dumps(
-					json_res["response"][0]["league"]["standings"][0][count]["team"][
-						"name"
-					]
-				)
-			).strip('"')
+			str(json.dumps(json_res["response"][0]["league"]["standings"][0][count]["team"]["name"])).strip('"')
 		)
 
-		games_played.append(
-			int(
-				json_res["response"][0]["league"]["standings"][0][count]["all"][
-					"played"
-				]
-			)
-		)
+		games_played.append(int(json_res["response"][0]["league"]["standings"][0][count]["all"]["played"]))
 
-		wins_list.append(
-			int(json_res["response"][0]["league"]["standings"][0][count]["all"]["win"])
-		)
+		wins_list.append(int(json_res["response"][0]["league"]["standings"][0][count]["all"]["win"]))
 
-		draws_list.append(
-			int(json_res["response"][0]["league"]["standings"][0][count]["all"]["draw"])
-		)
+		draws_list.append(int(json_res["response"][0]["league"]["standings"][0][count]["all"]["draw"]))
 
-		loses_list.append(
-			int(json_res["response"][0]["league"]["standings"][0][count]["all"]["lose"])
-		)
+		loses_list.append(int(json_res["response"][0]["league"]["standings"][0][count]["all"]["lose"]))
 
-		form_list.append(
-			str(
-				json.dumps(
-					json_res["response"][0]["league"]["standings"][0][count]["form"]
-				)
-			).strip('"')
-		)
+		form_list.append(str(json.dumps(json_res["response"][0]["league"]["standings"][0][count]["form"])).strip('"'))
 
-		points_list.append(
-			int(json_res["response"][0]["league"]["standings"][0][count]["points"])
-		)
+		points_list.append(int(json_res["response"][0]["league"]["standings"][0][count]["points"]))
 
-		goals_for.append(
-			int(
-				json_res["response"][0]["league"]["standings"][0][count]["all"][
-					"goals"
-				]["for"]
-			)
-		)
+		goals_for.append(int(json_res["response"][0]["league"]["standings"][0][count]["all"]["goals"]["for"]))
 
-		goals_against.append(
-			int(
-				json_res["response"][0]["league"]["standings"][0][count]["all"][
-					"goals"
-				]["against"]
-			)
-		)
+		goals_against.append(int(json_res["response"][0]["league"]["standings"][0][count]["all"]["goals"]["against"]))
 
-		goals_diff.append(
-			int(json_res["response"][0]["league"]["standings"][0][count]["goalsDiff"])
-		)
+		goals_diff.append(int(json_res["response"][0]["league"]["standings"][0][count]["goalsDiff"]))
 
-		status_list.append(
-			str(json_res["response"][0]["league"]["standings"][0][count]["status"])
-		)
+		status_list.append(str(json_res["response"][0]["league"]["standings"][0][count]["status"]))
 
-		logo_list.append(
-			str(
-				json_res["response"][0]["league"]["standings"][0][count]["team"]["logo"]
-			)
-		)
+		logo_list.append(str(json_res["response"][0]["league"]["standings"][0][count]["team"]["logo"]))
 
 		count += 1
 
@@ -245,9 +195,7 @@ def define_table_schema() -> list[dict[str, str]]:
 	return schema_definition
 
 
-def send_dataframe_to_bigquery(
-	standings_dataframe: DataFrame, schema_definition: list[dict[str, str]]
-) -> None:
+def send_dataframe_to_bigquery(standings_dataframe: DataFrame, schema_definition: list[dict[str, str]]) -> None:
 	standings_dataframe.to_gbq(
 		destination_table="premier_league_dataset.standings",
 		if_exists="replace",

@@ -93,17 +93,11 @@ def call_api() -> (
 
 		clean_sheets_list.append(int(json_res["response"]["clean_sheet"]["total"]))
 
-		penalty_scored_list.append(
-			int(json_res["response"]["penalty"]["scored"]["total"])
-		)
+		penalty_scored_list.append(int(json_res["response"]["penalty"]["scored"]["total"]))
 
-		penalty_missed_list.append(
-			int(json_res["response"]["penalty"]["missed"]["total"])
-		)
+		penalty_missed_list.append(int(json_res["response"]["penalty"]["missed"]["total"]))
 
-		average_goals_list.append(
-			float(json_res["response"]["goals"]["for"]["average"]["total"])
-		)
+		average_goals_list.append(float(json_res["response"]["goals"]["for"]["average"]["total"]))
 
 		win_streak_list.append(int(json_res["response"]["biggest"]["streak"]["wins"]))
 
@@ -181,9 +175,7 @@ def define_table_schema() -> list[dict[str, str]]:
 	return schema_definition
 
 
-def send_dataframe_to_bigquery(
-	standings_dataframe: DataFrame, schema_definition: list[dict[str, str]]
-) -> None:
+def send_dataframe_to_bigquery(standings_dataframe: DataFrame, schema_definition: list[dict[str, str]]) -> None:
 	teams_dataframe.to_gbq(
 		destination_table="premier_league_dataset.teams",
 		if_exists="replace",

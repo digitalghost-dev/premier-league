@@ -18,9 +18,7 @@ def gcp_secret_rapid_api() -> str:
 	return rapid_api_key
 
 
-def call_api() -> (
-	tuple[list[str], list[int], list[str], list[int], list[str], list[str]]
-):
+def call_api() -> tuple[list[str], list[int], list[str], list[int], list[str], list[str]]:
 	rapid_api_key = gcp_secret_rapid_api()
 	headers = {
 		"X-RapidAPI-Key": rapid_api_key,
@@ -64,30 +62,22 @@ def call_api() -> (
 
 		full_name_list.append(full_name)
 
-		goals_list.append(
-			int(json_res["response"][count]["statistics"][0]["goals"]["total"])
-		)
+		goals_list.append(int(json_res["response"][count]["statistics"][0]["goals"]["total"]))
 
 		try:
 			assists = json_res["response"][count]["statistics"][0]["goals"]["assists"]
 			if assists is not None:
 				assists_list.append(int(assists))
 			else:
-				assists_list.append(0)
+				assists_list.append(None)  # type: ignore
 		except (ValueError, TypeError):
 			assists_list.append(0)
 
-		team_list.append(
-			str(json_res["response"][count]["statistics"][0]["team"]["name"]).strip('"')
-		)
+		team_list.append(str(json_res["response"][count]["statistics"][0]["team"]["name"]).strip('"'))
 
-		nationality_list.append(
-			str(json_res["response"][count]["player"]["nationality"]).strip('"')
-		)
+		nationality_list.append(str(json_res["response"][count]["player"]["nationality"]).strip('"'))
 
-		photo_list.append(
-			str(json_res["response"][count]["player"]["photo"]).strip('"')
-		)
+		photo_list.append(str(json_res["response"][count]["player"]["photo"]).strip('"'))
 
 		count += 1
 
@@ -141,9 +131,7 @@ def define_table_schema() -> list[dict[str, str]]:
 	return schema_definition
 
 
-def send_dataframe_to_bigquery(
-	standings_dataframe: DataFrame, schema_definition: list[dict[str, str]]
-) -> None:
+def send_dataframe_to_bigquery(standings_dataframe: DataFrame, schema_definition: list[dict[str, str]]) -> None:
 	top_scorers_dataframe.to_gbq(
 		destination_table="premier_league_dataset.top_scorers",
 		if_exists="replace",
