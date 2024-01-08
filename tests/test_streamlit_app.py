@@ -24,15 +24,21 @@ def test_tab_two():
 
 # Fixtures
 def test_tab_three():
-	assert at.tabs[2].header[0].value == "Fixtures"
+	assert at.tabs[2].subheader[0].value == "Fixtures"
+
+
+# Squads
+def test_tab_four():
+	assert at.tabs[3].subheader[0].value == "Team Squads"
+	assert at.tabs[3].markdown[0].value == "**Note:** Double click on the player's photo to expand it."
 
 
 # News & Highlights
-def test_tab_four():
-	assert at.tabs[3].header[0].value == "Recent News"
-	assert at.tabs[3].header[1].value == "Recent Highlights"
+def test_tab_five():
+	assert at.tabs[4].header[0].value == "Recent News"
+	assert at.tabs[4].header[1].value == "Recent Highlights"
 
 
 # About
-def test_tab_five():
-	assert at.tabs[4].header[0].value == "About"
+def test_tab_six():
+	assert at.tabs[5].subheader[0].value == "About"
