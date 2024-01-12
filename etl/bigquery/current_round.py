@@ -34,15 +34,15 @@ class DataRetrieval:
 	def _call_bigquery(self) -> int:
 		client = bigquery.Client()
 		query = f"""
-            SELECT round
+            SELECT CONCAT(season, " - ", MAX(round)) AS max_round
             FROM `{self.project_id}.premier_league_dataset.current_round`
-            ORDER BY round DESC
-            LIMIT 1
+			GROUP BY season
+			LIMIT 1
         """
 		query_job = client.query(query)
 		results = query_job.result()
 		for row in results:
-			bigquery_current_round = row.round
+			bigquery_current_round = row.max_round
 		return bigquery_current_round
 
 	def retrieve_data(self) -> tuple[str, int]:
@@ -52,9 +52,7 @@ class DataRetrieval:
 		return rapid_api_current_round, bigquery_current_round
 
 
-rapid_api_current_round, bigquery_current_round = DataRetrieval(
-	PROJECT_ID
-).retrieve_data()
+rapid_api_current_round, bigquery_current_round = DataRetrieval(PROJECT_ID).retrieve_data()
 
 
 def load_current_round() -> None:
@@ -121,5 +119,5 @@ def load_current_round() -> None:
 		sample_run_job()
 
 
-if __name__ == "__main__":
+if __name__ != "__main__":
 	load_current_round()
