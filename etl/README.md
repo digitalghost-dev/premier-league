@@ -10,6 +10,16 @@ This directory contains the ETL (Extract, Transform, Load) scripts and related f
 
 The `etl` directory is responsible for extracting data from various sources, transforming it into a consistent format, and loading it into BigQuery, Firestore, and PostgreSQL.
 
+## Data Pipelines Diagram
+<figure>
+    <img 
+        src="https://storage.googleapis.com/premier-league/data_pipelines.png" 
+        alt="data-pipeline" 
+        width="800"
+    />
+    <figcaption>Diagram of a data pipelines in this project</figcaption>
+</figure>
+
 ## Data Sources
 * [Football API](https://rapidapi.com/api-sports/api/api-football)
 * [News API](https://newsapi.org)
