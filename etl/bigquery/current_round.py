@@ -3,11 +3,13 @@ import os
 import pandas as pd
 import requests  # type: ignore
 
+import google.auth
 from google.cloud import secretmanager, run_v2, bigquery
 from pandas import DataFrame
 
 PROJECT_ID = "cloud-data-infrastructure"
 os.environ["GCLOUD_PROJECT"] = PROJECT_ID
+credentials, project_id = google.auth.default()
 
 
 class DataRetrieval:
