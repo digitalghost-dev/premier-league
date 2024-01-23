@@ -19,7 +19,6 @@ type stadium struct {
 	Year_Opened  string   `json:"year_opened"`
 }
 
-// locations slice to seed record album data.
 var stadiums = []stadium{
 	{Team: "Arsenal", Stadium: "Emirates Stadium", City: "London", Latitude: 51.554867, Longitude: -0.109112, Capacity: "60,704", Year_Opened: "2006"},
 	{Team: "Aston Villa", Stadium: "Villa Park", City: "Birmingham", Latitude: 52.509090, Longitude: -1.885249, Capacity: "42,657", Year_Opened: "1897"},
