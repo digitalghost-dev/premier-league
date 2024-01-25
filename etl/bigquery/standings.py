@@ -32,8 +32,6 @@ def call_api() -> (
 		list[int],
 		list[int],
 		list[int],
-		list[str],
-		list[str],
 	]
 ):
 	payload = gcp_secret_rapid_api()
@@ -61,8 +59,6 @@ def call_api() -> (
 	goals_for = []
 	goals_against = []
 	goals_diff = []
-	status_list = []
-	logo_list = []
 
 	count = 0
 	while count < 20:
@@ -92,10 +88,6 @@ def call_api() -> (
 
 		goals_diff.append(int(json_res["response"][0]["league"]["standings"][0][count]["goalsDiff"]))
 
-		status_list.append(str(json_res["response"][0]["league"]["standings"][0][count]["status"]))
-
-		logo_list.append(str(json_res["response"][0]["league"]["standings"][0][count]["team"]["logo"]))
-
 		count += 1
 
 	return (
@@ -111,8 +103,6 @@ def call_api() -> (
 		goals_for,
 		goals_against,
 		goals_diff,
-		status_list,
-		logo_list,
 	)
 
 
@@ -130,8 +120,6 @@ def create_dataframe() -> DataFrame:
 		goals_for,
 		goals_against,
 		goals_diff,
-		status_list,
-		logo_list,
 	) = call_api()
 
 	headers = [
@@ -147,8 +135,6 @@ def create_dataframe() -> DataFrame:
 		"goals_for",
 		"goals_against",
 		"goal_difference",
-		"position_status",
-		"logo",
 	]
 	zipped = list(
 		zip(
@@ -164,8 +150,6 @@ def create_dataframe() -> DataFrame:
 			goals_for,
 			goals_against,
 			goals_diff,
-			status_list,
-			logo_list,
 		)
 	)
 
@@ -188,8 +172,6 @@ def define_table_schema() -> list[dict[str, str]]:
 		{"name": "goals_for", "type": "INTEGER"},
 		{"name": "goals_against", "type": "INTEGER"},
 		{"name": "goal_difference", "type": "INTEGER"},
-		{"name": "position_status", "type": "STRING"},
-		{"name": "logo", "type": "STRING"},
 	]
 
 	return schema_definition
