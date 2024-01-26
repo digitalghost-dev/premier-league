@@ -12,7 +12,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 # Update History
 
-## 2.14.0 | 2024-01-08
+## 2.14.1 | 2024-01-25
+
+### Changed
+* [#169](https://github.com/digitalghost-dev/premier-league/issues/154) - Changed the query for `components/connections.py` to reflect table schema changes for the standings `st.dataframe`.
+
+---
+
+## [2.14.0] | 2024-01-08
 
 ### Added
 * [#154](https://github.com/digitalghost-dev/premier-league/issues/154) - Added a new tab called **Squads** that displays the current squad for each team in the league.
@@ -21,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * [#153](https://github.com/digitalghost-dev/premier-league/issues/153) - Changed the Fixtures `st.header()` to `st.subheader()`.
 * [#155](https://github.com/digitalghost-dev/premier-league/issues/155) - Changed the About `st.header()` to `st.subheader()`.
 
+---
 
 ## [2.13.0] | 2023-12-19
 
@@ -411,6 +419,8 @@ Top Teams Tab
 
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
+
+[2.14.0]: https://github.com/digitalghost-dev/premier-league/commit/62a27e488c3fbc91c585e55e73c91adbe9edf0b8#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 
 [2.13.0]: https://github.com/digitalghost-dev/premier-league/commit/dec0426ca5d3de50e8093874635f5bf01718aaa6
 
