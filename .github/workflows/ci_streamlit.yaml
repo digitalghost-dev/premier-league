@@ -1,4 +1,4 @@
-name: CI/CD - Streamlit App
+name: CI/CD - Streamlit Image
 
 on:
   workflow_dispatch:
