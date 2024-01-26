@@ -81,7 +81,7 @@ jobs:
           uses: actions/checkout@v4
 
         - name: Set up Python
-          uses: actions/setup-python@v4
+          uses: 'actions/setup-python@v5.0.0'
           with:
             python-version: 3.12.0
 
@@ -137,7 +137,7 @@ jobs:
           outputs: type=docker,dest=/tmp/streamlit.tar
           
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: streamlit
           path: /tmp/streamlit.tar
@@ -162,7 +162,7 @@ jobs:
         uses: 'docker/setup-buildx-action@v3.0.0'
     
       - name: Download Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: streamlit
           path: /tmp
@@ -178,7 +178,7 @@ jobs:
           
       - name: Docker Auth
         id: docker-auth
-        uses: 'docker/login-action@v2'
+        uses: 'docker/login-action@v3'
         with:
           username: 'oauth2accesstoken'
           password: '${{ steps.auth.outputs.access_token }}'
@@ -212,6 +212,9 @@ jobs:
       (needs.push-artifact-registry.result == 'success')
       
     steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
       
       - name: Google Auth
         id: auth
@@ -243,6 +246,9 @@ jobs:
       (needs.deploy-streamlit-image.result == 'success')
 
     steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Google Auth
         id: auth
@@ -288,13 +294,13 @@ jobs:
           images: ${{ env.REGISTRY_IMAGE }}
       
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: 'docker/setup-qemu-action@v3'
       
       - name: Set up Docker Buildx
         uses: 'docker/setup-buildx-action@v3.0.0'
       
       - name: Login to Docker Hub
-        uses: docker/login-action@v2
+        uses: 'docker/login-action@v3'
         with: 
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -315,7 +321,7 @@ jobs:
           touch "/tmp/digests/${digest#sha256:}"
     
       - name: Upload Digest
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: digests
           path: /tmp/digests/*
@@ -330,7 +336,7 @@ jobs:
     steps:
 
       - name: Download Digests
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: digests
           path: /tmp/digests
@@ -346,7 +352,7 @@ jobs:
           tags: ${{ env.VERSION_NUMBER }}
           
       - name: Login to Docker Hub
-        uses: docker/login-action@v2
+        uses: 'docker/login-action@v3'
         with: 
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -381,7 +387,7 @@ jobs:
         uses: 'docker/setup-buildx-action@v3.0.0'
         
       - name: Download Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: streamlit
           path: /tmp
@@ -414,7 +420,7 @@ jobs:
     steps:
     
       - name: Download SBOM
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: streamlit-sbom-${{ env.VERSION_NUMBER }}.spdx.json
           
