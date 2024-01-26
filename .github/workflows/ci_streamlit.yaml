@@ -335,6 +335,7 @@ jobs:
           path: /tmp/digests/*
           if-no-files-found: error
           retention-days: 1
+
   
   create-manifest-and-push:
     runs-on: ubuntu-22.04
@@ -346,8 +347,8 @@ jobs:
       - name: Download Digests
         uses: actions/download-artifact@v4
         with:
-          pattern: digists-*
-          path: /tmp/digests/
+          pattern: digests-*
+          path: /tmp/digests
           merge-multiple: true
           
       - name: Set up Docker Buildx
