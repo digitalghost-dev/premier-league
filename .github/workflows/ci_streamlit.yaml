@@ -278,9 +278,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform:
-          - linux/amd64
-          - linux/arm64
+        platform: [linux/amd64, linux/arm64]
+        type: [arm64, amd64]
 
     steps:
       
@@ -323,7 +322,7 @@ jobs:
       - name: Upload Digest
         uses: actions/upload-artifact@v4
         with:
-          name: digests-${{ matrix.platform }}
+          name: digests-${{ matrix.type }}
           path: /tmp/digests/*
           if-no-files-found: error
           retention-days: 1
