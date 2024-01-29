@@ -7,10 +7,10 @@
 <p align="center">
     <img src="https://img.shields.io/github/actions/workflow/status/digitalghost-dev/premier-league/ci_streamlit.yaml?style=flat-square&logo=github&label=CI%2FCD"/>
     <a href="https://github.com/digitalghost-dev/premier-league/blob/main/CHANGELOG.md">
-        <img src="https://img.shields.io/badge/Dashboard_Version-2.14.1-FF4B4B?style=flat-square&logo=streamlit"/>
+        <img src="https://img.shields.io/badge/Dashboard_Version-2.15.0-FF4B4B?style=flat-square&logo=streamlit"/>
     </a>
     <a href="https://hub.docker.com/repository/docker/digitalghostdev/premier-league/general"> 
-        <img src="https://img.shields.io/docker/image-size/digitalghostdev/premier-league/2.14.1?style=flat-square&logo=docker&label=Image%20Size&color=0DB7ED"/>
+        <img src="https://img.shields.io/docker/image-size/digitalghostdev/premier-league/2.15.0?style=flat-square&logo=docker&label=Image%20Size&color=0DB7ED"/>
     </a>
     <img src="https://img.shields.io/github/repo-size/digitalghost-dev/premier-league?style=flat-square&label=Repo%20Size&color=DEA584">
 </p>
@@ -69,7 +69,7 @@
 3. The prior steps are orchestrated with Cloud Scheduler as a Docker container hosted on Cloud Run as a Job.
 
 #### Pipeline Diagram
-![data-pipeline](https://storage.googleapis.com/premier-league/data_pipelines.png)
+![data-pipeline](https://storage.googleapis.com/premier_league_bucket/flowcharts/data_pipelines_flowchart.png)
 
 ### CI/CD Pipeline
 The CI/CD pipeline is focused on building the Streamlit app into a Docker container that is then pushed to Artifact Registry and deployed to Cloud Run as a Service. Different architecutres are buit for different machine types and pushed to Docker Hub.
@@ -79,7 +79,7 @@ The CI/CD pipeline is focused on building the Streamlit app into a Docker contai
 3. The Docker image is then deployed to [Cloud Run](https://cloud.google.com/run/docs/overview/what-is-cloud-run) as a Service.
 
 #### Pipeline Diagram
-![cicd_pipeline](https://storage.googleapis.com/premier-league/cicd_pipeline.png)
+![cicd_pipeline](https://storage.googleapis.com/premier_league_bucket/flowcharts/cicd_pipeline_flowchart.png)
 
 ---
 

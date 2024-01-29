@@ -16,7 +16,7 @@ class TopTeamsSection:
 		]
 
 	def display(self):
-		with st.container(border=True):
+		with st.container():
 			st.subheader("Top 5 Teams")
 			columns = st.columns(5)
 

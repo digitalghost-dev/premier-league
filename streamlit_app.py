@@ -10,6 +10,7 @@ from components.fixtures_section import FixturesSection
 from components.highlights_section import HighlightsSection
 from components.league_form_section import LeagueFormsSection
 from components.point_progression_section import PointProgressionSection
+from components.point_slider_section import PointSliderSection
 from components.social_media_section import SocialMediaSection
 from components.squads_section import SquadSection
 from components.stadiums_map_section import StadiumMapSection
@@ -73,10 +74,11 @@ def streamlit_app():
 		st.write(f"{formatted_date}")
 
 	# Tab menu.
-	tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(
+	tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs(
 		[
 			"Standings & Overview",
-			"Top Teams & Scorers",
+			"Teams Statistics",
+			"Players Statistics",
 			"Fixtures",
 			"Squads",
 			"News & Hightlights",
@@ -93,11 +95,12 @@ def streamlit_app():
 		# Average goals scored column.
 		with col1:
 			teams_df_average_goals = teams_df.sort_values(by=["average_goals"], ascending=False)
+			max_average_goals = teams_df_average_goals.iloc[0, 6]
 
 			average_goals_df = pd.DataFrame(
 				{
 					"Average Goals": [
-						teams_df_average_goals.iloc[0, 6],
+						max_average_goals,
 						teams_df_average_goals.iloc[1, 6],
 						teams_df_average_goals.iloc[2, 6],
 						teams_df_average_goals.iloc[3, 6],
@@ -121,7 +124,7 @@ def streamlit_app():
 						help="The Average Goals Scored by Each Team.",
 						format="%f",
 						min_value=0,
-						max_value=8,
+						max_value=int(round(max_average_goals, 2)) * 2,
 					),
 				},
 				hide_index=True,
@@ -129,11 +132,12 @@ def streamlit_app():
 
 		with col2:
 			teams_df_penalties_scored = teams_df.sort_values(by=["penalties_scored"], ascending=False)
+			max_penalties_scored = teams_df_penalties_scored.iloc[0, 4]
 
 			penalties_scored_df = pd.DataFrame(
 				{
 					"Penalties Scored": [
-						teams_df_penalties_scored.iloc[0, 4],
+						max_penalties_scored,
 						teams_df_penalties_scored.iloc[1, 4],
 						teams_df_penalties_scored.iloc[2, 4],
 						teams_df_penalties_scored.iloc[3, 4],
@@ -157,7 +161,7 @@ def streamlit_app():
 						help="The Amount of Penalties Scored by Each Team.",
 						format="%d",
 						min_value=0,
-						max_value=20,
+						max_value=int(max_penalties_scored) * 2,
 					),
 				},
 				hide_index=True,
@@ -165,11 +169,12 @@ def streamlit_app():
 
 		with col3:
 			teams_df_win_streak = teams_df.sort_values(by=["win_streak"], ascending=False)
+			max_win_streak = teams_df_win_streak.iloc[0, 7]
 
 			win_streak_df = pd.DataFrame(
 				{
 					"Biggest Win Streak": [
-						teams_df_win_streak.iloc[0, 7],
+						max_win_streak,
 						teams_df_win_streak.iloc[1, 7],
 						teams_df_win_streak.iloc[2, 7],
 						teams_df_win_streak.iloc[3, 7],
@@ -193,7 +198,7 @@ def streamlit_app():
 						help="The Biggest Win Streak by Each Team.",
 						format="%d",
 						min_value=0,
-						max_value=10,
+						max_value=int(max_win_streak) * 2,
 					),
 				},
 				hide_index=True,
@@ -262,39 +267,41 @@ def streamlit_app():
 		stadium_map_section = StadiumMapSection()
 		stadium_map_section.display(stadiums_df)
 
-	# --------- Statistics Tab ---------
+	# --------- Team Statistics Tab ---------
 	# Tab 2 holds the following sections: [Top Teams, Point Progression, Top Scorers, League Forms].
 	with tab2:
+		top_teams_section = TopTeamsSection(teams_df)
 		with st.container():
-			sections = [
-				(TopTeamsSection, teams_df, None),
-				(PointProgressionSection, teams_df, standings_df),
-				(TopScorersSection, top_scorers_df, None),
-				(LeagueFormsSection, teams_df, None),
-			]
+			top_teams_section.display()
 
-			first_section = True
-			for section_class, dataframe_1, dataframe_2 in sections:
-				if not first_section:
-					st.subheader("")
-				else:
-					first_section = False
+		point_progression_section = PointProgressionSection(teams_df, standings_df)
+		with st.container():
+			point_progression_section.display()
 
-				if dataframe_2 is not None:
-					section = section_class(dataframe_1, dataframe_2)
-				else:
-					section = section_class(dataframe_1)
-				section.display()
+		point_slider_section = PointSliderSection(standings_df)
+		with st.container():
+			point_slider_section.display()
+
+		league_forms_section = LeagueFormsSection(teams_df)
+		with st.container():
+			league_forms_section.display()
+
+	# --------- Player Statistics Tab ---------
+	# Tab 3 holds the following sections: [Player Statistics].
+	with tab3:
+		top_scorers_section = TopScorersSection(top_scorers_df)
+		with st.container():
+			top_scorers_section.display()
 
 	# --------- Fixtures Tab ---------
-	# Tab 3 holds the following sections: [Fixtures].
-	with tab3:
+	# Tab 4 holds the following sections: [Fixtures].
+	with tab4:
 		# Fixtures section.
 		fixtures_section.display()
 
 	# --------- Squads Tab ---------
-	# Tab 4 holds the following sections: [Squads].
-	with tab4:
+	# Tab 5 holds the following sections: [Squads].
+	with tab5:
 		st.subheader("Team Squads")
 		st.markdown("**Note:** Double click on the player's photo to expand it.")
 		squads = SquadSection(squads_df)
@@ -302,16 +309,19 @@ def streamlit_app():
 		col1, _, _ = st.columns(3)
 		with col1:
 			option = st.selectbox(
-				label="**Select a team to view their squad:**",
+				index=None,
+				label="Use the dropdown menu to select a team:",
 				options=squads.teams,
-				placeholder="Please select a team to view their squad.",
+				placeholder="Please make a selection",
 			)
 		if option:
+			selected_team_logo = teams_df[teams_df["team"] == option]["logo"].iloc[0]
+			st.image(selected_team_logo, width=75)
 			squads.display(option)
 
 	# --------- News Tab ---------
-	# Tab 5 holds the following sections: [News].
-	with tab5:
+	# Tab 6 holds the following sections: [News, Highlights].
+	with tab6:
 		st.header("Recent News")
 		col1, col2, col3, col4 = st.columns(4)
 
@@ -374,8 +384,8 @@ def streamlit_app():
 			HighlightsSection(highlights_df).display_second_row()
 
 	# --------- About Tab ---------
-	# Tab 6 holds the following sections: [About].
-	with tab6:
+	# Tab 7 holds the following sections: [About].
+	with tab7:
 		# About
 		about_section = AboutSection()
 		about_section.display()

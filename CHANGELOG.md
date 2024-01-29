@@ -12,7 +12,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 # Update History
 
-## 2.14.1 | 2024-01-25
+## 2.15.0 | 2024-01-28
+
+### Added
+* [#165](https://github.com/digitalghost-dev/premier-league/issues/165) - Added each team's club icon to the **Squads** tab when a team is selected from the dropdown menu.
+* [#172](https://github.com/digitalghost-dev/premier-league/issues/172) - Added a new **Players Statistics** tab.
+
+### Changed
+* [#164](https://github.com/digitalghost-dev/premier-league/issues/164) - Changed the default value `st.selectbox` to `None` in the **Squads** tab.
+* [#168](https://github.com/digitalghost-dev/premier-league/issues/168) - Changed the `max_value` for each `st.dataframe` to programatically calaculate based on current max value in the DataFrame under the **League Statistics** section.
+* [#171](https://github.com/digitalghost-dev/premier-league/issues/171) - Changed line chart under **Point Progression throughout the Season** section to use plotly instead of Streamlit's built in `st.line_chart` method.
+
+### Removed
+* [#170](https://github.com/digitalghost-dev/premier-league/issues/168) - Removed `for` loop that previously generated the sections for **Goalkeepers**, **Defenders**, **Midfielders**, and **Attackers** under the **Squads** tab.
+* [#173](https://github.com/digitalghost-dev/premier-league/issues/173) - Removed `st.container` border from **Top 5 Teams** and **Top 5 Scorers** sections.
+
+---
+
+## [2.14.1] | 2024-01-25
 
 ### Changed
 * [#169](https://github.com/digitalghost-dev/premier-league/issues/154) - Changed the query for `components/connections.py` to reflect table schema changes for the standings `st.dataframe`.
@@ -419,6 +436,8 @@ Top Teams Tab
 
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
+
+[2.14.1]: https://github.com/digitalghost-dev/premier-league/commit/e4a0ba46fd3dee96544b34b2022140c73a4d2ccd
 
 [2.14.0]: https://github.com/digitalghost-dev/premier-league/commit/62a27e488c3fbc91c585e55e73c91adbe9edf0b8#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
 

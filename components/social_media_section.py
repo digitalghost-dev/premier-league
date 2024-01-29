@@ -7,12 +7,12 @@ class SocialMediaSection:
 		self.social_links = [
 			{
 				"url": "https://hub.docker.com/r/digitalghostdev/premier-league/tags",
-				"icon_url": "https://storage.googleapis.com/premier-league/docker.svg",
+				"icon_url": "https://storage.googleapis.com/premier_league_bucket/icons/companies/docker.svg",
 				"alt_text": "Docker",
 			},
 			{
 				"url": "https://github.com/digitalghost-dev/",
-				"icon_url": "https://storage.googleapis.com/premier-league/github.svg",
+				"icon_url": "https://storage.googleapis.com/premier_league_bucket/icons/companies/github.svg",
 				"alt_text": "GitHub",
 			},
 		]

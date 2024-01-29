@@ -1,4 +1,5 @@
 import pandas as pd
+import plotly.graph_objects as go
 import streamlit as st
 
 
@@ -35,4 +36,24 @@ class PointProgressionSection:
 		df = self.create_dataframe(team_forms)
 
 		st.subheader("Point Progression throughout the Season")
-		st.line_chart(data=df)
+
+		labels = [str(f"{self.standings_df.iloc[i, 3]} - {self.standings_df.iloc[i, 1]} points") for i in range(5)]
+		colors = ["#1e90ff", "#ff4500", "#ffd700", "#228b22", "#000000"]
+
+		fig = go.Figure()
+
+		for i in range(5):
+			fig.add_trace(go.Scatter(x=df.index, y=df.iloc[:, i], name=labels[i], line=dict(color=colors[i], width=2)))
+
+		# add markers
+		fig.update_traces(mode="markers+lines", marker=dict(size=8, line=dict(width=2)))
+
+		fig.update_layout(
+			xaxis_title="Gameweek",
+			yaxis_title="Points",
+			legend_title="Team",
+			legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01),
+			height=600,
+		)
+
+		st.plotly_chart(fig, use_container_width=True)
