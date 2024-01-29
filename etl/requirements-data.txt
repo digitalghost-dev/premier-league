@@ -5,7 +5,7 @@ requests==2.31.0
 # Data
 pandas==2.1.4
 pandas-gbq==0.20.0
-polars==0.20.2
+polars==0.20.6
 psycopg2-binary==2.9.9
 sqlalchemy==2.0.25
 prefect-soda-core==0.1.8
