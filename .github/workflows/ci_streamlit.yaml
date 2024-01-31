@@ -17,7 +17,7 @@ on:
       - 'api/**'
       - 'etl/**'
       - 'cli/**'
-      - 'dbt_production/**'
+      - 'dbt_prod/**'
       - 'prefect/**'
       - 'soda/**'
       - 'terraform/**'
