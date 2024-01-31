@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: stocks
+    columns:
+      - name: formatted_time
+        tests:
+          - not_null
+          - unique
+      - name: new_york_time
+        tests:
+          - not_null
+          - unique
+      - name: price
+        tests:
+          - not_null
