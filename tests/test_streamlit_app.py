@@ -28,6 +28,36 @@ def test_tab_two():
 def test_tab_three():
 	assert at.tabs[2].subheader[0].value == "Top 5 Scorers"
 
+	# Column 1
+	assert "Goals:" in at.tabs[2].markdown[2].value
+	assert "Assists:" in at.tabs[2].markdown[3].value
+	assert "Team:" in at.tabs[2].markdown[4].value
+	assert "Nationality:" in at.tabs[2].markdown[5].value
+
+	# Column 2
+	assert "Goals:" in at.tabs[2].markdown[8].value
+	assert "Assists:" in at.tabs[2].markdown[9].value
+	assert "Team:" in at.tabs[2].markdown[10].value
+	assert "Nationality:" in at.tabs[2].markdown[11].value
+
+	# Column 3
+	assert "Goals:" in at.tabs[2].markdown[14].value
+	assert "Assists:" in at.tabs[2].markdown[15].value
+	assert "Team:" in at.tabs[2].markdown[16].value
+	assert "Nationality:" in at.tabs[2].markdown[17].value
+
+	# Column 4
+	assert "Goals:" in at.tabs[2].markdown[20].value
+	assert "Assists:" in at.tabs[2].markdown[21].value
+	assert "Team:" in at.tabs[2].markdown[22].value
+	assert "Nationality:" in at.tabs[2].markdown[23].value
+
+	# Column 5
+	assert "Goals:" in at.tabs[2].markdown[26].value
+	assert "Assists:" in at.tabs[2].markdown[27].value
+	assert "Team:" in at.tabs[2].markdown[28].value
+	assert "Nationality:" in at.tabs[2].markdown[29].value
+
 
 # Fixtures
 def test_tab_four():
@@ -70,6 +100,11 @@ def test_tab_six():
 	assert at.tabs[5].header[1].value == "Recent Highlights"
 
 
-# About
+# MANU Stock Price
 def test_tab_seven():
-	assert at.tabs[6].subheader[0].value == "About"
+	assert at.tabs[6].subheader[0].value == "MANU - Stock Price"
+
+
+# About
+def test_tab_eight():
+	assert at.tabs[7].subheader[0].value == "About"
