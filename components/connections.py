@@ -153,3 +153,14 @@ def get_squads() -> pd.DataFrame:
 		"""
 	)
 	return pd.DataFrame(data=squads_data)
+
+
+@st.cache_resource
+def get_stocks() -> pd.DataFrame:
+	stock_data = run_query(
+		"""
+        SELECT new_york_time, price 
+        FROM `dbt_production.stocks` 
+        """
+	)
+	return pd.DataFrame(data=stock_data)

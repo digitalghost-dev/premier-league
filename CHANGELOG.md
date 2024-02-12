@@ -12,6 +12,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 # Update History
 
+## 2.16.0 | 2024-02-11
+
+### Added
+* [#179](https://github.com/digitalghost-dev/premier-league/issues/179) - Added a new tab that shows a stock chart for **MANU**, Manchester United's stock ticker.
+* [#180](https://github.com/digitalghost-dev/premier-league/issues/180) - Added a `st.info` and `st.warning` message to explain the tab with its functions and to explain that no data was found, respectively.
+
+---
+
 ## 2.15.0 | 2024-01-28
 
 ### Added

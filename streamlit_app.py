@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 
 import pandas as pd
@@ -14,38 +15,48 @@ from components.point_slider_section import PointSliderSection
 from components.social_media_section import SocialMediaSection
 from components.squads_section import SquadSection
 from components.stadiums_map_section import StadiumMapSection
+from components.stock_section import StockSection
 from components.top_scorers_section import TopScorersSection
 from components.top_teams_section import TopTeamsSection
 from components.connections import (
 	firestore_connection,
-	get_standings,
-	get_stadiums,
-	get_teams,
-	get_top_scorers,
-	get_news,
 	get_highlights,
 	get_league_statistics,
-	get_min_round,
 	get_max_round,
+	get_min_round,
+	get_news,
 	get_squads,
+	get_stadiums,
+	get_standings,
+	get_stocks,
+	get_teams,
+	get_top_scorers,
 )
+
+import google.auth
+
+project_id = "cloud-data-infrastructure"
+os.environ["GCLOUD_PROJECT"] = project_id
+credentials, project_id = google.auth.default()
 
 st.set_page_config(page_title="Streamlit: Premier League", layout="wide")
 
 
 def streamlit_app():
 	# Get the dataframes.
-	standings_df = get_standings()
-	stadiums_df = get_stadiums()
-	teams_df = get_teams()
-	top_scorers_df = get_top_scorers()
-	news_df = get_news()
+	firestore_database = firestore_connection()
 	highlights_df = get_highlights()
 	league_statistics_df = get_league_statistics()
-	min_round = get_min_round()
 	max_round = get_max_round()
+	min_round = get_min_round()
+	news_df = get_news()
 	squads_df = get_squads()
-	firestore_database = firestore_connection()
+	standings_df = get_standings()
+	stadiums_df = get_stadiums()
+	stocks_df = get_stocks()
+	teams_df = get_teams()
+	top_scorers_df = get_top_scorers()
+
 	fixtures_section = FixturesSection(firestore_database, max_round, min_round)
 
 	# Image, title, and subheader.
@@ -74,7 +85,7 @@ def streamlit_app():
 		st.write(f"{formatted_date}")
 
 	# Tab menu.
-	tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs(
+	tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = st.tabs(
 		[
 			"Standings & Overview",
 			"Teams Statistics",
@@ -82,6 +93,7 @@ def streamlit_app():
 			"Fixtures",
 			"Squads",
 			"News & Hightlights",
+			"Manchester United Stock (Beta)",
 			"About",
 		]
 	)
@@ -383,9 +395,15 @@ def streamlit_app():
 			HighlightsSection(highlights_df).display_first_row()
 			HighlightsSection(highlights_df).display_second_row()
 
-	# --------- About Tab ---------
-	# Tab 7 holds the following sections: [About].
+	# --------- Stock Tab ---------
+	# Tab 7 holds the following sections: [Stock Price].
 	with tab7:
+		stock_section = StockSection(stocks_df)
+		stock_section.display()
+
+	# --------- About Tab ---------
+	# Tab 8 holds the following sections: [About].
+	with tab8:
 		# About
 		about_section = AboutSection()
 		about_section.display()
