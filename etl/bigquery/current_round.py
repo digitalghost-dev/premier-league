@@ -60,7 +60,6 @@ rapid_api_current_round, bigquery_current_round = DataRetrieval(PROJECT_ID).retr
 def load_current_round() -> None:
 	if rapid_api_current_round == bigquery_current_round:
 		print("Current round is already loaded!")
-		exit()
 	else:
 		print("Current round is not loaded!")
 
