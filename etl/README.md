@@ -13,7 +13,7 @@ The `etl` directory is responsible for extracting data from various sources, tra
 ## Data Pipelines Diagram
 <figure>
     <img 
-        src="https://storage.googleapis.com/premier-league/data_pipelines.png" 
+        src="https://storage.googleapis.com/premier_league_bucket/flowcharts/data_pipelines_flowchart.png" 
         alt="data-pipeline" 
         width="800"
     />
