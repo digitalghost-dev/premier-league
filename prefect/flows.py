@@ -54,3 +54,12 @@ def task_squads():
 @flow
 def squads():
     a = task_squads()
+
+# --- Current Round ---
+@task
+def task_current_round():
+    from etl.bigquery.current_round import load_current_round
+
+@flow
+def current_round():
+    a = task_current_round()
