@@ -1,4 +1,5 @@
 from google.cloud import bigquery
+import pandas as pd
 
 client = bigquery.Client()
 bucket_name = "premier_league_bucket"
@@ -15,11 +16,15 @@ def transfer(request) -> str:
 	extract_job = client.extract_table(
 		table_ref,
 		destination_uri,
-		# Location must match that of the source table.
 		location="US",
-	)  # API request
-	extract_job.result()  # Waits for job to complete.
+	)
+	extract_job.result()
 
 	print("Exported {}:{}.{} to {}".format(project, dataset_id, table_id, destination_uri))
+
+	df = pd.read_csv("https://storage.googleapis.com/premier_league_bucket/standings.csv")
+	sorted_df = df.sort_values(by=["rank"], ascending=True)
+	removed_columns = sorted_df.drop(columns=["team_id"])
+	removed_columns.to_csv(destination_uri, index=False)
 
 	return "OK"
