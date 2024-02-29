@@ -17,8 +17,7 @@
 
 
 ## Overview
-> [!NOTE]
-> This repository contains a personal project designed to enhance my skills in Data Engineering. It focuses on developing data pipelines that extract, transform, and load data from various sources into diverse databases. Additionally, it involves creating a dashboard with visualizations using Streamlit.
+This repository contains a personal project designed to enhance my skills in Data Engineering. It focuses on developing data pipelines that extract, transform, and load data from various sources into diverse databases. Additionally, it involves creating a dashboard with visualizations using Streamlit.
 
 > [!IMPORTANT]
 > Many architectural choices and decisions in this project may not make the most efficent sense on purpose for the sake of practicing and learning.
