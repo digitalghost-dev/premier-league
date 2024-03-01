@@ -7,10 +7,10 @@
 <p align="center">
     <img src="https://img.shields.io/github/actions/workflow/status/digitalghost-dev/premier-league/ci_streamlit.yaml?style=flat-square&logo=github&label=CI%2FCD"/>
     <a href="https://github.com/digitalghost-dev/premier-league/blob/main/CHANGELOG.md">
-        <img src="https://img.shields.io/badge/Dashboard_Version-2.16.0-FF4B4B?style=flat-square&logo=streamlit"/>
+        <img src="https://img.shields.io/badge/Dashboard_Version-2.16.1-FF4B4B?style=flat-square&logo=streamlit"/>
     </a>
     <a href="https://hub.docker.com/repository/docker/digitalghostdev/premier-league/general"> 
-        <img src="https://img.shields.io/docker/image-size/digitalghostdev/premier-league/2.16.0?style=flat-square&logo=docker&label=Image%20Size&color=0DB7ED"/>
+        <img src="https://img.shields.io/docker/image-size/digitalghostdev/premier-league/2.16.1?style=flat-square&logo=docker&label=Image%20Size&color=0DB7ED"/>
     </a>
     <img src="https://img.shields.io/github/repo-size/digitalghost-dev/premier-league?style=flat-square&label=Repo%20Size&color=DEA584">
 </p>

@@ -148,7 +148,7 @@ def get_squads() -> pd.DataFrame:
 	squads_data = run_query(
 		"""
 			SELECT * 
-			FROM `premier_league_dataset.squads_view`
+			FROM `premier_league_squads.all_teams_squads_view`
 			
 		"""
 	)
