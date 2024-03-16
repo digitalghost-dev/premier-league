@@ -18,9 +18,9 @@ terraform/terraform*
 soda/configuration.yaml
 
 # dbt configuration files
-dbt_production/target/
-dbt_production/dbt_packages/
-dbt_production/logs/
+dbt_prod/target/
+dbt_prod/dbt_packages/
+dbt_prod/logs/
 
 # Byte-compiled / optimized / DLL files
 **/__pycache__
