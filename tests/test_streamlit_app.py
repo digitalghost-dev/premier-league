@@ -24,7 +24,7 @@ def test_tab_two():
 	assert at.tabs[1].subheader[3].value == "Forms for the Rest of the League"
 
 
-# Players Statistics
+# Players & Injuries Statistics
 def test_tab_three():
 	assert at.tabs[2].subheader[0].value == "Top 5 Scorers"
 
@@ -57,6 +57,8 @@ def test_tab_three():
 	assert "Assists:" in at.tabs[2].markdown[27].value
 	assert "Team:" in at.tabs[2].markdown[28].value
 	assert "Nationality:" in at.tabs[2].markdown[29].value
+
+	assert at.tabs[2].subheader[1].value == "Recent Injuries"
 
 
 # Fixtures
