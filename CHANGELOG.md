@@ -12,7 +12,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 # Update History
 
-## 2.16.1 | 2024-03-01
+## 2.17.0 | 2024-03-17
+
+### Added
+* [#183](https://github.com/digitalghost-dev/premier-league/issues/183) - Added a new *Recent Injuries* section under *Players & Injuries* tab.
+
+### Changed
+* [#182](https://github.com/digitalghost-dev/premier-league/issues/182) - Changed the tab name for *Players Statistics* to *Players & Injuries*.
+
+---
+
+## [2.16.1] | 2024-03-01
 
 ### Changed
 * [#181](https://github.com/digitalghost-dev/premier-league/issues/181) - Changed `components/connections.py` to use new dataset in BigQuery for team squads.
@@ -452,7 +462,9 @@ Top Teams Tab
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
 
-[2.16.0]: https://github.com/digitalghost-dev/premier-league/commit/aae9d9c814eafc905104a765c475b5763d0881f8#diff-4dc66906e3c3b7f7a82967d85af564f2d5a6e0bee5829aa5eda607dd9756c87d
+[2.16.1]: https://github.com/digitalghost-dev/premier-league/commit/950590251f6559beb2376acf491a3cf1edec8a8e
+
+[2.16.0]: https://github.com/digitalghost-dev/premier-league/commit/aae9d9c814eafc905104a765c475b5763d0881f8
 
 [2.15.0]: https://github.com/digitalghost-dev/premier-league/commit/95aac28fbf4ab29f7965e8bc326f631198cf7272
 

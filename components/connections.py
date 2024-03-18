@@ -156,6 +156,17 @@ def get_squads() -> pd.DataFrame:
 
 
 @st.cache_resource
+def get_injuries() -> pd.DataFrame:
+	injuries_data = run_query(
+		"""
+			SELECT * 
+			FROM `premier_league_injuries.all_teams_injuries_view`
+		"""
+	)
+	return pd.DataFrame(data=injuries_data)
+
+
+@st.cache_resource
 def get_stocks() -> pd.DataFrame:
 	stock_data = run_query(
 		"""

@@ -9,6 +9,7 @@ from streamlit.delta_generator import DeltaGenerator
 from components.about_section import AboutSection
 from components.fixtures_section import FixturesSection
 from components.highlights_section import HighlightsSection
+from components.injuries_section import InjuriesSection
 from components.league_form_section import LeagueFormsSection
 from components.point_progression_section import PointProgressionSection
 from components.point_slider_section import PointSliderSection
@@ -21,6 +22,7 @@ from components.top_teams_section import TopTeamsSection
 from components.connections import (
 	firestore_connection,
 	get_highlights,
+	get_injuries,
 	get_league_statistics,
 	get_max_round,
 	get_min_round,
@@ -46,6 +48,7 @@ def streamlit_app():
 	# Get the dataframes.
 	firestore_database = firestore_connection()
 	highlights_df = get_highlights()
+	injuries_df = get_injuries()
 	league_statistics_df = get_league_statistics()
 	max_round = get_max_round()
 	min_round = get_min_round()
@@ -89,7 +92,7 @@ def streamlit_app():
 		[
 			"Standings & Overview",
 			"Teams Statistics",
-			"Players Statistics",
+			"Players & Injuries",
 			"Fixtures",
 			"Squads",
 			"News & Hightlights",
@@ -304,6 +307,10 @@ def streamlit_app():
 		top_scorers_section = TopScorersSection(top_scorers_df)
 		with st.container():
 			top_scorers_section.display()
+
+		injuries_section = InjuriesSection(injuries_df)
+		with st.container():
+			injuries_section.display()
 
 	# --------- Fixtures Tab ---------
 	# Tab 4 holds the following sections: [Fixtures].
