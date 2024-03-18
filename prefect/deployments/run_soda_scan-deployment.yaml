@@ -1,0 +1,43 @@
+###
+### A complete description of a Prefect Deployment for flow 'run-soda-scan'
+###
+name: data_quality
+description: null
+version: b7519422832beb73bb96d4191849271b
+# The work queue that will handle this deployment's runs
+work_queue_name: premier-league-work-queue
+work_pool_name: premier-league-work-pool
+tags: []
+parameters: {}
+schedule: null
+schedules: []
+is_schedule_active: null
+infra_overrides: {}
+infrastructure:
+  type: process
+  env: {}
+  labels: {}
+  name: null
+  command: null
+  stream_output: true
+  working_dir: null
+  block_type_slug: process
+  _block_type_slug: process
+
+###
+### DO NOT EDIT BELOW THIS LINE
+###
+flow_name: run-soda-scan
+manifest_path: null
+storage: null
+path: /Users/cs/premier-league
+entrypoint: prefect/data_quality_scan.py:run_soda_scan
+parameter_openapi_schema:
+  title: Parameters
+  type: object
+  properties: {}
+  required: null
+  definitions: null
+timestamp: '2024-03-18T23:00:39.939987+00:00'
+triggers: []
+enforce_parameter_schema: null
