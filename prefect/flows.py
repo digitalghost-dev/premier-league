@@ -55,6 +55,15 @@ def task_squads():
 def squads():
     a = task_squads()
 
+# --- Injuries ---
+@task
+def task_injuries():
+    from etl.bigquery.injuries import call_api
+
+@flow
+def injuries():
+    a = task_injuries()
+
 # --- Current Round ---
 @task
 def task_current_round():
