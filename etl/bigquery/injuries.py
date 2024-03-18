@@ -163,5 +163,5 @@ def call_api():
 		print(f"{team_name_list[0]}'s injuries table loaded!")
 
 
-if __name__ == "__main__":
+if __name__ != "__main__":
 	call_api()
