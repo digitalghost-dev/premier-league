@@ -24,7 +24,7 @@ This repository contains a personal project designed to enhance my skills in Dat
 
 ## Important Links
 
-* [Documentation](https://docs.digitalghost.dev/) - currently under construction 🔨
+* [Documentation](https://docs.digitalghost.dev/) - still building out 🔨
 * [Streamlit App](https://streamlit.digitalghost.dev/)
 * [Version History](https://github.com/digitalghost-dev/premier-league/blob/main/CHANGELOG.md)
 
@@ -47,28 +47,42 @@ This repository contains a personal project designed to enhance my skills in Dat
 ## Data and CI/CD Pipelines
 ### Data Pipelines
 
-#### Data Pipeline 1
+<h4><u>Data Pipeline 1</u></h4>
+
+Orchestrated with [Prefect](https://www.prefect.io), a Python file is ran to extract stock data for Manchester United.
+
 1. Data from the [Financial Modeling Prep API](https://site.financialmodelingprep.com) is extracted with Python using the `/quote` endpoint.
 2. The data is loaded directly into a PostgreSQL database hosted on [Cloud SQL](https://cloud.google.com/sql?hl=en) with no transformations.
-3. The prior steps are orchestrated with [Prefect](https://www.prefect.io).
-4. Once the data is loaded into PostgreSQL, Datastream replicates the data into BigQuery. Datastream checks for staleness every 15 minutes.
-5. [dbt](https://getdbt.com) is used to transform the data in BigQuery and create a view with transformed data.
+3. Once the data is loaded into PostgreSQL, Datastream replicates the data into BigQuery. Datastream checks for staleness every 15 minutes.
+4. [dbt](https://getdbt.com) is used to transform the data in BigQuery and create a view with transformed data.
 
-#### Data Pipeline 2
-1. Data is extracted from multiple API sources with Python:
-    * Data from the [Football Data API](https://www.football-data.org/) is extracted with Python using the `/standings`, `/teams`, and `top_scorers` endpoints.
-    * Data from the [NewsAPI](https://newsapi.org) is extracted with Python using the `/everything` endpoint with parameters set to search for the Premier League.
-    * Data from the Go & Gin API is extracted with Python using the `/stadiums` endpoint.
-2. Python performs any necessary transformations and loads the data into BigQuery.
-3. The prior steps are orchestrated with [Prefect](https://www.prefect.io).
+<h4><u>Data Pipeline 2</u></h4>
 
-#### Data Pipeline 3
-1. Data from the [Football Data API](https://www.football-data.org/) is extracted with Python using the `/fixtures` endpoint.
-2. Python creates dictionaries from the data and loads the data into Firestore
-3. The prior steps are orchestrated with Cloud Scheduler as a Docker container hosted on Cloud Run as a Job.
+Orchestrated with [Prefect](https://www.prefect.io), Python files are ran that perform a full ETL process.
 
-#### Pipeline Diagram
-![data-pipeline](https://storage.googleapis.com/premier_league_bucket/flowcharts/data_pipelines_flowchart.png)
+1. Data is extracted from multiple API sources:
+    * Data from the [Football Data API](https://www.football-data.org/) is extracted to retrieve information on the current standings, team statistics, top scorers, squads, fixtures, and the current round. The following endpoints are used:
+        * `/standings`
+        * `/teams`
+        * `/top_scorers`
+        * `/squads`
+        * `/fixtures/current_round`
+        * `/fixtures`
+    * Data from the [NewsAPI](https://newsapi.org) is extracted to retrieve news article links with filters set to the Premier League from Sky Sports, The Guardian, and 90min. The following endpoints are used:
+        * `/everything`
+    * Data from a self-built API written in Golang is extracted to retrieve information on teams' stadiums. The following endpoints are used:
+        * `/stadiums`
+    * Data from the [YouTube API](https://developers.google.com/youtube/v3) is extracted to retrieve the latest highlights from NBC Sports YouTube channel.
+2. Python performs any necessary transformations such as coverting data types or checking for `NULL` values
+3. Majority of the data is then loaded into **BigQuery** in their respective tables. Fixture data is loaded into **Firestore** as documents categoirzed by the round number.
+
+<h4><u>Data Pipeline 3</u></h4>
+1. Daily exports of the standings and top scorers data in BigQuery are exported to a Cloud Storage bucket using Cloud Scheduler to be used in another project.
+    * The other project is a [CLI](https://github.com/digitalghost-dev/pl-cli/) tool written in Golang.
+
+<h4><u>Pipeline Diagram</u></h4>
+
+![data-pipeline-flowchart](https://storage.googleapis.com/premier_league_bucket/flowcharts/data_pipelines_flowchart.png)
 
 ### CI/CD Pipeline
 The CI/CD pipeline is focused on building the Streamlit app into a Docker container that is then pushed to Artifact Registry and deployed to Cloud Run as a Service. Different architecutres are buit for different machine types and pushed to Docker Hub.
