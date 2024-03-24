@@ -13,11 +13,16 @@ def task_teams():
 def task_top_scorers():
     from etl.bigquery.top_scorers import send_dataframe_to_bigquery
 
+@task
+def task_fixtues():
+    from etl.firestore.fixtures import load_firestore
+
 @flow
 def statistics():
     a = task_standings()
     b = task_teams(wait_for=[a])
     c = task_top_scorers(wait_for=[a, b])
+    d = task_fixtues(wait_for=[a, b, c])
 
 # --- News ---
 @task
