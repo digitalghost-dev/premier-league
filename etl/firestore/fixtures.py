@@ -128,5 +128,5 @@ def load_firestore():
     print(f"Document {current_round_response} has been loaded!")
 
 
-if __name__ == "__main__":
+if __name__ != "__main__":
     load_firestore()
