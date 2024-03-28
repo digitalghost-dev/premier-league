@@ -1,3 +1,4 @@
+  GNU nano 5.4                               statistics-deployment.yaml                                        
 ###
 ### A complete description of a Prefect Deployment for flow 'statistics'
 ###
@@ -13,6 +14,12 @@ schedule: null
 schedules: []
 is_schedule_active: null
 infra_overrides: {}
+
+###
+### DO NOT EDIT BELOW THIS LINE
+###
+flow_name: statistics
+manifest_path: null
 infrastructure:
   type: process
   env: {}
@@ -21,16 +28,13 @@ infrastructure:
   command: null
   stream_output: true
   working_dir: null
+  _block_document_id: d07769e0-7478-47f9-a89f-fdba7df219df
+  _block_document_name: anonymous-085bb46e-2985-452e-840a-222a128de535
+  _is_anonymous: true
   block_type_slug: process
   _block_type_slug: process
-
-###
-### DO NOT EDIT BELOW THIS LINE
-###
-flow_name: statistics
-manifest_path: null
 storage: null
-path: /Users/cs/premier-league
+path: /home/pythonsanchez/premier-league
 entrypoint: prefect/flows.py:statistics
 parameter_openapi_schema:
   title: Parameters
@@ -38,6 +42,6 @@ parameter_openapi_schema:
   properties: {}
   required: null
   definitions: null
-timestamp: '2024-03-18T22:59:09.940793+00:00'
+timestamp: '2024-03-19T00:54:36.287059+00:00'
 triggers: []
 enforce_parameter_schema: null

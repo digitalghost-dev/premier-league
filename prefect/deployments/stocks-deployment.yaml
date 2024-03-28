@@ -1,3 +1,4 @@
+  GNU nano 5.4                                 stocks-deployment.yaml                                          
 ###
 ### A complete description of a Prefect Deployment for flow 'stocks'
 ###
@@ -13,6 +14,12 @@ schedule: null
 schedules: []
 is_schedule_active: null
 infra_overrides: {}
+
+###
+### DO NOT EDIT BELOW THIS LINE
+###
+flow_name: stocks
+manifest_path: null
 infrastructure:
   type: process
   env: {}
@@ -21,16 +28,13 @@ infrastructure:
   command: null
   stream_output: true
   working_dir: null
+  _block_document_id: d00fda5e-d9ad-4e29-9186-3a82f6c7387b
+  _block_document_name: anonymous-a7b04bd9-9549-458a-9263-3adc7756e42e
+  _is_anonymous: true
   block_type_slug: process
   _block_type_slug: process
-
-###
-### DO NOT EDIT BELOW THIS LINE
-###
-flow_name: stocks
-manifest_path: null
 storage: null
-path: /Users/cs/premier-league
+path: /home/pythonsanchez/premier-league
 entrypoint: prefect/flows.py:stocks
 parameter_openapi_schema:
   title: Parameters
@@ -38,6 +42,6 @@ parameter_openapi_schema:
   properties: {}
   required: null
   definitions: null
-timestamp: '2024-03-18T23:00:22.417707+00:00'
+timestamp: '2024-03-19T00:55:12.070787+00:00'
 triggers: []
 enforce_parameter_schema: null

@@ -13,6 +13,12 @@ schedule: null
 schedules: []
 is_schedule_active: null
 infra_overrides: {}
+
+###
+### DO NOT EDIT BELOW THIS LINE
+###
+flow_name: news
+manifest_path: null
 infrastructure:
   type: process
   env: {}
@@ -21,16 +27,13 @@ infrastructure:
   command: null
   stream_output: true
   working_dir: null
+  _block_document_id: be253629-d0c6-4a28-853f-cf861cca30d7
+  _block_document_name: anonymous-f5036643-492b-49fd-a992-eb64855b0732
+  _is_anonymous: true
   block_type_slug: process
   _block_type_slug: process
-
-###
-### DO NOT EDIT BELOW THIS LINE
-###
-flow_name: news
-manifest_path: null
 storage: null
-path: /Users/cs/premier-league
+path: /home/pythonsanchez/premier-league
 entrypoint: prefect/flows.py:news
 parameter_openapi_schema:
   title: Parameters
@@ -38,6 +41,6 @@ parameter_openapi_schema:
   properties: {}
   required: null
   definitions: null
-timestamp: '2024-03-18T23:00:16.486763+00:00'
+timestamp: '2024-03-19T00:55:04.964169+00:00'
 triggers: []
 enforce_parameter_schema: null

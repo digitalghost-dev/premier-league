@@ -1,3 +1,4 @@
+  GNU nano 5.4                                injuries-deployment.yaml                                         
 ###
 ### A complete description of a Prefect Deployment for flow 'injuries'
 ###
@@ -13,6 +14,12 @@ schedule: null
 schedules: []
 is_schedule_active: null
 infra_overrides: {}
+
+###
+### DO NOT EDIT BELOW THIS LINE
+###
+flow_name: injuries
+manifest_path: null
 infrastructure:
   type: process
   env: {}
@@ -21,16 +28,13 @@ infrastructure:
   command: null
   stream_output: true
   working_dir: null
+  _block_document_id: 5a7ad7a1-341f-4b70-8ac8-4a18768aa962
+  _block_document_name: anonymous-2bd75ab0-bb08-4153-b8e4-de4247a132d0
+  _is_anonymous: true
   block_type_slug: process
   _block_type_slug: process
-
-###
-### DO NOT EDIT BELOW THIS LINE
-###
-flow_name: injuries
-manifest_path: null
 storage: null
-path: /Users/cs/premier-league
+path: /home/pythonsanchez/premier-league
 entrypoint: prefect/flows.py:injuries
 parameter_openapi_schema:
   title: Parameters
@@ -38,6 +42,6 @@ parameter_openapi_schema:
   properties: {}
   required: null
   definitions: null
-timestamp: '2024-03-18T23:00:59.935409+00:00'
+timestamp: '2024-03-19T00:55:26.497708+00:00'
 triggers: []
 enforce_parameter_schema: null

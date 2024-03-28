@@ -1,3 +1,4 @@
+  GNU nano 5.4                               highlights-deployment.yaml                                        
 ###
 ### A complete description of a Prefect Deployment for flow 'highlights'
 ###
@@ -13,6 +14,12 @@ schedule: null
 schedules: []
 is_schedule_active: null
 infra_overrides: {}
+
+###
+### DO NOT EDIT BELOW THIS LINE
+###
+flow_name: highlights
+manifest_path: null
 infrastructure:
   type: process
   env: {}
@@ -21,16 +28,13 @@ infrastructure:
   command: null
   stream_output: true
   working_dir: null
+  _block_document_id: cc1a4def-5006-481c-8a99-fd7b50d69d87
+  _block_document_name: anonymous-94073dd6-53db-44a1-9dc2-09c93c7d9117
+  _is_anonymous: true
   block_type_slug: process
   _block_type_slug: process
-
-###
-### DO NOT EDIT BELOW THIS LINE
-###
-flow_name: highlights
-manifest_path: null
 storage: null
-path: /Users/cs/premier-league
+path: /home/pythonsanchez/premier-league
 entrypoint: prefect/flows.py:highlights
 parameter_openapi_schema:
   title: Parameters
@@ -38,6 +42,6 @@ parameter_openapi_schema:
   properties: {}
   required: null
   definitions: null
-timestamp: '2024-03-18T23:00:04.740877+00:00'
+timestamp: '2024-03-19T00:54:49.874866+00:00'
 triggers: []
 enforce_parameter_schema: null

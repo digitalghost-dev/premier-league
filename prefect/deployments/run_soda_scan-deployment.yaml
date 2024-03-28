@@ -1,3 +1,4 @@
+  GNU nano 5.4                             run_soda_scan-deployment.yaml                                       
 ###
 ### A complete description of a Prefect Deployment for flow 'run-soda-scan'
 ###
@@ -13,6 +14,12 @@ schedule: null
 schedules: []
 is_schedule_active: null
 infra_overrides: {}
+
+###
+### DO NOT EDIT BELOW THIS LINE
+###
+flow_name: run-soda-scan
+manifest_path: null
 infrastructure:
   type: process
   env: {}
@@ -21,16 +28,13 @@ infrastructure:
   command: null
   stream_output: true
   working_dir: null
+  _block_document_id: 231c21a0-bea6-4800-86f4-f9924fe459a2
+  _block_document_name: anonymous-54354ea5-5dfd-48a1-a920-7f8795b80fd5
+  _is_anonymous: true
   block_type_slug: process
   _block_type_slug: process
-
-###
-### DO NOT EDIT BELOW THIS LINE
-###
-flow_name: run-soda-scan
-manifest_path: null
 storage: null
-path: /Users/cs/premier-league
+path: /home/pythonsanchez/premier-league
 entrypoint: prefect/data_quality_scan.py:run_soda_scan
 parameter_openapi_schema:
   title: Parameters
@@ -38,6 +42,6 @@ parameter_openapi_schema:
   properties: {}
   required: null
   definitions: null
-timestamp: '2024-03-18T23:00:39.939987+00:00'
+timestamp: '2024-03-19T00:55:42.096102+00:00'
 triggers: []
 enforce_parameter_schema: null

@@ -1,3 +1,4 @@
+  GNU nano 5.4                                 squads-deployment.yaml                                          
 ###
 ### A complete description of a Prefect Deployment for flow 'squads'
 ###
@@ -13,6 +14,12 @@ schedule: null
 schedules: []
 is_schedule_active: null
 infra_overrides: {}
+
+###
+### DO NOT EDIT BELOW THIS LINE
+###
+flow_name: squads
+manifest_path: null
 infrastructure:
   type: process
   env: {}
@@ -21,16 +28,13 @@ infrastructure:
   command: null
   stream_output: true
   working_dir: null
+  _block_document_id: 9eb2d8f7-7ef9-4f30-bf97-a8217320d4bc
+  _block_document_name: anonymous-67d88fb7-ee19-4c67-83b0-a0c4de72b28e
+  _is_anonymous: true
   block_type_slug: process
   _block_type_slug: process
-
-###
-### DO NOT EDIT BELOW THIS LINE
-###
-flow_name: squads
-manifest_path: null
 storage: null
-path: /Users/cs/premier-league
+path: /home/pythonsanchez/premier-league
 entrypoint: prefect/flows.py:squads
 parameter_openapi_schema:
   title: Parameters
@@ -38,6 +42,6 @@ parameter_openapi_schema:
   properties: {}
   required: null
   definitions: null
-timestamp: '2024-03-18T23:00:29.300500+00:00'
+timestamp: '2024-03-19T00:55:19.207112+00:00'
 triggers: []
 enforce_parameter_schema: null
