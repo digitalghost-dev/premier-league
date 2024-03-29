@@ -142,7 +142,7 @@ def call_api() -> None:
 		formmated_team_name = team_name_list[0].replace(" ", "_").lower()
 
 		df.to_gbq(
-			destination_table=f"premier_league_dataset.squad_{formmated_team_name}",
+			destination_table=f"premier_league_squads.{formmated_team_name}",
 			if_exists="replace",
 			table_schema=schema_definition,
 		)
