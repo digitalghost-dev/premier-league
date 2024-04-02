@@ -4,7 +4,7 @@ import pandas as pd
 import requests  # type: ignore
 
 import google.auth
-from google.cloud import secretmanager, run_v2, bigquery
+from google.cloud import secretmanager, bigquery
 from pandas import DataFrame
 
 PROJECT_ID = "cloud-data-infrastructure"
@@ -99,26 +99,9 @@ def load_current_round() -> None:
 
 			print(f"Current round: {round_number_int} loaded!")
 
-		def sample_run_job():
-			client = run_v2.JobsClient()
-
-			request = run_v2.RunJobRequest(
-				name="projects/463690670206/locations/us-central1/jobs/pl-fixtures",
-			)
-
-			operation = client.run_job(request=request)
-
-			print("Waiting for operation to complete...")
-
-			response = operation.result()
-
-			print(response)
-
 		current_round_dataframe = create_dataframe()
 		schema_definition = define_table_schema()
 		send_dataframe_to_bigquery(current_round_dataframe, schema_definition)
-		sample_run_job()
-
 
 if __name__ != "__main__":
 	load_current_round()
