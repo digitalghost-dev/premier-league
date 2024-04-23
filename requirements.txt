@@ -4,7 +4,7 @@
 # Streamlit
 pandas==2.1.4
 plotly==5.18.0
-streamlit==1.32.2
+streamlit==1.33.0
 
 # Google Cloud
 firebase-admin==6.3.0
