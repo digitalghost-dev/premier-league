@@ -4,9 +4,10 @@ at = AppTest.from_file("streamlit_app.py", default_timeout=1000)
 at.run()
 
 
-def test_title_area():
-	assert "Premier League Statistics / 2023-24" in at.title[0].value
+def test_main_page():
+	assert at.title[0].value == "Premier League Statistics / 2023-24"
 	assert "Current Round: " in at.subheader[0].value
+	assert at.subheader[-1].value == "Social"
 
 
 # Standings & Overivew
