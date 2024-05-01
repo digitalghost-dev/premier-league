@@ -1,4 +1,6 @@
 import os
+import time
+
 from datetime import datetime
 
 import pandas as pd
@@ -11,6 +13,7 @@ from components.fixtures_section import FixturesSection
 from components.highlights_section import HighlightsSection
 from components.injuries_section import InjuriesSection
 from components.league_form_section import LeagueFormsSection
+from components.news_section import NewsSection
 from components.point_progression_section import PointProgressionSection
 from components.point_slider_section import PointSliderSection
 from components.social_media_section import SocialMediaSection
@@ -278,39 +281,56 @@ def streamlit_app():
 
 		standings_table()
 
-		# Stadiums.
+		# Stadiums
 		stadium_map_section = StadiumMapSection()
 		stadium_map_section.display(stadiums_df)
 
 	# --------- Team Statistics Tab ---------
 	# Tab 2 holds the following sections: [Top Teams, Point Progression, Top Scorers, League Forms].
 	with tab2:
-		top_teams_section = TopTeamsSection(teams_df)
-		with st.container():
-			top_teams_section.display()
+		def top_teams_func():
+			top_teams_section = TopTeamsSection(teams_df)
+			with st.container():
+				top_teams_section.display()
 
-		point_progression_section = PointProgressionSection(teams_df, standings_df)
-		with st.container():
-			point_progression_section.display()
+		def point_progression_func():
+			point_progression_section = PointProgressionSection(teams_df, standings_df)
+			with st.container():
+				point_progression_section.display()
 
-		point_slider_section = PointSliderSection(standings_df)
-		with st.container():
-			point_slider_section.display()
+		@st.experimental_fragment
+		def point_slider_func():
+			point_slider_section = PointSliderSection(standings_df)
+			with st.container():
+				point_slider_section.display()
 
-		league_forms_section = LeagueFormsSection(teams_df)
-		with st.container():
-			league_forms_section.display()
+		def league_forms_func():
+			league_forms_section = LeagueFormsSection(teams_df)
+			with st.container():
+				league_forms_section.display()
+
+		top_teams_func()
+		point_progression_func()
+		point_slider_func()
+		league_forms_func()
 
 	# --------- Player Statistics Tab ---------
 	# Tab 3 holds the following sections: [Player Statistics].
 	with tab3:
-		top_scorers_section = TopScorersSection(top_scorers_df)
-		with st.container():
-			top_scorers_section.display()
 
-		injuries_section = InjuriesSection(injuries_df)
-		with st.container():
-			injuries_section.display()
+		def top_scorers_func():
+			top_scorers_section = TopScorersSection(top_scorers_df)
+			with st.container():
+				top_scorers_section.display()
+
+		@st.experimental_fragment
+		def injuries_func():
+			injuries_section = InjuriesSection(injuries_df)
+			with st.container():
+				injuries_section.display()
+
+		top_scorers_func()
+		injuries_func()
 
 	# --------- Fixtures Tab ---------
 	# Tab 4 holds the following sections: [Fixtures].
@@ -323,80 +343,31 @@ def streamlit_app():
 	with tab5:
 		st.subheader("Team Squads")
 		st.markdown("**Note:** Double click on the player's photo to expand it.")
-		squads = SquadSection(squads_df)
 
-		col1, _, _ = st.columns(3)
-		with col1:
-			option = st.selectbox(
-				index=None,
-				label="Use the dropdown menu to select a team:",
-				options=squads.teams,
-				placeholder="Please make a selection",
-			)
-		if option:
-			selected_team_logo = teams_df[teams_df["team"] == option]["logo"].iloc[0]
-			st.image(selected_team_logo, width=75)
-			squads.display(option)
+		@st.experimental_fragment
+		def squads_func():
+			squads = SquadSection(squads_df)
+
+			col1, _, _ = st.columns(3)
+			with col1:
+				option = st.selectbox(
+					index=None,
+					label="Use the dropdown menu to select a team:",
+					options=squads.teams,
+					placeholder="Please make a selection",
+				)
+			if option:
+				selected_team_logo = teams_df[teams_df["team"] == option]["logo"].iloc[0]
+				st.image(selected_team_logo, width=75)
+				squads.display(option)
+
+		squads_func()
 
 	# --------- News Tab ---------
 	# Tab 6 holds the following sections: [News, Highlights].
 	with tab6:
-		st.header("Recent News")
-		col1, col2, col3, col4 = st.columns(4)
-
-		with col1:
-			with st.container():
-				try:
-					st.image(news_df.iloc[0, 2], use_column_width=True)
-					st.subheader(news_df.iloc[0, 0])
-					st.write(f"Publish time: {news_df.iloc[0, 3]}")
-					st.markdown(
-						f"<a href={(news_df.iloc[0, 1])}>Read More</a>",
-						unsafe_allow_html=True,
-					)
-				except IndexError:
-					pass
-
-		with col2:
-			with st.container():
-				try:
-					st.image(news_df.iloc[1, 2], use_column_width=True)
-					st.subheader(news_df.iloc[1, 0])
-					st.write(f"Publish time: {news_df.iloc[1, 3]}")
-					st.markdown(
-						f"<a href={(news_df.iloc[1, 1])}>Read More</a>",
-						unsafe_allow_html=True,
-					)
-				except IndexError:
-					pass
-
-		with col3:
-			with st.container():
-				try:
-					st.image(news_df.iloc[2, 2], use_column_width=True)
-					st.subheader(news_df.iloc[2, 0])
-					st.write(f"Publish time: {news_df.iloc[2, 3]}")
-					st.markdown(
-						f"<a href={(news_df.iloc[2, 1])}>Read More</a>",
-						unsafe_allow_html=True,
-					)
-				except IndexError:
-					pass
-
-		with col4:
-			with st.container():
-				try:
-					st.image(news_df.iloc[3, 2], use_column_width=True)
-					st.subheader(news_df.iloc[3, 0])
-					st.write(f"Publish time: {news_df.iloc[3, 3]}")
-					st.markdown(
-						f"<a href={(news_df.iloc[3, 1])}>Read More</a>",
-						unsafe_allow_html=True,
-					)
-				except IndexError:
-					pass
-
-		st.divider()
+		with st.container():
+			NewsSection(news_df).display()
 
 		with st.container():
 			HighlightsSection(highlights_df).display_first_row()

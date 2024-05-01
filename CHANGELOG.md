@@ -12,7 +12,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 # Update History
 
-## 2.17.0 | 2024-03-17
+## 2.17.1 | 2024-04-27
+
+### Changed
+* [#184](https://github.com/digitalghost-dev/premier-league/issues/184) - Changed the calling of the dashboard's different components to using the new `@st.experimental_fragment` decorator in Streamlit's `1.33.0` version.
+* [#185](https://github.com/digitalghost-dev/premier-league/issues/185) - Changed the News section into an importable `class`.
+
+---
+
+## [2.17.0] | 2024-03-17
 
 ### Added
 * [#183](https://github.com/digitalghost-dev/premier-league/issues/183) - Added a new *Recent Injuries* section under *Players & Injuries* tab.
@@ -461,6 +469,8 @@ Top Teams Tab
 
 Top Players Tab
 * Shows the `portrait`, `goals`, `team`, and `nationality` of the current top five goal scorers in the league.
+
+[2.17.0]: https://github.com/digitalghost-dev/premier-league/commit/f097df039469c361d992c4e52eaa6211354aefb5
 
 [2.16.1]: https://github.com/digitalghost-dev/premier-league/commit/950590251f6559beb2376acf491a3cf1edec8a8e
 
