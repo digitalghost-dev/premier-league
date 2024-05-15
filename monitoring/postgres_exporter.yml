@@ -1,0 +1,9 @@
+auth_modules:
+  postgres_conn:
+    type: userpass
+    userpass:
+      username: "{{ db.username }}"
+      password: "{{ db.password }}"
+    options:
+      port: 5432
+      sslmode: disable
