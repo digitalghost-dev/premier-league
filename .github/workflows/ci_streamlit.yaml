@@ -15,9 +15,9 @@ on:
     paths-ignore:
       - '.github/**'
       - 'api/**'
-      - 'etl/**'
-      - 'cli/**'
       - 'dbt_prod/**'
+      - 'etl/**'
+      - 'monitoring/**'
       - 'prefect/**'
       - 'soda/**'
       - 'terraform/**'
