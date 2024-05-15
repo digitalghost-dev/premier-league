@@ -13,6 +13,12 @@ test.py
 # Terraform secrets and state files
 terraform/.terraform*
 terraform/terraform*
+terraform/cloud_sql/.terraform*
+terraform/cloud_sql/terraform*
+
+# Monitoring
+monitoring/values*
+monitoring/grafana_storage/
 
 # Soda configuration files
 soda/configuration.yaml
