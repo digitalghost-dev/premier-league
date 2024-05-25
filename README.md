@@ -15,6 +15,8 @@
     <img src="https://img.shields.io/github/repo-size/digitalghost-dev/premier-league?style=flat-square&label=Repo%20Size&color=DEA584">
 </p>
 
+> [!WARNING]
+> After a year and some change of building this project, it's time for me to archive it. I've started to use these tools in my current position so learning these on my own and spending my own money on paying for the Football API and Google Cloud services no longer makes sense. I'm switching my focus on learning Golang!
 
 ## Overview
 This repository contains a personal project designed to enhance my skills in Data Engineering. It focuses on developing data pipelines that extract, transform, and load data from various sources into diverse databases. Additionally, it involves creating a dashboard with visualizations using Streamlit.
@@ -24,7 +26,7 @@ This repository contains a personal project designed to enhance my skills in Dat
 
 ## Important Links
 
-* [Documentation](https://docs.digitalghost.dev/) - still building out 🔨
+* [Documentation](https://docs.digitalghost.dev/)
 * [Streamlit App](https://streamlit.digitalghost.dev/)
 * [Version History](https://github.com/digitalghost-dev/premier-league/blob/main/CHANGELOG.md)
 
