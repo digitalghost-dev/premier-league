@@ -24,12 +24,6 @@ This repository contains a personal project designed to enhance my skills in Dat
 > [!IMPORTANT]
 > Many architectural choices and decisions in this project may not make the most efficent sense on purpose for the sake of practicing and learning.
 
-## Important Links
-
-* [Documentation](https://docs.digitalghost.dev/)
-* [Streamlit App](https://streamlit.digitalghost.dev/)
-* [Version History](https://github.com/digitalghost-dev/premier-league/blob/main/CHANGELOG.md)
-
 ## Infrastructure
 ### Tools & Services
 ![cloud](https://img.shields.io/badge/Google_Cloud-4285F4?style=flat-square&logo=googlecloud&logoColor=white) ![streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=flat-square&logo=streamlit&logoColor=white) ![terraform](https://img.shields.io/badge/Terraform-844FBA?style=flat-square&logo=terraform&logoColor=white) ![docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white) ![prefect](https://img.shields.io/badge/-Prefect-070E10?style=flat-square&logo=prefect) ![dbt](https://img.shields.io/badge/dbt-FF694B?style=flat-square&logo=dbt&logoColor=white)
